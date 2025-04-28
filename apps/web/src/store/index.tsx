@@ -1,15 +1,19 @@
 "use client";
 
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import {
+  TypedUseSelectorHook,
   useDispatch,
   useSelector,
   Provider,
-  type TypedUseSelectorHook,
 } from "react-redux";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { useRef } from "react";
-import rootReducer from "./root-reducer";
+import { accountState } from "./states";
+
+const rootReducer = combineReducers({
+  account: accountState.reducer,
+});
 
 export const makeStore = () =>
   configureStore({
