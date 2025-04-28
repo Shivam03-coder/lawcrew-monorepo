@@ -2,11 +2,9 @@
   "name": "lawcrew",
   "version": "1.0.0",
   "private": true,
-  "description": "",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky install"
+    "dev:web": "pnpm nx run @lawcrew/web:dev --verbose",
+    "dev:api": "pnpm nx run @lawcrew/api:dev"
   },
   "keywords": [],
   "author": "",

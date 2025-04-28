@@ -6,8 +6,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import { Server } from "http";
 import { appEnvConfigs } from "./configs";
-import { ApiError } from "./utils/server-utils";
-
+import { trpcExpress } from "@lawcrew/trpc-server";
 interface AppOptions {
   port?: number;
 }
@@ -21,7 +20,6 @@ class App {
     this.app = express();
     this.port = options?.port || Number(appEnvConfigs.PORT) || 3000;
     this.initializeMiddlewares();
-    this.initializeErrorHandler();
   }
 
   private initializeMiddlewares(): void {
@@ -41,19 +39,9 @@ class App {
     this.app.use(express.json());
     this.app.use(bodyParser.urlencoded({ extended: true }));
     this.app.use(cookieParser());
+    this.app.use("/trpc", trpcExpress);
   }
 
-  private initializeErrorHandler(): void {
-    this.app.use((err: ApiError, _req: any, res: any, _next: NextFunction) => {
-      if (err instanceof ApiError) {
-        return res.json({
-          code: err.code,
-          status: "failed",
-          message: err.message,
-        });
-      }
-    });
-  }
   public listen(): void {
     this.server = this.app.listen(this.port, () => {
       console.log(`Server is running at http://localhost:${this.port}`);

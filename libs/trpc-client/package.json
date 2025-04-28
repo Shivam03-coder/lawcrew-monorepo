@@ -1,0 +1,23 @@
+{
+  "name": "@lawcrew/trpc-client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "dependencies": {
+    "@lawcrew/trpc-server": "workspace:^",
+    "@tanstack/react-query": "5.74.4",
+    "@trpc/client": "^11.1.1",
+    "@trpc/react-query": "^11.1.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.62",
+    "next": "^14.1.0",
+    "react": "^18.3.1",
+    "typescript": "^5.8.2"
+  },
+  "peerDependencies": {
+    "next": "^14.1.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}
