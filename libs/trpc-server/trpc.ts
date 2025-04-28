@@ -1,6 +1,5 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import { createTRPCcontext } from "./context";
-import superjson from "superjson";
 import { ZodError } from "zod";
 import AuthServices, {
   SessionUser,

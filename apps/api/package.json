@@ -1,6 +1,8 @@
 {
   "name": "@lawcrew/api",
   "version": "1.0.0",
+  "description": "",
+  "main": "src/server.ts",
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "start": "node -r module-alias/register dist/server.js",
