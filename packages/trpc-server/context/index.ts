@@ -1,6 +1,6 @@
 import { CreateExpressContextOptions } from "@trpc/server/adapters/express";
-import { UserRole } from "@lawcrew/db/types";
 import { db } from "@lawcrew/db";
+import { UserRole } from "@lawcrew/db/generated/prisma";
 
 interface SessionUser {
   id: string;

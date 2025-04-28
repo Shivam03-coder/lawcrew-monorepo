@@ -22,10 +22,10 @@ importers:
         version: 0.24.0
       '@lawcrew/db':
         specifier: workspace:^
-        version: link:../../libs/db
+        version: link:../../packages/db
       '@lawcrew/trpc-server':
         specifier: workspace:^
-        version: link:../../libs/trpc-server
+        version: link:../../packages/trpc-server
       '@prisma/client':
         specifier: ^6.6.0
         version: 6.6.0(prisma@6.6.0(typescript@5.8.3))(typescript@5.8.3)
@@ -147,9 +147,12 @@ importers:
       '@hookform/resolvers':
         specifier: ^5.0.1
         version: 5.0.1(react-hook-form@7.56.1(react@18.3.1))
+      '@lawcrew/schema':
+        specifier: workspace:^
+        version: link:../../packages/schema
       '@lawcrew/trpc-client':
         specifier: workspace:^
-        version: link:../../libs/trpc-client
+        version: link:../../packages/trpc-client
       '@radix-ui/react-accordion':
         specifier: ^1.2.8
         version: 1.2.8(@types/react-dom@18.3.6(@types/react@18.3.20))(@types/react@18.3.20)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -627,6 +630,82 @@ importers:
       vite:
         specifier: ^6.3.1
         version: 6.3.3(@types/node@22.15.3)(jiti@1.21.7)(tsx@4.19.3)(yaml@2.7.1)
+
+  packages/db:
+    devDependencies:
+      prisma:
+        specifier: ^6.6.0
+        version: 6.6.0(typescript@5.8.3)
+
+  packages/schema:
+    dependencies:
+      zod:
+        specifier: ^3.24.2
+        version: 3.24.3
+
+  packages/trpc-client:
+    dependencies:
+      '@lawcrew/api':
+        specifier: workspace:^
+        version: link:../../apps/api
+      '@lawcrew/trpc-server':
+        specifier: workspace:^
+        version: link:../trpc-server
+      '@tanstack/react-query':
+        specifier: 5.74.4
+        version: 5.74.4(react@18.3.1)
+      '@trpc/client':
+        specifier: ^11.1.1
+        version: 11.1.1(@trpc/server@11.1.1(typescript@5.8.3))(typescript@5.8.3)
+      '@trpc/react-query':
+        specifier: ^11.1.1
+        version: 11.1.1(@tanstack/react-query@5.74.4(react@18.3.1))(@trpc/client@11.1.1(@trpc/server@11.1.1(typescript@5.8.3))(typescript@5.8.3))(@trpc/server@11.1.1(typescript@5.8.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.8.3)
+      react-dom:
+        specifier: ^18.3.1
+        version: 18.3.1(react@18.3.1)
+    devDependencies:
+      '@types/react':
+        specifier: ^18.2.62
+        version: 18.3.20
+      next:
+        specifier: ^14.1.0
+        version: 14.1.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      typescript:
+        specifier: ^5.8.2
+        version: 5.8.3
+
+  packages/trpc-server:
+    dependencies:
+      '@lawcrew/api':
+        specifier: workspace:^
+        version: link:../../apps/api
+      '@lawcrew/db':
+        specifier: workspace:^
+        version: link:../db
+      '@lawcrew/schema':
+        specifier: workspace:^
+        version: link:../schema
+      '@trpc/server':
+        specifier: ^11.1.1
+        version: 11.1.1(typescript@5.8.3)
+      '@types/bcrypt':
+        specifier: ^5.0.2
+        version: 5.0.2
+      bcrypt:
+        specifier: ^5.1.1
+        version: 5.1.1
+      bcryptjs:
+        specifier: ^3.0.2
+        version: 3.0.2
+      superjson:
+        specifier: ^2.2.2
+        version: 2.2.2
+      zod:
+        specifier: ^3.24.2
+        version: 3.24.3
 
 packages:
 

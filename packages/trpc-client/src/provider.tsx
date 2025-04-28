@@ -1,4 +1,5 @@
 "use client";
+
 import { trpcClient as trpc } from "./client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
@@ -7,11 +8,18 @@ import { appEnvConfigs } from "@lawcrew/api/src/configs/index";
 
 export const TrpcProvider = ({ children }: { children: React.ReactNode }) => {
   const [queryClient] = useState(() => new QueryClient());
+
   const [trpcClient] = useState(() =>
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: `http://localhost:${appEnvConfigs.PORT}/trpc`,
+          url: `http://localhost:5050/trpc`,
+          fetch(url, options) {
+            return fetch(url, {
+              ...options,
+              credentials: "include",
+            });
+          },
         }),
       ],
     })

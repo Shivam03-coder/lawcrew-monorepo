@@ -1,25 +1,16 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import Cookies from "js-cookie";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Mail, Lock, User } from "lucide-react";
-
-import FormField from "@/components/ui/form-field";
-import { useSignInMutation } from "@/backend/auth-api";
+import { Lock, User } from "lucide-react";
 import { useAppToasts } from "@/hooks/use-app-toast";
-import Spinner from "@/components/ui/spinner";
-import DataLoader from "@/components/shared/loader/data-laoder";
-import Link from "next/link";
-import { useAppDispatch } from "@/store";
-import { setIsAuthLoading } from "@/store/states";
-import { loginSchema, LoginType } from "../schema";
+import FormField from "@/components/shared/form-field";
+import { loginSchema, type LoginType } from "@lawcrew/schema";
+import { trpcClient } from "@lawcrew/trpc-client/src/client";
 
 const SignIn = () => {
   const {
@@ -33,33 +24,28 @@ const SignIn = () => {
 
   const router = useRouter();
   const { ErrorToast, SuccessToast } = useAppToasts();
-  const [Signin, { isLoading }] = useSignInMutation();
-  const dispatch = useAppDispatch();
-  const onSubmit = async (data: LoginType) => {
-    try {
-      const resp = await Signin(data).unwrap();
+  const LoginUser = trpcClient.auth.login.useMutation();
+  const onSubmit = (logindetails: LoginType) => {
+    if (!logindetails) return;
 
-      if (resp.status === "success") {
-        SuccessToast({ title: "Login successful!" });
-        dispatch(setIsAuthLoading());
-        setTimeout(() => {
-          const userRole = Cookies.get("UserRole");
-          const userId = Cookies.get("UserId");
-
-          if (userRole && userId) {
-            router.push(`/${userRole.toLowerCase()}/${userId}`);
-          } else {
-            router.push("/");
-          }
-        }, 3000);
-        dispatch(setIsAuthLoading());
-      } else {
-        ErrorToast({ title: resp.message });
-      }
-    } catch (error: any) {
-      ErrorToast({ title: "Sign in failed" });
-    }
+    LoginUser.mutate(
+      {
+        userName: logindetails.userName,
+        password: logindetails.password,
+      },
+      {
+        onSuccess: ({ message }) => {
+          SuccessToast({ title: message });
+        },
+        onError: ({ message }) => {
+          ErrorToast({
+            title: message,
+          });
+        },
+      },
+    );
   };
+
   return (
     <Card className="w-full max-w-md bg-white py-8 shadow-none">
       <CardHeader className="space-y-1 pb-8">
@@ -79,8 +65,8 @@ const SignIn = () => {
               <Input
                 {...register("userName")}
                 className="rounded-full bg-white pl-9 focus:ring-1 focus:ring-dark focus:transition-all"
-                type="email"
                 placeholder="john@example"
+                disabled={LoginUser.isSuccess}
               />
             </div>
           </FormField>
@@ -93,12 +79,17 @@ const SignIn = () => {
                 type="password"
                 className="rounded-full bg-white pl-9 focus:ring-1 focus:ring-dark focus:transition-all"
                 placeholder="••••••••"
+                disabled={LoginUser.isPending}
               />
             </div>
           </FormField>
 
-          <Button type="submit" className="w-full bg-warning text-dark">
-            {isLoading ? <Spinner /> : "LOG-IN"}
+          <Button
+            type="submit"
+            className="bg-warning w-full text-dark"
+            disabled={LoginUser.isSuccess}
+          >
+            {LoginUser.isSuccess ? "Logging in..." : "LOGIN"}
           </Button>
         </form>
       </CardContent>

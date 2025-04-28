@@ -45,8 +45,6 @@ class AuthServices {
     });
 
     const rawSessionToken = crypto.randomBytes(32).toString("hex");
-    console.log("🚀 ~ AuthServices ~ rawSessionToken:", rawSessionToken);
-
     await db.session.create({
       data: {
         sessionKey: rawSessionToken,
