@@ -263,6 +263,9 @@ importers:
 
   libs/trpc-client:
     dependencies:
+      '@lawcrew/api':
+        specifier: workspace:^
+        version: link:../../apps/api
       '@lawcrew/trpc-server':
         specifier: workspace:^
         version: link:../trpc-server

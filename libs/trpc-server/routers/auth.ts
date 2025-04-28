@@ -1,7 +1,6 @@
 import { protectedProcedure, publicProcedure, router } from "../trpc";
 import { signupSchema } from "@lawcrew/schema";
 import AuthServices from "@lawcrew/api/src/services/auth-services";
-import { TRPCError } from "@trpc/server";
 
 export const authRoutes = router({
   signup: publicProcedure

@@ -9,16 +9,26 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  firstName String
-  lastName  String?
-  userName  String   @unique
-  email     String   @unique
-  password  String
+  id          String       @id @default(cuid())
+  firstName   String
+  lastName    String?
+  userName    String       @unique
+  email       String       @unique
+  password    String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  Session     Session?
+  role        UserRole     @default(ADMIN)
+  UserAddress UserAddress?
+}
+
+model UserAddress {
+  id        Int      @id @default(autoincrement())
+  city      String
+  state     String
+  userId    String?  @unique
+  user      User?    @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Session   Session?
-  role      UserRole @default(ADMIN)
 }
 
 model Session {
