@@ -7,16 +7,16 @@
   *::before,
   *::after {
     box-sizing: border-box;
+    /* user-select: none; */
   }
 
   html,
   body,
   #root,
   .app {
-    font-family: var(--font-inter), sans-serif;
     height: 100vh;
     width: 100%;
-    @apply text-base font-inter;
+    @apply font-inter text-base;
   }
 
   html {
@@ -24,32 +24,10 @@
   }
 
   :root {
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  :root {
-    --color-primary: #040d12;
+    --color-primary: #111827;
     --color-secondary: #f2f8ff;
-    --color-main: #3b82f6;
-    --color-dark: #1f1f23;
+    --color-main: #2d70ff;
+    --color-dark: #151517;
   }
 
   h1 {
@@ -75,15 +53,6 @@
   h6 {
     @apply text-base font-medium leading-snug;
   }
-  .theme {
-    --animate-marquee: marquee var(--duration) infinite linear;
-    --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
-  }
-}
-
-::-webkit-scrollbar {
-  width: 0px;
-  height: 0px;
 }
 
 @layer utilities {
@@ -102,58 +71,247 @@
   .opacityBg {
     background: linear-gradient(to top, rgba(255, 255, 255, 0.05), transparent);
   }
+
+  .input {
+    @apply rounded border-2 bg-white;
+  }
+  .card {
+    @apply bg-gradient-to-r from-sky-100 to-white dark:from-slate-700 dark:to-gray-800;
+  }
+  .textDark {
+    @apply text-primary dark:text-secondary;
+  }
+  .borderDark {
+    @apply border-primary dark:border-secondary;
+  }
 }
 
-.cl-internal-1dauvpw,
-.cl-userButtonPopoverFooter {
-  display: none;
+/* Scrollbar Track */
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
+.tiptap {
+  /* list styles */
+  ul,
+  ol {
+    list-style-type: none;
+    padding: 0.1rem;
+    margin: 1.25rem 1rem 1.25rem 0.4rem;
+  }
+
+  ul li {
+    list-style-type: disc;
+    p {
+      margin-bottom: 0.25em;
+      margin-top: 0.25em;
+    }
+  }
+  ol li {
+    list-style-type: decimal;
+    p {
+      margin-bottom: 0.25em;
+      margin-top: 0.25em;
+    }
+  }
+
+  /* Task list specific styles */
+  ul[data-type="taskList"] {
+    list-style: none;
+    margin-left: 0;
+    padding: 0;
+
+    li {
+      align-items: flex-start;
+      display: flex;
+
+      > label {
+        flex: 0 0 auto;
+        margin-right: 0.5rem;
+        user-select: none;
+      }
+
+      > div {
+        flex: 1 1 auto;
+      }
+    }
+
+    input[type="checkbox"] {
+      cursor: pointer;
+    }
+
+    ul[data-type="taskList"] {
+      margin: 0;
+    }
+  }
+
+  /* Heading styles */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    line-height: 1.1;
+    margin-top: 2.5rem;
+    text-wrap: pretty;
+  }
+
+  h1,
+  h2 {
+    margin-top: 3.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  h1 {
+    font-size: 1.4rem;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+  }
+
+  h4,
+  h5,
+  h6 {
+    font-size: 1rem;
+  }
+
+  /* Table-specific styling */
+  table {
+    border-collapse: collapse;
+    margin: 0;
+    overflow: hidden;
+    table-layout: fixed;
+    width: 100%;
+
+    td,
+    th {
+      border: 1px solid #000000;
+      box-sizing: border-box;
+      min-width: 1em;
+      padding: 6px 8px;
+      position: relative;
+      vertical-align: top;
+
+      > * {
+        margin-bottom: 0;
+      }
+    }
+
+    th {
+      background-color: #d2d2ff;
+      font-weight: bold;
+      text-align: left;
+    }
+
+    .selectedCell:after {
+      background: #afafff;
+      content: "";
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      pointer-events: none;
+      position: absolute;
+      z-index: 2;
+    }
+
+    .column-resize-handle {
+      background-color: #ffd2ff;
+      bottom: -2px;
+      pointer-events: none;
+      position: absolute;
+      right: -2px;
+      top: 0;
+      width: 4px;
+    }
+  }
+
+  .tableWrapper {
+    margin: 1.5rem 0;
+    overflow-x: auto;
+  }
+
+  &.resize-cursor {
+    cursor: ew-resize;
+    cursor: col-resize;
+  }
+
+  img {
+    display: block;
+    height: auto;
+    margin: 1.5rem 0;
+    max-width: 100%;
+    &.ProseMirror-selectednode {
+      outline: 3px solid #ffcdff;
+    }
+  }
+
+  /* Link styles */
+  a {
+    color: #1515ff;
+    cursor: pointer;
+    /* text-decoration: underline; */
+
+    &:hover {
+      color: #0000ca;
+    }
+  }
+}
+
+.cl-headerTitle {
+  @apply py-3 text-2xl font-normal text-green-50;
+}
+
+.cl-internal-n8erpa[data-variant="solid"][data-color="primary"] {
+  @apply py-2 shadow-none;
 }
 
 .cl-userButtonPopoverCard {
-  background-color: var(--color-secondary);
+  @apply bg-white dark:bg-blue-950;
 }
 
-.cl-button {
-  background-color: var(--color-main);
-  color: black;
-  outline: none;
-  border: none;
-  text-transform: uppercase;
+.cl-userButtonPopoverFooter,
+.cl-footer,
+.cl-internal-1dauvpw {
+  @apply hidden;
 }
 
-.cl-internal-1pr5xvn {
-  text-transform: uppercase;
-  color: var(--color-main);
+.cl-scrollBox,
+.cl-cardBox {
+  @apply textDark rounded border-none bg-white font-lexend dark:bg-primary !important;
 }
 
-.cl-rootBox {
-  @apply rounded-xl border-2 border-blue-500;
+.cl-internal-13u79ez {
+  @apply bg-none;
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+.cl-header {
+  @apply textDark;
 }
 
-@theme inline {
-  @keyframes marquee {
-  from {
-    transform: translateX(0);
-    }
-  to {
-    transform: translateX(calc(-100% - var(--gap)));
-    }
-  }
-  @keyframes marquee-vertical {
-  from {
-    transform: translateY(0);
-    }
-  to {
-    transform: translateY(calc(-100% - var(--gap)));
-    }
-  }
+.dark .cl-internal-13lvar6 {
+  background: #111827;
+}
+
+.cl-navbarButton {
+  @apply textDark;
+}
+
+.cl-userButtonPopoverMain {
+  @apply textDark bg-white dark:bg-primary;
+}
+
+.cl-internal-pp7u0o,
+.cl-headerTitle {
+  @apply textDark;
+}
+.cl-internal-1lldyk3 {
+  @apply textDark;
 }

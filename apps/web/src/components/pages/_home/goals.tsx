@@ -7,7 +7,7 @@ import {
   BarChart,
   CheckCircle,
 } from "lucide-react";
-import SectionHeader from "../../components/_home/section-header";
+import SectionHeader from "./section-header";
 
 const RetroactiveCard = ({
   title,

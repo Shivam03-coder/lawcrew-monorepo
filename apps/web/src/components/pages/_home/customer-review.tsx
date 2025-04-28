@@ -6,9 +6,9 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Quote } from "lucide-react";
-import SectionHeader from "../../components/_home/section-header";
 import { Marquee } from "@/components/magicui/marquee";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import SectionHeader from "./section-header";
 
 const reviews = [
   {

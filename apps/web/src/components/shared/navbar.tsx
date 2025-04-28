@@ -21,7 +21,6 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
-import { useClerk, UserButton } from "@clerk/nextjs";
 import useMount from "@/hooks/use-mount";
 import ThemeToggle from "@/components/theme-toogle";
 import AppHeaderNavMenu from "@/components/nav-menu";
@@ -29,12 +28,10 @@ import AppHeaderNavMenu from "@/components/nav-menu";
 const Navbar = () => {
   const isMobile = useMediaQuery("(min-width: 968px)");
   const [open, setOpen] = useState<boolean>(false);
-  const clerk = useClerk();
   const mount = useMount();
   if (!mount) return null;
   return (
     <header className="sticky top-0 z-50 mx-auto rounded-xl bg-transparent p-3 font-lexend backdrop-blur">
-      {clerk.loaded && (
         <div className="flex h-14 w-full items-center justify-between px-2 sm:px-8">
           <MobileNavigation open={open} setOpen={setOpen} />
           <div className="flex-2 md:flex">
@@ -46,7 +43,7 @@ const Navbar = () => {
                   width={40}
                   height={40}
                 />
-                <h1 className="inline-flex items-center gap-x-2 text-2xl font-bold text-gray-800 dark:text-gray-100">
+                <h1 className="inline-flex items-center gap-x-2 text-2xl font-bold text-gray-800 dark:text-white">
                   LAWCREW
                 </h1>
               </div>
@@ -62,7 +59,6 @@ const Navbar = () => {
             </nav>
           </div>
         </div>
-      )}
     </header>
   );
 };

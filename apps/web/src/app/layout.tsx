@@ -1,7 +1,7 @@
 import { type Metadata } from "next";
 import "@/styles/globals.css";
 import { appfonts } from "@/fonts";
-import AppProvider from "@/components/providers/app-providers";
+import AppProvider from "@/components/shared/app-providers";
 import { TrpcProvider } from "@lawcrew/trpc-client/src/provider";
 
 export const metadata: Metadata = {
