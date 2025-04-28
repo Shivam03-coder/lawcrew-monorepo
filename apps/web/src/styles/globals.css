@@ -75,6 +75,10 @@
   h6 {
     @apply text-base font-medium leading-snug;
   }
+  .theme {
+    --animate-marquee: marquee var(--duration) infinite linear;
+    --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+  }
 }
 
 ::-webkit-scrollbar {
@@ -124,4 +128,32 @@
 
 .cl-rootBox {
   @apply rounded-xl border-2 border-blue-500;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@theme inline {
+  @keyframes marquee {
+  from {
+    transform: translateX(0);
+    }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes marquee-vertical {
+  from {
+    transform: translateY(0);
+    }
+  to {
+    transform: translateY(calc(-100% - var(--gap)));
+    }
+  }
 }
