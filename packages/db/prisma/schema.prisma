@@ -15,6 +15,7 @@ model User {
   userName    String       @unique
   email       String       @unique
   password    String
+  phoneNumber String       @unique
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   Session     Session?

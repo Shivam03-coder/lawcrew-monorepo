@@ -13,7 +13,7 @@ const FormField = ({
   className?: string;
 }) => (
   <div className={cn("space-y-2", className)}>
-    <Label className="text-main/90 text-sm font-medium">{label} :</Label>
+    <Label className="text-gray-900 text-sm font-medium">{label} :</Label>
     <div className="relative">
       {children}
       {error && (

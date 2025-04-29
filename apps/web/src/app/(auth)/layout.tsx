@@ -11,7 +11,7 @@ export default function RootAuthLayout({
       {/* Full-Screen SVG Background */}
       <div className="absolute inset-0 -z-10">
         <Image
-          src="/mountain.svg"
+          src="/page-turner.svg"
           alt="Background"
           layout="fill"
           objectFit="cover"

@@ -14,10 +14,10 @@ export default {
         manrope: ["var(--font-manrope)", ...fontFamily.sans],
       },
       colors: {
-        primary: "var(--color-primary)",
-        secondary: "var(--color-secondary)",
-        main: "var(--color-main)",
-        dark: "var(--color-dark)",
+        primary: "#111827",
+        secondary: "#f2f8ff",
+        main: "#2d70ff",
+        dark: "#151517",
         chart: {
           "1": "hsl(var(--chart-1, 210 90% 40%))",
           "2": "hsl(var(--chart-2, 210 70% 50%))",

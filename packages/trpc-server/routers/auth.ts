@@ -7,8 +7,16 @@ export const authRoutes = router({
   signup: publicProcedure
     .input(signupSchema)
     .mutation(async ({ ctx, input }) => {
-      const { firstName, lastName, userName, email, password, city, state } =
-        input;
+      const {
+        firstName,
+        lastName,
+        userName,
+        email,
+        password,
+        city,
+        state,
+        phoneNumber,
+      } = input;
 
       const existingUser = await ctx.db.user.findFirst({
         where: {
@@ -17,6 +25,14 @@ export const authRoutes = router({
       });
 
       if (existingUser) throw new Error("User already exist!");
+
+      const isUserNameExist = await ctx.db.user.findUnique({
+        where: {
+          userName,
+        },
+      });
+
+      if (isUserNameExist) throw new Error("User name already exist!");
 
       const hashedPassword = await AuthServices.hashPassword(password);
 
@@ -33,6 +49,7 @@ export const authRoutes = router({
               state,
             },
           },
+          phoneNumber,
         },
         select: {
           id: true,
