@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema, type SignupType } from "@lawcrew/schema";
@@ -16,6 +16,7 @@ import FormField from "@/components/shared/form-field";
 import Spinner from "@/components/shared/spinner";
 
 import { User, Mail, Lock, Phone, MapPin, Landmark } from "lucide-react";
+import PasswordViewToggle from "@/components/shared/password-toggle";
 
 const UserForm = () => {
   const {
@@ -40,6 +41,8 @@ const UserForm = () => {
   const SignupUser = api.auth.signup.useMutation();
   const router = useRouter();
   const { SuccessToast, ErrorToast } = useAppToasts();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
 
   const onSubmit = async (Userdetails: SignupType) => {
     if (!Userdetails) return;
@@ -72,7 +75,7 @@ const UserForm = () => {
       </CardHeader>
 
       <CardContent>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 text-sm">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 text-sm">
           <div className="flex gap-3">
             <FormField
               className="flex-1"
@@ -148,11 +151,15 @@ const UserForm = () => {
               <Lock className="absolute left-3 top-2.5 h-4 w-4 text-primary" />
               <Input
                 {...register("password")}
-                type="password"
+                type={showPassword ? "text" : "password"}
                 className="rounded-full bg-white pl-9 focus:ring-1 focus:ring-dark focus:transition-all"
                 placeholder="••••••••"
               />
             </div>
+            <PasswordViewToggle
+                setShowPassword={setShowPassword}
+                showPassword={showPassword}
+              />
           </FormField>
 
           <div className="flex gap-3">

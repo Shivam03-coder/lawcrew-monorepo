@@ -94,12 +94,14 @@ const SignInForm = () => {
                 showPassword={showPassword}
               />
             </div>
-            <Link
-              href="/forgot-password"
-              className="text-main/80 mt-2 flex justify-end px-4 underline underline-offset-1"
-            >
-              forgot-password
-            </Link>
+            <button className="float-right">
+              <Link
+                href="/forgot-password"
+                className="text-main/80 mt-2 flex justify-end px-4 underline underline-offset-1"
+              >
+                forgot-password
+              </Link>
+            </button>
           </FormField>
 
           <Button
@@ -110,6 +112,15 @@ const SignInForm = () => {
             {LoginUser.isPending ? <Spinner color="#f2f8ff" /> : "LOGIN"}
           </Button>
         </form>
+        <div className="mt-6 text-center text-sm">
+          Don't have an account?{" "}
+          <a
+            href="/sign-up"
+            className="text-blue-600 underline underline-offset-4 transition-colors hover:underline"
+          >
+            Sign-up
+          </a>
+        </div>
       </CardContent>
     </Card>
   );
