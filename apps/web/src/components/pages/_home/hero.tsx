@@ -19,15 +19,15 @@ const Hero = () => {
 
       <section className="max-w-3xl px-4 sm:max-w-4xl">
         {/* Heading */}
-        <h1 className="textDark relative mx-auto mt-6 font-lexend text-3xl font-normal tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+        <h1 className="textDark relative mx-auto mt-6 font-lexend text-3xl font-normal tracking-tight sm:text-3xl md:text-5xl lg:text-6xl">
           A Satisfied Customer is
-          <span className="mt-2 block bg-gradient-to-r from-blue-600 via-black to-blue-600 bg-clip-text pb-3 text-transparent dark:via-slate-400 sm:pb-5">
+          <span className="mt-2 block textDark pb-3 text-transparent dark:via-slate-400 sm:pb-5">
             The Best Business Strategy.
           </span>
         </h1>
 
         {/* Description */}
-        <p className="textDark mx-auto mt-6 max-w-2xl font-lexend text-sm sm:text-lg md:text-xl">
+        <p className="textDark opacity-70  mx-auto mt-6 max-w-2xl font-lexend text-sm sm:text-lg md:text-lg">
           LAW-WISE empowers legal professionals with cutting-edge tools for
           efficient case management, secure document handling, and streamlined
           client communication. Simplify legal workflows, stay organized, and
@@ -37,7 +37,7 @@ const Hero = () => {
         {/* Action Buttons */}
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:mt-10 sm:flex-row sm:gap-6">
           <Button
-            className="group flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-300 via-black to-purple-300 px-6 py-3 text-sm font-semibold text-white transition-all hover:scale-105 sm:w-auto sm:px-8 sm:py-4 sm:text-base"
+            className="group flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-all hover:scale-105 sm:w-auto sm:px-8 sm:py-4 sm:text-base"
             size="lg"
             aria-label="Try for Free"
           >

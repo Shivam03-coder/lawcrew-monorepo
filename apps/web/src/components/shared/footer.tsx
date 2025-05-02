@@ -9,7 +9,7 @@ import {
 import Link from "next/link";
 const Footer = () => {
   return (
-    <footer className="border-t bg-blue-100 dark:border-black dark:bg-gradient-to-b dark:from-gray-800 dark:to-gray-700 sm:rounded-t-[80px]">
+    <footer className="border-t bg-white dark:border-black dark:bg-gradient-to-b dark:from-gray-800 dark:to-gray-700 ">
       <div className="container mx-auto px-4 py-6 md:py-8 lg:py-10">
         {/* Main Footer Content */}
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">

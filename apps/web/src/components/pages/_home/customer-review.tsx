@@ -73,7 +73,7 @@ const ReviewCard = ({
   body: string;
 }) => {
   return (
-    <Card className="card relative flex w-64 transform flex-col rounded-lg p-4 shadow-md transition-transform hover:scale-105 hover:bg-secondary">
+    <Card className="card relative flex w-64 transform flex-col rounded-lg p-4 shadow-md transition-transform hover:scale-105">
       <CardHeader className="flex flex-row items-center gap-2">
         <Avatar className="flex-shrink-0">
           <AvatarImage src={img} alt={name} className="rounded-full" />

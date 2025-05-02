@@ -80,7 +80,7 @@ const Payment = () => {
               </div>
             </section>
             <div className="p-4">
-              <button className="w-full rounded bg-[#001f3f] px-5 py-3 text-white transition hover:bg-[#003366]">
+              <button className="w-full rounded bg-primary px-5 py-3 text-white transition hover:bg-[#003366]">
                 Get Started{" "}
                 <ChevronRight className="ml-2 inline-block" size={18} />
               </button>

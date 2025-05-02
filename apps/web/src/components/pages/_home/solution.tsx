@@ -21,6 +21,7 @@ import {
 import Link from "next/link";
 import React from "react";
 import SectionHeader from "./section-header";
+import { Button } from "@/components/ui/button";
 
 interface SolutionCardProps {
   icon: ReactNode;
@@ -41,7 +42,7 @@ const SolutionCard: FC<SolutionCardProps> = ({
 }) => {
   return (
     <Card
-      className={`hover:bg-secondary/50 card group flex h-full flex-col transition-all duration-300 hover:scale-[1.02]`}
+      className={`card bg-white group flex h-full flex-col hover:transition-all duration-300 hover:scale-[1.02]`}
     >
       <CardHeader className="flex-none">
         <CardTitle
@@ -56,16 +57,19 @@ const SolutionCard: FC<SolutionCardProps> = ({
         </CardDescription>
       </CardHeader>
       <CardContent className="flex-grow">
-        <p className="text-muted-foreground font-inter text-sm dark:text-slate-300 sm:text-base">
+        <p className="text-primary/70 font-inter text-sm dark:text-slate-300 sm:text-base">
           {description}
         </p>
       </CardContent>
       <CardFooter className="flex-none pt-4">
-        <Link
-          href={linkHref}
-          className="inline-flex items-center rounded-xl bg-primary p-3 text-sm font-medium text-secondary hover:underline sm:text-base"
-        >
-          {linkText} <ChevronRight className="ml-1 h-4 w-4 sm:h-5 sm:w-5" />
+      
+      <Link href={linkHref} className="mt-auto flex justify-center">
+          <Button
+            variant="outline"
+            className="w-full rounded-full border-white bg-primary text-secondary transition-all"
+          >
+            {linkText || "Click to Explore"}
+          </Button>
         </Link>
       </CardFooter>
     </Card>

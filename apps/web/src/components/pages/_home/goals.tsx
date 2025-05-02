@@ -20,7 +20,7 @@ const RetroactiveCard = ({
   Icon: React.ElementType;
   iconBgColor: string;
 }) => (
-  <div className="hover:bg-secondary/50 card group flex transform items-center space-x-4 rounded-lg p-4 shadow-md transition-all duration-300 hover:scale-[1.02] sm:p-5 md:p-6">
+<div className="card group flex transform items-center space-x-4 rounded-lg  p-4 shadow transition-all duration-300 hover:scale-[1.02] sm:p-5 md:p-6">
     <div
       className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full p-2.5 transition-colors group-hover:bg-opacity-80 sm:h-14 sm:w-14 sm:p-3 ${iconBgColor}`}
     >

@@ -7,7 +7,7 @@
     "dev:api": "pnpm nx run @lawcrew/api:dev"
   },
   "keywords": [],
-  "author": "",
+  "author": "shivam",
   "license": "ISC",
   "devDependencies": {
     "nx": "20.8.1",
