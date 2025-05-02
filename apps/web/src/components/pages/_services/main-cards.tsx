@@ -4,8 +4,11 @@ import { Scale, Briefcase, ChevronRight, MonitorCheck } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import useAuth from "@/hooks/use-auth";
 
-function Main() {
+function MainCards() {
+  const user = useAuth();
+  if (!user) return null;
   const services = [
     {
       title: "Legal Services",
@@ -17,7 +20,7 @@ function Main() {
         "Contract Drafting",
         "Legal Representation",
       ],
-      path: "/",
+      path: `/legal-management/${user?.role?.toLocaleLowerCase()}/${user?.id}/`,
     },
     {
       title: "Financial Services",
@@ -29,7 +32,7 @@ function Main() {
         "Tax Consultation",
         "Wealth Management",
       ],
-      path: "/",
+      path: `/legal-management/${user?.role}/${user?.id}/`,
     },
     {
       title: "Income Services",
@@ -41,7 +44,7 @@ function Main() {
         "Tax Consultation",
         "Wealth Management",
       ],
-      path: "/",
+      path: `/legal-management/${user?.role}/${user?.id}/`,
     },
   ];
 
@@ -110,4 +113,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default MainCards;

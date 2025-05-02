@@ -16,7 +16,7 @@
   .app {
     height: 100vh;
     width: 100%;
-    @apply font-inter text-base;
+    @apply font-lexend text-base;
   }
 
   html {
@@ -76,7 +76,7 @@
     @apply rounded border-2 bg-white;
   }
   .card {
-    @apply hover:border hover:border-black ;
+    @apply hover:border hover:border-black;
   }
   .textDark {
     @apply text-primary dark:text-secondary;

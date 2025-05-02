@@ -127,6 +127,7 @@ export const authRoutes = router({
             state: true,
           },
         },
+        userProfile: true,
       },
     });
     return {
