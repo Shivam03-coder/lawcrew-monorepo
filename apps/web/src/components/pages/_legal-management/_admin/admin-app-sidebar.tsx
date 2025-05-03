@@ -49,6 +49,11 @@ const AdminAppsidebar = () => {
       icon: Home,
     },
     {
+      title: "Task",
+      url: links?.tasks,
+      icon: CheckSquare,
+    },
+    {
       title: "Clients",
       url: links?.clientList,
       icon: Users,
@@ -59,19 +64,14 @@ const AdminAppsidebar = () => {
       icon: Users,
     },
     {
-      title: "Calendar",
-      url: links?.calendar,
-      icon: Calendar,
-    },
-    {
       title: "Case",
       url: links?.cases,
       icon: Gavel,
     },
     {
-      title: "Task",
-      url: links?.tasks,
-      icon: CheckSquare,
+      title: "Calendar",
+      url: links?.calendar,
+      icon: Calendar,
     },
     {
       title: "Contacts",

@@ -1,14 +1,5 @@
 "use client";
 
-export interface User {
-  id: string;
-  username: string;
-  firstName: string;
-  lastName: string;
-  password: string;
-  createdAt: string;
-}
-
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,6 +13,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
 import { Participants } from "@/types/global";
+import { useRouter } from "next/navigation";
+import useAuth from "@/hooks/use-auth";
+import Link from "next/link";
 
 export const userColumns: ColumnDef<Participants>[] = [
   {
@@ -46,21 +40,42 @@ export const userColumns: ColumnDef<Participants>[] = [
     enableHiding: false,
     size: 40,
   },
+
   {
-    accessorKey: "id",
-    header: ({ column }) => (
-      <Button variant="ghost" onClick={() => column.toggleSorting()}>
-        ID <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-    ),
-  },
-  {
-    accessorKey: "username",
+    accessorKey: "userName",
     header: ({ column }) => (
       <Button variant="ghost" onClick={() => column.toggleSorting()}>
         Username <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
+    cell: ({ row }) => {
+      const router = useRouter();
+      const userName = row.getValue("userName") as string;
+      const clientId = row.original.id;
+      const user = useAuth();
+
+      return (
+        <Link
+          href={`/legal-management/${user?.role?.toLocaleLowerCase()}/${user?.id}/client-list/${clientId}`}
+          className="lowercase text-primary underline transition hover:text-dark"
+        >
+          {userName}
+        </Link>
+      );
+    },
+  },
+  {
+    accessorKey: "firstName",
+    header: ({ column }) => (
+      <Button variant="ghost" onClick={() => column.toggleSorting()}>
+        Name <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+    cell: ({ row }) => {
+      const firstName = row.getValue("firstName");
+      const lastName = row.original.lastName;
+      return <span>{`${firstName} ${lastName}`}</span>;
+    },
   },
   {
     accessorKey: "email",
@@ -71,7 +86,7 @@ export const userColumns: ColumnDef<Participants>[] = [
     ),
   },
   {
-    accessorKey: "contacts",
+    accessorKey: "phoneNumber",
     header: ({ column }) => (
       <Button variant="ghost" onClick={() => column.toggleSorting()}>
         Contacts <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -85,6 +100,19 @@ export const userColumns: ColumnDef<Participants>[] = [
     cell: () => <span>********</span>,
   },
   {
+    id: "address",
+    header: ({ column }) => (
+      <Button variant="ghost" onClick={() => column.toggleSorting()}>
+        Address <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+    cell: ({ row }) => {
+      const { city, state } = row.original.UserAddress || {};
+      return <span className="lowercase">{city ? `${city}` : "N/A"}</span>;
+    },
+    enableSorting: false, // optional: remove if UserAddress isn't sortable
+  },
+  {
     accessorKey: "createdAt",
     header: ({ column }) => (
       <Button variant="ghost" onClick={() => column.toggleSorting()}>
@@ -93,7 +121,7 @@ export const userColumns: ColumnDef<Participants>[] = [
     ),
     cell: ({ row }) => {
       const createdAt = new Date(row.getValue("createdAt"));
-      return <span>{createdAt.toLocaleDateString()}</span>;
+      return <span>{new Date(createdAt).toLocaleDateString()}</span>;
     },
   },
   {

@@ -1,5 +1,6 @@
 import { addParticipantsSchema } from "@lawcrew/schema";
 import { router, protectedProcedure } from "../trpc";
+import { z } from "zod";
 
 export const participantsRoutes = router({
   addMember: protectedProcedure
@@ -30,7 +31,7 @@ export const participantsRoutes = router({
               state,
             },
           },
-          role: "CLIENT",
+          role: "MEMBER",
         },
       });
       return member;
@@ -87,6 +88,7 @@ export const participantsRoutes = router({
         },
         password: true,
         userName: true,
+        createdAt: true,
       },
       orderBy: {
         createdAt: "desc",
@@ -113,6 +115,7 @@ export const participantsRoutes = router({
         },
         password: true,
         userName: true,
+        createdAt: true,
       },
       orderBy: {
         createdAt: "desc",
@@ -120,4 +123,20 @@ export const participantsRoutes = router({
     });
     return member;
   }),
+
+  deleteParticipant: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id } = input;
+      const deletedParticipant = await ctx.db.user.delete({
+        where: {
+          id,
+        },
+      });
+      return deletedParticipant;
+    }),
 });

@@ -18,4 +18,5 @@ export interface Participants {
     state: string;
   } | null;
   userName: string;
+  createdAt: string;
 }

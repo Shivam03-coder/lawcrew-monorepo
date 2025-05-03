@@ -1,132 +1,14 @@
+"use client";
 import MembersTable from "@/components/pages/_legal-management/_admin/members-list/members-table";
-import { Participants } from "@/types/global";
-import React from "react";
+import DataLoader from "@/components/shared/loader";
+import { api } from "@lawcrew/trpc-client/src/client";
 
-export const dummyUsers: Participants[] = [
-  {
-    id: "1",
-    userName: "john_doe",
-    email: "john@example.com",
-    phoneNumber: "9876543210",
-    password: "********",
-    createdAt: "2024-04-10",
-    city: "New York",
-    state: "NY",
-    firstName: "John",
-    lastName: "Doe",
-  },
-  {
-    id: "2",
-    userName: "john_doe",
-    email: "john@example.com",
-    phoneNumber: "9876543210",
-    password: "********",
-    createdAt: "2024-04-10",
-    city: "New York",
-    state: "NY",
-    firstName: "John",
-    lastName: "Doe",
-  },
-  {
-    id: "3",
-    userName: "john_doe",
-    email: "john@example.com",
-    phoneNumber: "9876543210",
-    password: "********",
-    createdAt: "2024-04-10",
-    city: "New York",
-    state: "NY",
-    firstName: "John",
-    lastName: "Doe",
-  },
-  {
-    id: "4",
-    userName: "john_doe",
-    email: "john@example.com",
-    phoneNumber: "9876543210",
-    password: "********",
-    createdAt: "2024-04-10",
-    city: "New York",
-    state: "NY",
-    firstName: "John",
-    lastName: "Doe",
-  },
-  {
-    id: "5",
-    userName: "john_doe",
-    email: "john@example.com",
-    phoneNumber: "9876543210",
-    password: "********",
-    createdAt: "2024-04-10",
-    city: "New York",
-    state: "NY",
-    firstName: "John",
-    lastName: "Doe",
-  },
-  {
-    id: "6",
-    userName: "john_doe",
-    email: "john@example.com",
-    phoneNumber: "9876543210",
-    password: "********",
-    createdAt: "2024-04-10",
-    city: "New York",
-    state: "NY",
-    firstName: "John",
-    lastName: "Doe",
-  },
-  {
-    id: "7",
-    userName: "john_doe",
-    email: "john@example.com",
-    phoneNumber: "9876543210",
-    password: "********",
-    createdAt: "2024-04-10",
-    city: "New York",
-    state: "NY",
-    firstName: "John",
-    lastName: "Doe",
-  },
-  {
-    id: "8",
-    userName: "john_doe",
-    email: "john@example.com",
-    phoneNumber: "9876543210",
-    password: "********",
-    createdAt: "2024-04-10",
-    city: "New York",
-    state: "NY",
-    firstName: "John",
-    lastName: "Doe",
-  },
-  {
-    id: "9",
-    userName: "john_doe",
-    email: "john@example.com",
-    phoneNumber: "9876543210",
-    password: "********",
-    createdAt: "2024-04-10",
-    city: "New York",
-    state: "NY",
-    firstName: "John",
-    lastName: "Doe",
-  },
-  {
-    id: "10",
-    userName: "john_doe",
-    email: "john@example.com",
-    phoneNumber: "9876543210",
-    password: "********",
-    createdAt: "2024-04-10",
-    city: "New York",
-    state: "NY",
-    firstName: "John",
-    lastName: "Doe",
-  },
-];
+const MembersListPage = () => {
+  const { data: users = [], isLoading } = api.participant.getMember.useQuery();
+  if (isLoading) return <DataLoader />;
+  console.log("🚀 ~ MembersListPage ~ users:", users);
 
-const ParticipantsPage = () => {
-  return <MembersTable data={dummyUsers} />;
+  return <MembersTable data={users} />;
 };
 
-export default ParticipantsPage;
+export default MembersListPage;

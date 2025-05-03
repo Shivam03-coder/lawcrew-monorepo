@@ -16,7 +16,6 @@ import {
 import {
   Search,
   SlidersHorizontal,
-  RefreshCw,
   ChevronLeft,
   ChevronRight,
   Trash,
@@ -31,13 +30,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -214,7 +207,7 @@ export function TableShell<TData, TValue>({
       {/* Table Content */}
       {/* Table Content */}
       <div className="px-6">
-        <div className="max-h-[700px] mb-6 w-full overflow-auto rounded-lg border border-gray-100">
+        <div className="mb-6 max-h-[700px] w-full overflow-auto rounded-lg border border-gray-100">
           {data.length > 0 ? (
             <Table className="min-w-[900px]">
               <TableHeader>
@@ -265,7 +258,7 @@ export function TableShell<TData, TValue>({
         </div>
       </div>
 
-      <div className="mt-4 flex absolute bottom-0 pb-5 w-full items-center justify-between px-2">
+      <div className="absolute bottom-0 mt-4 flex w-full items-center justify-between px-2 pb-5">
         <div className="text-sm text-gray-500 dark:text-gray-400">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected

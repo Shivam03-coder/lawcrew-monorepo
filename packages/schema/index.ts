@@ -68,3 +68,4 @@ export const addParticipantsSchema = z.object({
 });
 
 export type AddParticipantsType = z.infer<typeof addParticipantsSchema>;
+

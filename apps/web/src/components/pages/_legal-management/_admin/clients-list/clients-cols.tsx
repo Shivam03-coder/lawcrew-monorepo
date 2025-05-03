@@ -121,7 +121,7 @@ export const userColumns: ColumnDef<Participants>[] = [
     ),
     cell: ({ row }) => {
       const createdAt = new Date(row.getValue("createdAt"));
-      return <span>{createdAt.toLocaleDateString()}</span>;
+      return <span>{new Date(createdAt).toLocaleDateString()}</span>;
     },
   },
   {
