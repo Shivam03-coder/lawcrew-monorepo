@@ -36,3 +36,35 @@ export const forgotPasswordSchema = z
   });
 
 export type ForgotPasswordType = z.infer<typeof forgotPasswordSchema>;
+
+export const addParticipantsSchema = z.object({
+  userName: z
+    .string()
+    .min(3, { message: "Username must be at least 3 characters long" })
+    .regex(/^[a-zA-Z0-9]+$/, {
+      message: "Username can only contain letters and numbers",
+    }),
+
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters long" }),
+
+  email: z.string().email({ message: "Invalid email address" }),
+
+  firstName: z
+    .string()
+    .min(2, { message: "First name must be at least 2 characters" }),
+
+  lastName: z
+    .string()
+    .min(2, { message: "Last name must be at least 2 characters" }),
+
+  city: z.string().min(1, { message: "City is required" }),
+  state: z.string().min(1, { message: "State is required" }),
+
+  phoneNumber: z.string().regex(/^[0-9]{10,15}$/, {
+    message: "Phone number must be between 10 and 15 digits",
+  }),
+});
+
+export type AddParticipantsType = z.infer<typeof addParticipantsSchema>;

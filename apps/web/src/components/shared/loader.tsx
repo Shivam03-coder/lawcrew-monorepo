@@ -17,7 +17,7 @@ const DataLoader = () => {
         animate={{ scale: [1, 1.1, 1] }}
         transition={{ repeat: Infinity, duration: 2 }}
       >
-        DIGITALGB...
+        LAWCREW.NET...
       </motion.div>
       <HashLoader size={80} color="#ffffff" />
     </motion.div>

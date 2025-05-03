@@ -1,3 +1,5 @@
+"use client";
+import React from "react";
 import {
   Home,
   Calendar,
@@ -31,46 +33,57 @@ import {
 
 import { Users, Gavel, Contact } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-
-const items = [
-  {
-    title: "Home",
-    url: "/",
-    icon: Home,
-  },
-  {
-    title: "Participants",
-    url: "/participants",
-    icon: Users,
-  },
-  {
-    title: "Calendar",
-    url: "/calendar",
-    icon: Calendar,
-  },
-  {
-    title: "Case",
-    url: "/cases",
-    icon: Gavel,
-  },
-  {
-    title: "Task",
-    url: "/tasks",
-    icon: CheckSquare,
-  },
-  {
-    title: "Contacts",
-    url: "/contacts",
-    icon: Contact,
-  },
-  {
-    title: "Settings",
-    url: "/settings",
-    icon: Settings,
-  },
-];
+import useAuth from "@/hooks/use-auth";
+import useAppLinks from "@/hooks/use-app-links";
 
 const AdminAppsidebar = () => {
+  const user = useAuth();
+  const links = useAppLinks();
+
+  if (!links || Object.values(links).some((link) => !link)) return null;
+
+  const items = [
+    {
+      title: "Home",
+      url: links?.base,
+      icon: Home,
+    },
+    {
+      title: "Clients",
+      url: links?.clientList,
+      icon: Users,
+    },
+    {
+      title: "Members",
+      url: links?.memberList,
+      icon: Users,
+    },
+    {
+      title: "Calendar",
+      url: links?.calendar,
+      icon: Calendar,
+    },
+    {
+      title: "Case",
+      url: links?.cases,
+      icon: Gavel,
+    },
+    {
+      title: "Task",
+      url: links?.tasks,
+      icon: CheckSquare,
+    },
+    {
+      title: "Contacts",
+      url: links?.contacts,
+      icon: Contact,
+    },
+    {
+      title: "Settings",
+      url: links?.settings,
+      icon: Settings,
+    },
+  ];
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="py-4">

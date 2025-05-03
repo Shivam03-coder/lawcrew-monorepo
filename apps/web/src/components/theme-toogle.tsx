@@ -16,7 +16,8 @@ const ThemeToggle = () => {
     <Button
       size="icon"
       onClick={() => dispatch(toggleDarkMode())}
-      className="rounded-full bg-transparent p-2 transition-all dark:text-secondary"
+      variant={ "ghost"}
+      className="text-dark dark:text-secondary bg-none"
     >
       {isDarkMode ? <Moon className="size-6" /> : <Sun className="h-5 w-5" />}
     </Button>

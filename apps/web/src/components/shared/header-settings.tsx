@@ -37,8 +37,8 @@ const HeaderSettings = () => {
         <Bell size={20} />
       </button>
       <ThemeToggle />
-      <button className="rounded-lg p-2 text-gray-500 dark:text-secondary">
-        <Settings size={20} />
+      <button className="rounded-lg p-2 text-primary">
+        <Settings className="text-primary" size={20} />
       </button>
       <UserProfile
         userName={name as string}

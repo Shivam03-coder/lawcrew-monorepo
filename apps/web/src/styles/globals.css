@@ -28,6 +28,12 @@
     --color-secondary: #f2f8ff;
     --color-main: #2d70ff;
     --color-dark: #151517;
+
+    --chart-1: #60b5ff;
+    --chart-2: #81e7af;
+    --chart-3: #2e4752;
+    --chart-4: #f1c35d;
+    --chart-5: #f5a455;
   }
 
   h1 {
@@ -83,6 +89,9 @@
   }
   .borderDark {
     @apply border-primary dark:border-secondary;
+  }
+  .mainCard {
+    @apply rounded bg-slate-50 p-4 shadow;
   }
 }
 
