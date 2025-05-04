@@ -8,24 +8,59 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  ADMIN
+  MEMBER
+  CLIENT
+}
+
+enum CaseType {
+  CIVIL
+  CRIMINAL
+  FAMILY
+  CORPORATE
+  PROPERTY
+  TAX
+  OTHER
+}
+
+enum CaseStatus {
+  OPEN
+  IN_PROGRESS
+  CLOSED
+  ARCHIVED
+  ON_HOLD
+}
+
+enum CasePriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
 model User {
-  id          String       @id @default(cuid())
+  id          String   @id @default(cuid())
   firstName   String
   lastName    String?
-  userName    String       @unique
-  email       String       @unique
+  userName    String   @unique
+  email       String   @unique
   userProfile String?
   password    String
-  phoneNumber String       @unique
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  phoneNumber String   @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  role UserRole @default(ADMIN)
+
   Session     Session?
-  role        UserRole     @default(ADMIN)
   UserAddress UserAddress?
+  TeamAdmin   TeamAdmin?
+  TeamMember  TeamMember?
+  TeamClient  TeamClient?
 }
 
 model UserAddress {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   city      String
   state     String
   userId    String?  @unique
@@ -41,10 +76,91 @@ model Session {
 
   userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("UserSessions")
 }
 
-enum UserRole {
-  ADMIN
-  MEMBER
-  CLIENT
+model TeamAdmin {
+  id         String   @id @default(cuid())
+  userId     String?  @unique
+  user       User?    @relation(fields: [userId], references: [id])
+  role       UserRole @default(ADMIN)
+  isVerified Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  cases Case[]
+}
+
+model TeamMember {
+  id        String   @id @default(cuid())
+  userId    String?  @unique
+  user      User?    @relation(fields: [userId], references: [id])
+  role      UserRole @default(MEMBER)
+  createdAt DateTime @default(now())
+
+  memberships TeamMembership[]
+}
+
+model TeamClient {
+  id        String   @id @default(cuid())
+  userId    String?  @unique
+  user      User?    @relation(fields: [userId], references: [id])
+  role      UserRole @default(CLIENT)
+  createdAt DateTime @default(now())
+
+  cases Case[]
+}
+
+model Case {
+  id          String     @id @default(cuid())
+  caseNumber  String     @unique
+  caseTitle   String
+  caseType    CaseType
+  caseStatus  CaseStatus
+  caseDetails String
+  caseDocsUrl String?
+  startDate   DateTime
+  dueDate     DateTime
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  priority     CasePriority? @default(MEDIUM)
+  jurisdiction String?
+
+  outcome    String?
+  isArchived Boolean @default(false)
+
+  teamAdminId String
+  admin       TeamAdmin @relation(fields: [teamAdminId], references: [id])
+
+  teamClientId String
+  client       TeamClient @relation(fields: [teamClientId], references: [id])
+
+  members TeamMembership[]
+  tags    CaseTag[]
+
+  @@index([caseNumber, caseType, caseStatus])
+  @@map("Team")
+}
+
+model CaseTag {
+  id     String @id @default(cuid())
+  label  String
+  caseId String
+  case   Case   @relation(fields: [caseId], references: [id])
+
+  @@unique([label, caseId])
+}
+
+model TeamMembership {
+  id           String     @id @default(cuid())
+  teamMemberId String
+  teamMember   TeamMember @relation(fields: [teamMemberId], references: [id])
+
+  teamId String
+  team   Case   @relation(fields: [teamId], references: [id])
+
+  joinedAt DateTime @default(now())
+
+  @@unique([teamMemberId, teamId])
 }
