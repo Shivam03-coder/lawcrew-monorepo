@@ -1,41 +1,12 @@
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
+  
 }
 
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
-}
-
-enum UserRole {
-  ADMIN
-  MEMBER
-  CLIENT
-}
-
-enum CaseType {
-  CIVIL
-  CRIMINAL
-  FAMILY
-  CORPORATE
-  PROPERTY
-  TAX
-  OTHER
-}
-
-enum CaseStatus {
-  OPEN
-  IN_PROGRESS
-  CLOSED
-  ARCHIVED
-  ON_HOLD
-}
-
-enum CasePriority {
-  LOW
-  MEDIUM
-  HIGH
 }
 
 model User {
@@ -163,4 +134,35 @@ model TeamMembership {
   joinedAt DateTime @default(now())
 
   @@unique([teamMemberId, teamId])
+}
+
+
+enum UserRole {
+    ADMIN
+    MEMBER
+    CLIENT
+}
+
+enum CaseType {
+    CIVIL
+    CRIMINAL
+    FAMILY
+    CORPORATE
+    PROPERTY
+    TAX
+    OTHER
+}
+
+enum CaseStatus {
+    OPEN
+    IN_PROGRESS
+    CLOSED
+    ARCHIVED
+    ON_HOLD
+}
+
+enum CasePriority {
+    LOW
+    MEDIUM
+    HIGH
 }
