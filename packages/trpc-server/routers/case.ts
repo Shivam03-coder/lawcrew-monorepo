@@ -10,8 +10,19 @@ export const caseDetailsRoutes = router({
         data: {
           ...input,
           adminId,
+          CaseTag: {
+            create: {
+              label: input.labels as string,
+            },
+          },
+          CaseNote: {
+            create: {
+              note: input.note as string,
+              createdBy: adminId,
+            },
+          },
         },
       });
+      return caseDetails;
     }),
-  getDocumentsUrl: publicProcedure.query(async ({ ctx }) => {}),
 });

@@ -12,7 +12,9 @@ const AddCasePage = () => {
         <AddClientFormNavs active={active} setActive={setActive} />
         <AddCleintPoster />
       </div>
-      <AddClientForm />
+      <div className="center h-full w-full p-5">
+        <AddClientForm />
+      </div>
     </main>
   );
 };

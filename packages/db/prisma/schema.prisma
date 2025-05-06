@@ -98,11 +98,10 @@ model TeamClient {
 }
 
 model CaseTag {
-  id           String @id @default(cuid())
-  label        String
-  caseId       String
-  practiceArea String
-  case         Case   @relation(fields: [caseId], references: [id])
+  id     String @id @default(cuid())
+  label  String
+  caseId String
+  case   Case   @relation(fields: [caseId], references: [id])
 
   @@unique([label, caseId])
 }

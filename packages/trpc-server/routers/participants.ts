@@ -15,6 +15,8 @@ export const participantsRoutes = router({
         phoneNumber,
         userName,
         state,
+        country,
+        zip,
       } = input;
 
       const member = await ctx.db.user.create({
@@ -29,6 +31,8 @@ export const participantsRoutes = router({
             create: {
               city,
               state,
+              country,
+              zip,
             },
           },
           role: "MEMBER",
@@ -48,6 +52,8 @@ export const participantsRoutes = router({
         phoneNumber,
         userName,
         state,
+        country,
+        zip,
       } = input;
 
       const client = await ctx.db.user.create({
@@ -62,6 +68,8 @@ export const participantsRoutes = router({
             create: {
               city,
               state,
+              country,
+              zip,
             },
           },
           role: "CLIENT",

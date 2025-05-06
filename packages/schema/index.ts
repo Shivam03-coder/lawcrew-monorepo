@@ -75,7 +75,11 @@ export const addParticipantsSchema = z.object({
 
   city: z.string().min(1, { message: "City is required" }),
   state: z.string().min(1, { message: "State is required" }),
-
+  country: z.string().min(2, "Country must be at least 2 characters"),
+  zip: z
+    .string()
+    .min(4, "ZIP code must be at least 4 characters")
+    .max(10, "ZIP code must be at most 10 characters"),
   phoneNumber: z.string().regex(/^[0-9]{10,15}$/, {
     message: "Phone number must be between 10 and 15 digits",
   }),
@@ -83,7 +87,7 @@ export const addParticipantsSchema = z.object({
 
 export type AddParticipantsType = z.infer<typeof addParticipantsSchema>;
 
-const PracticeAreaEnum = z.enum([
+export const PracticeAreaEnum = z.enum([
   "CRIMINAL",
   "CIVIL",
   "COMMERCIAL",
@@ -110,20 +114,21 @@ const CaseStageEnum = z.enum([
 
 export const caseDetailsSchema = z.object({
   title: z.string(),
-  description: z.string().optional(),
-  practiseArea: PracticeAreaEnum.default("CRIMINAL"),
-  arrivalDate: z.date().optional(),
-  status: CaseStatusEnum.default("OPEN"),
-  matterPriority: MatterPriorityEnum.default("HIGH"),
-  internalRefNumber: z.string().optional(),
-  filedDate: z.date().optional(),
-  closedDate: z.date().optional(),
-  estimatedCloseDate: z.date().optional(),
+  description: z.string(),
+  practiseArea: PracticeAreaEnum,
+  arrivalDate: z.date(),
+  status: CaseStatusEnum,
+  matterPriority: MatterPriorityEnum,
+  internalRefNumber: z.string(),
+  filedDate: z.date(),
+  closedDate: z.date(),
+  estimatedCloseDate: z.date(),
   stage: CaseStageEnum,
   clientId: z.string(),
-  teamMemberId: z.string(),
   teamMemberIds: z.array(z.string()),
-  docsUrl: z.string().url().optional(),
+  docsUrl: z.string().url(),
+  labels: z.string(),
+  note: z.string(),
 });
 
 export type CaseDetailsType = z.infer<typeof caseDetailsSchema>;
