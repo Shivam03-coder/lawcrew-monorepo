@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import { Server } from "http";
 import { appEnvConfigs } from "./configs";
 import { trpcExpress } from "@lawcrew/trpc-server";
+import getMediaUrlRoute from "./routes/get-media-link.route";
 interface AppOptions {
   port?: number;
 }
@@ -40,6 +41,7 @@ class App {
     this.app.use(bodyParser.urlencoded({ extended: true }));
     this.app.use(cookieParser());
     this.app.use("/trpc", trpcExpress);
+    this.app.use("/", getMediaUrlRoute);
   }
 
   public listen(): void {
