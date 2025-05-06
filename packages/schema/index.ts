@@ -82,3 +82,48 @@ export const addParticipantsSchema = z.object({
 });
 
 export type AddParticipantsType = z.infer<typeof addParticipantsSchema>;
+
+const PracticeAreaEnum = z.enum([
+  "CRIMINAL",
+  "CIVIL",
+  "COMMERCIAL",
+  "ADMINISTRATIVE",
+  "LABOR",
+  "FAMILY",
+  "REAL_ESTATE",
+  "INTELLECTUAL_PROPERTY",
+  "ENVIRONMENTAL",
+  "TAXATION",
+]);
+const CaseStatusEnum = z.enum(["OPEN", "CLOSED", "PENDING"]);
+const MatterPriorityEnum = z.enum(["HIGH", "MEDIUM", "LOW"]);
+const CaseStageEnum = z.enum([
+  "RECONCILIATION_COMMITTEE",
+  "FIRST_INSTANCE_COURT",
+  "APPEAL_COURT",
+  "CASSATION_HIGH_COURT",
+  "EXECUTION",
+  "UNDER_SETTLEMENT",
+  "SETTLED_CLOSED",
+  "DISPUTE",
+]);
+
+export const caseDetailsSchema = z.object({
+  title: z.string(),
+  description: z.string().optional(),
+  practiseArea: PracticeAreaEnum.default("CRIMINAL"),
+  arrivalDate: z.date().optional(),
+  status: CaseStatusEnum.default("OPEN"),
+  matterPriority: MatterPriorityEnum.default("HIGH"),
+  internalRefNumber: z.string().optional(),
+  filedDate: z.date().optional(),
+  closedDate: z.date().optional(),
+  estimatedCloseDate: z.date().optional(),
+  stage: CaseStageEnum,
+  clientId: z.string(),
+  teamMemberId: z.string(),
+  teamMemberIds: z.array(z.string()),
+  docsUrl: z.string().url().optional(),
+});
+
+export type CaseDetailsType = z.infer<typeof caseDetailsSchema>;

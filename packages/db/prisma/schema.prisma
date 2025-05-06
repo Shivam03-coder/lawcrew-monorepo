@@ -126,7 +126,7 @@ model Case {
   description        String?
   practiseArea       PracticeArea   @default(CRIMINAL)
   arrivalDate        DateTime?      @default(now())
-  status             CaseStatus     @default(OPEN)
+  status             CaseStatus?    @default(OPEN)
   matterPriority     matterPriority @default(HIGH)
   internalRefNumber  String?
   filedDate          DateTime?
@@ -142,8 +142,8 @@ model Case {
 
   TeamMembership TeamMembership[]
 
-  opponentId String   @unique
-  Opponent   Opponent @relation(fields: [opponentId], references: [id])
+  opponentId String?   @unique
+  Opponent   Opponent? @relation(fields: [opponentId], references: [id])
 
   CaseTag      CaseTag[]
   CaseDocument CaseDocument[]
@@ -217,10 +217,8 @@ enum UserRole {
 
 enum CaseStatus {
   OPEN
-  IN_PROGRESS
   CLOSED
-  ARCHIVED
-  ON_HOLD
+  PENDING
 }
 
 enum matterPriority {
