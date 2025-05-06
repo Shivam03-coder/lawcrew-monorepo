@@ -2,12 +2,12 @@
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import useMount from "@/hooks/use-mount";
-import { useAppDispatch, useAppSelector } from "@/store";
-import { toggleDarkMode } from "@/store/states/global";
+import useThemeStore from "@/store/user-theme-store";
 
 const ThemeToggle = () => {
-  const dispatch = useAppDispatch();
-  const { isDarkMode } = useAppSelector((state) => state.global);
+  const isDarkMode = useThemeStore((state) => state.isDarkMode);
+  const toggleDarkMode = useThemeStore((state) => state.toggleDarkMode);
+  
 
   const isMounted = useMount();
   if (!isMounted) return null;
@@ -15,9 +15,9 @@ const ThemeToggle = () => {
   return (
     <Button
       size="icon"
-      onClick={() => dispatch(toggleDarkMode())}
-      variant={ "ghost"}
-      className="text-dark dark:text-secondary bg-none"
+      onClick={() => toggleDarkMode()}
+      variant={"ghost"}
+      className="bg-none text-dark dark:text-secondary"
     >
       {isDarkMode ? <Moon className="size-6" /> : <Sun className="h-5 w-5" />}
     </Button>

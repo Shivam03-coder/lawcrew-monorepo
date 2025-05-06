@@ -45,11 +45,12 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import useMount from "@/hooks/use-mount";
 
 const AdminAppsidebar = () => {
   const user = useAuth();
   const links = useAppLinks();
-
+  const Mount = useMount()
   if (!links || Object.values(links).some((link) => !link)) return null;
 
   const items = [
@@ -99,6 +100,7 @@ const AdminAppsidebar = () => {
       icon: PlusCircleIcon,
     },
   ];
+  if(!Mount) return null
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="py-4">

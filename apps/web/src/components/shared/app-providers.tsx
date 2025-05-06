@@ -1,10 +1,10 @@
 "use client";
 
-import StoreProvider, { useAppSelector } from "@/store";
 import { useEffect } from "react";
 import { Toaster } from "../ui/toaster";
+import useThemeStore from "@/store/user-theme-store";
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
-  const { isDarkMode } = useAppSelector((state) => state.global);
+  const isDarkMode = useThemeStore((state) => state.isDarkMode);
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -25,12 +25,11 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   return (
-    <StoreProvider>
+    <>
       <Toaster />
       <AppLayout>{children}</AppLayout>
-    </StoreProvider>
+    </>
   );
 };
 
 export default AppProvider;
-
