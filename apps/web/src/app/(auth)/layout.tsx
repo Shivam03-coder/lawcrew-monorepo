@@ -25,10 +25,10 @@ export default function RootAuthLayout({
         {/* Left Side - Image Section */}
         <div className="hidden items-center justify-center lg:flex">
           <Image
-            src="/auth.png"
+            src="/auth.svg"
             alt="Authentication Background"
-            height={600}
-            width={600}
+            height={700}
+            width={700}
             className="object-cover dark:brightness-[0.2]"
             priority
           />

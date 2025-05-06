@@ -46,6 +46,7 @@ const SignInForm = () => {
           router.push("/services");
         },
         onError: ({ message }) => {
+          console.log("🚀 ~ onSubmit ~ message:", message)
           ErrorToast({
             title: message,
           });
@@ -55,7 +56,7 @@ const SignInForm = () => {
   };
 
   return (
-    <Card className="w-full max-w-md bg-white py-3 font-lexend shadow-none">
+    <Card className="w-full max-w-md bg-white border border-primary/60 py-3 font-lexend shadow-none">
       <CardHeader className="space-y-1 pb-8">
         <CardTitle className="textDark whitespace-nowrap bg-clip-text text-center text-3xl font-bold tracking-tight text-transparent">
           Welcome back to Lawcrew.

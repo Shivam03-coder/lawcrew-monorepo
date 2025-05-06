@@ -64,7 +64,7 @@ const UserForm = () => {
   };
 
   return (
-    <Card className="w-full max-w-[540px] bg-white py-3 font-lexend shadow-none">
+    <Card className="w-full border-2 border-dashed border-primary max-w-[540px] bg-white py-3 font-lexend shadow-none">
       <CardHeader className="space-y-1 pb-8">
         <CardTitle className="text-center text-3xl font-bold tracking-tight">
           Create your account in Lawcrew

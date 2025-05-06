@@ -2,6 +2,7 @@ import { protectedProcedure, publicProcedure, router } from "../trpc";
 import { signupSchema, loginSchema } from "@lawcrew/schema";
 import AuthServices from "@lawcrew/api/src/services/auth-services";
 import { GlobalUtils } from "@lawcrew/api/src/global";
+import { ApiError } from "../utils/api-error";
 
 export const authRoutes = router({
   signup: publicProcedure
@@ -24,15 +25,13 @@ export const authRoutes = router({
         },
       });
 
-      if (existingUser) throw new Error("User already exist!");
+      if (existingUser) ApiError("User already exists");
 
       const isUserNameExist = await ctx.db.user.findUnique({
-        where: {
-          userName,
-        },
+        where: { userName },
       });
 
-      if (isUserNameExist) throw new Error("User name already exist!");
+      if (isUserNameExist) ApiError("Username already taken");
 
       const hashedPassword = await AuthServices.hashPassword(password);
 
@@ -44,10 +43,7 @@ export const authRoutes = router({
           email,
           password: hashedPassword,
           UserAddress: {
-            create: {
-              city,
-              state,
-            },
+            create: { city, state },
           },
           phoneNumber,
         },
@@ -59,40 +55,34 @@ export const authRoutes = router({
         },
       });
 
-      return {
-        user: newUser,
-      };
+      return { user: newUser };
     }),
 
   login: publicProcedure.input(loginSchema).mutation(async ({ ctx, input }) => {
     const { password, userName } = input;
 
-    // Check if the user exists
     const user = await ctx.db.user.findUnique({
-      where: {
-        userName,
-      },
+      where: { userName },
     });
 
-    if (!user) throw new Error("User doesn't exist");
+    if (!user) ApiError("User not found !");
 
     const isPasswordCorrect = await AuthServices.verifyPassword(
       password,
       user.password
     );
 
-    if (!isPasswordCorrect) throw new Error("Wrong password!");
+    if (!isPasswordCorrect) ApiError("You have entered an incorrect password");
 
     const { sessionToken } = await AuthServices.generateTokens(user);
+
     GlobalUtils.setMultipleCookies(ctx.res, [
       { name: "sessionToken", value: sessionToken },
       { name: "UserRole", value: user.role },
       { name: "UserId", value: user.id },
     ]);
 
-    return {
-      message: "Login succesfull",
-    };
+    return { message: "You have been logged in succesfully" };
   }),
 
   forgotpassword: publicProcedure
@@ -101,16 +91,18 @@ export const authRoutes = router({
       const { password, userName } = input;
 
       const isUserExist = await ctx.db.user.findUnique({
-        where: {
-          userName,
-        },
+        where: { userName },
       });
-      if (!isUserExist) throw new Error("User doesnot exist");
+
+      if (!isUserExist) ApiError("User does not exist");
+
       const hashedPassword = await AuthServices.hashPassword(password);
+
       await ctx.db.user.update({
         where: { userName },
         data: { password: hashedPassword },
       });
+
       return { message: "Password reset successfully" };
     }),
 
@@ -130,8 +122,7 @@ export const authRoutes = router({
         userProfile: true,
       },
     });
-    return {
-      user,
-    };
+
+    return { user };
   }),
 });

@@ -1,5 +1,5 @@
 "use client";
-import MembersTable from "@/components/pages/_legal-management/_admin/members-list/members-table";
+import MembersTable from "@/features/legal-management/_admin/members-list/members-table";
 import DataLoader from "@/components/shared/loader";
 import { api } from "@lawcrew/trpc-client/src/client";
 

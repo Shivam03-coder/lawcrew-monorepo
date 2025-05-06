@@ -5,13 +5,13 @@ import { Pencil } from "lucide-react";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import CaseLineChart from "@/components/pages/_legal-management/_admin/case-line-chart";
-import EditUser from "@/components/pages/_legal-management/_admin/edit-user";
-import CardList from "@/components/pages/_legal-management/_admin/card-list";
+import CaseLineChart from "@/features/legal-management/_admin/case-line-chart";
+import EditUser from "@/features/legal-management/_admin/edit-user";
+import CardList from "@/features/legal-management/_admin/card-list";
 import AppBreadcrumb from "@/components/shared/app-breadcrumb";
-import UserStatusContainer from "@/components/pages/_legal-management/_admin/user-status-container";
-import UserInfoContainer from "@/components/pages/_legal-management/_admin/user-info-container";
-import UserCaseContainer from "@/components/pages/_legal-management/_admin/user-case-container";
+import UserStatusContainer from "@/features/legal-management/_admin/user-status-container";
+import UserInfoContainer from "@/features/legal-management/_admin/user-info-container";
+import UserCaseContainer from "@/features/legal-management/_admin/user-case-container";
 
 const UserPage = () => {
   const userCrumbs = [

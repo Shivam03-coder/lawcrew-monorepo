@@ -1,5 +1,5 @@
-import AdminAppsidebar from "@/components/pages/_legal-management/_admin/admin-app-sidebar";
-import AdminNavbar from "@/components/pages/_legal-management/_admin/admin-navabar";
+import AdminAppsidebar from "@/features/legal-management/_admin/admin-app-sidebar";
+import AdminNavbar from "@/features/legal-management/_admin/admin-navabar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { cookies } from "next/headers";
 

@@ -1,5 +1,5 @@
-import Navbar from "@/components/pages/_services/lawcrew-header";
-import MainCards from "@/components/pages/_services/main-cards";
+import Navbar from "@/features/service/lawcrew-header";
+import MainCards from "@/features/service/main-cards";
 import React from "react";
 
 function LawcrewPage() {

@@ -1,10 +1,10 @@
-import CaseAreaChart from "@/components/pages/_legal-management/_admin/case-area-chart";
-import CaseBarChart from "@/components/pages/_legal-management/_admin/case-bar-chart";
-import CasePieChart from "@/components/pages/_legal-management/_admin/case-pie-chart";
-import CardList from "@/components/pages/_legal-management/_admin/card-list";
+import CaseAreaChart from "@/features/legal-management/_admin/case-area-chart";
+import CaseBarChart from "@/features/legal-management/_admin/case-bar-chart";
+import CasePieChart from "@/features/legal-management/_admin/case-pie-chart";
+import CardList from "@/features/legal-management/_admin/card-list";
 import React from "react";
-import TodoList from "@/components/pages/_legal-management/_admin/todo-list";
-import CaseTable from "@/components/pages/_legal-management/_admin/case-list/case-table";
+import TodoList from "@/features/legal-management/_admin/todo-list";
+import CaseTable from "@/features/legal-management/_admin/case-list/case-table";
 
 const HomePage = () => {
   return (

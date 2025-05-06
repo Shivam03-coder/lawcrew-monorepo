@@ -1,7 +1,6 @@
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
-  
 }
 
 datasource db {
@@ -24,19 +23,22 @@ model User {
   role UserRole @default(ADMIN)
 
   Session     Session?
-  UserAddress UserAddress?
+  UserAddress Address?
   TeamAdmin   TeamAdmin?
   TeamMember  TeamMember?
   TeamClient  TeamClient?
 }
 
-model UserAddress {
-  id        String   @id @default(cuid())
+model Address {
+  id        String    @id @default(cuid())
+  Zip       String
   city      String
   state     String
-  userId    String?  @unique
-  user      User?    @relation(fields: [userId], references: [id])
-  createdAt DateTime @default(now())
+  Country   String
+  userId    String?   @unique
+  user      User?     @relation(fields: [userId], references: [id])
+  createdAt DateTime  @default(now())
+  Opponent  Opponent?
 }
 
 model Session {
@@ -72,6 +74,19 @@ model TeamMember {
   memberships TeamMembership[]
 }
 
+model Opponent {
+  id              String   @id @default(cuid())
+  title           String?
+  firstName       String
+  lastName        String
+  jobTitle        String?
+  emial           String?
+  phoneNumber     String?
+  addressId       String?  @unique
+  opponentAddress Address? @relation(fields: [addressId], references: [id])
+  Case            Case?
+}
+
 model TeamClient {
   id        String   @id @default(cuid())
   userId    String?  @unique
@@ -82,43 +97,12 @@ model TeamClient {
   cases Case[]
 }
 
-model Case {
-  id          String     @id @default(cuid())
-  caseNumber  String     @unique
-  caseTitle   String
-  caseType    CaseType
-  caseStatus  CaseStatus
-  caseDetails String
-  caseDocsUrl String?
-  startDate   DateTime
-  dueDate     DateTime
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-
-  priority     CasePriority? @default(MEDIUM)
-  jurisdiction String?
-
-  outcome    String?
-  isArchived Boolean @default(false)
-
-  teamAdminId String
-  admin       TeamAdmin @relation(fields: [teamAdminId], references: [id])
-
-  teamClientId String
-  client       TeamClient @relation(fields: [teamClientId], references: [id])
-
-  members TeamMembership[]
-  tags    CaseTag[]
-
-  @@index([caseNumber, caseType, caseStatus])
-  @@map("Team")
-}
-
 model CaseTag {
-  id     String @id @default(cuid())
-  label  String
-  caseId String
-  case   Case   @relation(fields: [caseId], references: [id])
+  id           String @id @default(cuid())
+  label        String
+  caseId       String
+  practiceArea String
+  case         Case   @relation(fields: [caseId], references: [id])
 
   @@unique([label, caseId])
 }
@@ -136,33 +120,145 @@ model TeamMembership {
   @@unique([teamMemberId, teamId])
 }
 
+model Case {
+  id                 String         @id @default(cuid())
+  title              String
+  description        String?
+  practiseArea       PracticeArea   @default(CRIMINAL)
+  arrivalDate        DateTime?      @default(now())
+  status             CaseStatus     @default(OPEN)
+  matterPriority     matterPriority @default(HIGH)
+  internalRefNumber  String?
+  filedDate          DateTime?
+  closedDate         DateTime?
+  estimatedCloseDate DateTime?
+  stage              CaseStage      @default(RECONCILIATION_COMMITTEE)
 
-enum UserRole {
-    ADMIN
-    MEMBER
-    CLIENT
+  clientId String
+  client   TeamClient @relation(fields: [clientId], references: [id])
+
+  adminId String
+  admin   TeamAdmin @relation(fields: [adminId], references: [id])
+
+  TeamMembership TeamMembership[]
+
+  opponentId String   @unique
+  Opponent   Opponent @relation(fields: [opponentId], references: [id])
+
+  CaseTag      CaseTag[]
+  CaseDocument CaseDocument[]
+  CaseNote     CaseNote[]
+  CaseReminder CaseReminder[]
+  CaseInvoice  CaseInvoice[]
+  CasePayment  CasePayment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-enum CaseType {
-    CIVIL
-    CRIMINAL
-    FAMILY
-    CORPORATE
-    PROPERTY
-    TAX
-    OTHER
+model CaseDocument {
+  id          String   @id @default(cuid())
+  caseId      String
+  case        Case     @relation(fields: [caseId], references: [id])
+  documentUrl String
+  uploadedBy  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model CaseNote {
+  id        String   @id @default(cuid())
+  caseId    String
+  case      Case     @relation(fields: [caseId], references: [id])
+  note      String
+  createdBy String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CaseReminder {
+  id           String   @id @default(cuid())
+  caseId       String
+  case         Case     @relation(fields: [caseId], references: [id])
+  reminderDate DateTime
+  description  String
+  createdBy    String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model CaseInvoice {
+  id        String   @id @default(cuid())
+  caseId    String
+  case      Case     @relation(fields: [caseId], references: [id])
+  amount    Float
+  status    String
+  dueDate   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CasePayment {
+  id          String       @id @default(cuid())
+  caseId      String
+  case        Case         @relation(fields: [caseId], references: [id])
+  amount      Float
+  rateType    CaseRateType @default(FIXED)
+  paymentDate DateTime
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+enum UserRole {
+  ADMIN
+  MEMBER
+  CLIENT
 }
 
 enum CaseStatus {
-    OPEN
-    IN_PROGRESS
-    CLOSED
-    ARCHIVED
-    ON_HOLD
+  OPEN
+  IN_PROGRESS
+  CLOSED
+  ARCHIVED
+  ON_HOLD
 }
 
-enum CasePriority {
-    LOW
-    MEDIUM
-    HIGH
+enum matterPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum PracticeArea {
+  CRIMINAL
+  CIVIL
+  COMMERCIAL
+  ADMINISTRATIVE
+  LABOR
+  FAMILY
+  REAL_ESTATE
+  INTELLECTUAL_PROPERTY
+  ENVIRONMENTAL
+  TAXATION
+}
+
+enum OpponentType {
+  COMPANY
+  PERSON
+}
+
+enum CaseStage {
+  RECONCILIATION_COMMITTEE
+  FIRST_INSTANCE_COURT
+  APPEAL_COURT
+  CASSATION_HIGH_COURT
+  EXECUTION
+  UNDER_SETTLEMENT
+  SETTLED_CLOSED
+  DISPUTE
+}
+
+enum CaseRateType {
+  HOURLY
+  FIXED
 }

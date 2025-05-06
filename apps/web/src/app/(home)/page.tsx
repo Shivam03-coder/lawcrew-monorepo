@@ -1,8 +1,8 @@
-import CustomerReview from "@/components/pages/_home/customer-review";
-import Goal from "@/components/pages/_home/goals";
-import Hero from "@/components/pages/_home/hero";
-import Payment from "@/components/pages/_home/payment";
-import Solution from "@/components/pages/_home/solution";
+import CustomerReview from "@/features/home/customer-review";
+import Goal from "@/features/home/goals";
+import Hero from "@/features/home/hero";
+import Payment from "@/features/home/payment";
+import Solution from "@/features/home/solution";
 import Footer from "@/components/shared/footer";
 
 function Home() {
