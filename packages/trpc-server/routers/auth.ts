@@ -17,6 +17,8 @@ export const authRoutes = router({
         city,
         state,
         phoneNumber,
+        country,
+        zip,
       } = input;
 
       const existingUser = await ctx.db.user.findFirst({
@@ -43,7 +45,7 @@ export const authRoutes = router({
           email,
           password: hashedPassword,
           UserAddress: {
-            create: { city, state },
+            create: { city, state, country, zip },
           },
           phoneNumber,
         },

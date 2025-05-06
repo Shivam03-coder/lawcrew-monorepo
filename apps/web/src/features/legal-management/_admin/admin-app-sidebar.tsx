@@ -8,6 +8,10 @@ import {
   ChevronUp,
   CheckSquare,
   Ellipsis,
+  Projector,
+  ChevronDown,
+  Plus,
+  PlusCircleIcon,
 } from "lucide-react";
 import {
   Sidebar,
@@ -15,6 +19,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuBadge,
@@ -35,6 +40,11 @@ import { Users, Gavel, Contact } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import useAuth from "@/hooks/use-auth";
 import useAppLinks from "@/hooks/use-app-links";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 const AdminAppsidebar = () => {
   const user = useAuth();
@@ -83,6 +93,11 @@ const AdminAppsidebar = () => {
       url: links?.settings,
       icon: Settings,
     },
+    {
+      title: "Add Case",
+      url: links?.addcase,
+      icon: PlusCircleIcon,
+    },
   ];
   return (
     <Sidebar collapsible="icon">
@@ -107,7 +122,7 @@ const AdminAppsidebar = () => {
                   <SidebarMenuButton asChild>
                     <Link href={item.url}>
                       <item.icon />
-                      <span>{item.title}</span>
+                      <span className="text-primary">{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
                   {item.title === "Inbox" && (

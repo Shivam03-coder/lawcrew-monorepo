@@ -31,10 +31,10 @@ model User {
 
 model Address {
   id        String    @id @default(cuid())
-  Zip       String
+  zip       String
   city      String
   state     String
-  Country   String
+  country   String
   userId    String?   @unique
   user      User?     @relation(fields: [userId], references: [id])
   createdAt DateTime  @default(now())

@@ -5,7 +5,15 @@ export const signupSchema = z.object({
   lastName: z.string().optional(),
   city: z.string().min(2, "City must be at least 2 characters"),
   state: z.string().min(2, "State must be at least 2 characters"),
-  userName: z.string().min(1, "Username is required"),
+  country: z.string().min(2, "Country must be at least 2 characters"),
+  zip: z
+    .string()
+    .min(4, "ZIP code must be at least 4 characters")
+    .max(10, "ZIP code must be at most 10 characters"),
+  userName: z
+    .string()
+    .regex(/^[A-Za-z]+@\d+$/, "Username must be in the format Name@12345"),
+
   email: z.string().email("Enter a valid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   phoneNumber: z
@@ -17,14 +25,20 @@ export const signupSchema = z.object({
 export type SignupType = z.infer<typeof signupSchema>;
 
 export const loginSchema = z.object({
-  userName: z.string().min(1, "Username is required"),
+  userName: z
+    .string()
+    .regex(/^[A-Za-z]+@\d+$/, "Username must be in the format Name@12345"),
+
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 export type LoginType = z.infer<typeof loginSchema>;
 
 export const forgotPasswordSchema = z
   .object({
-    userName: z.string().min(1, "Username is required"),
+    userName: z
+      .string()
+      .regex(/^[A-Za-z]+@\d+$/, "Username must be in the format Name@12345"),
+
     password: z.string().min(6, "Password must be at least 6 characters"),
     confirmPassword: z
       .string()
@@ -68,4 +82,3 @@ export const addParticipantsSchema = z.object({
 });
 
 export type AddParticipantsType = z.infer<typeof addParticipantsSchema>;
-
