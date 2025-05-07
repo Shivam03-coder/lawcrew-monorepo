@@ -49,6 +49,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import Image from "next/image";
 
 type TableShellProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[];
@@ -293,15 +294,13 @@ export function TableShell<TData, TValue>({
 const EmptyState = () => {
   return (
     <div className="flex max-h-[800px] min-h-[600px] flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-200 bg-gray-50 px-6 py-16 text-center">
-      <div className="rounded-full bg-gray-100 p-3">
-        <Search className="h-6 w-6 text-gray-400" />
-      </div>
-      <h3 className="mt-4 text-lg font-semibold text-gray-800">
-        No content found
-      </h3>
-      <p className="mt-1 text-sm text-gray-600">
-        Get started by creating your first social media content piece.
-      </p>
+      <Image
+        src="/no-data.svg"
+        alt="No data"
+        width={450}
+        height={450}
+        className="mb-4"
+      />
     </div>
   );
 };

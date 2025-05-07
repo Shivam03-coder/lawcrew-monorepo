@@ -1,3 +1,4 @@
+import AddClientForm from "@/components/forms/add-client-form";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -7,7 +8,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import ClientForm from "./client-form";
 import { Plus } from "lucide-react";
 
 export function AddClient() {
@@ -25,7 +25,7 @@ export function AddClient() {
             Make changes to your profile here. Click save when you're done.
           </SheetDescription>
         </SheetHeader>
-        <ClientForm />
+        <AddClientForm />
       </SheetContent>
     </Sheet>
   );

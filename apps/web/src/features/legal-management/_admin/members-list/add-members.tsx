@@ -1,3 +1,4 @@
+import AddMembersForm from "@/components/forms/add-members-form";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -8,7 +9,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Plus } from "lucide-react";
-import MembersForm from "./members-form";
 
 export function AddMember() {
   return (
@@ -25,7 +25,7 @@ export function AddMember() {
             Make changes to your profile here. Click save when you're done.
           </SheetDescription>
         </SheetHeader>
-        <MembersForm />
+        <AddMembersForm />
       </SheetContent>
     </Sheet>
   );

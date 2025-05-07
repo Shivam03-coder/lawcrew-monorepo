@@ -23,7 +23,7 @@ const AddClientFormNavs = ({
   setActive: (active: string) => void;
 }) => {
   return (
-    <nav className="w-full space-y-1 border-2 border-primary/15 p-3">
+    <nav className="w-full mb-5 space-y-1 border-2 border-primary/15 p-3">
       {formNavs.map((item) => (
         <button
           key={item}

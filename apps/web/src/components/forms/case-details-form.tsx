@@ -45,8 +45,20 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Textarea } from "../ui/textarea";
+import { useEffect, useState } from "react";
+import { SelectedMembersType } from "@/types/global";
 
-const CaseDetailsForm = () => {
+interface CaseDetailsFormProps {
+  selectedMembers: SelectedMembersType[];
+  setSelectedMembers: React.Dispatch<
+    React.SetStateAction<SelectedMembersType[]>
+  >;
+  onMemberSelect: (memberId: string) => void;
+}
+const CaseDetailsForm = ({
+  selectedMembers,
+  onMemberSelect,
+}: CaseDetailsFormProps) => {
   const {
     register,
     handleSubmit,
@@ -75,9 +87,18 @@ const CaseDetailsForm = () => {
     },
   });
 
+  const { data: clients } = api.participant.getClient.useQuery();
+  const { data: members } = api.participant.getMember.useQuery();
   const router = useRouter();
   const { ErrorToast, SuccessToast } = useAppToasts();
   const createCaseMutation = api.litigation.createCase.useMutation();
+
+  useEffect(() => {
+    setValue(
+      "teamMemberIds",
+      selectedMembers.map((m) => m.id),
+    );
+  }, [selectedMembers, setValue]);
 
   const onSubmit = (data: CaseDetailsType) => {
     console.log(data);
@@ -162,7 +183,7 @@ const CaseDetailsForm = () => {
                 defaultValue={watch("status")}
                 value={watch("status")}
               >
-                <SelectTrigger className="w-full pl-9">
+                <SelectTrigger className="focus:border-2-primary rounded-full bg-white pl-12 text-dark placeholder:text-dark/60 focus:border-2 focus:ring-dark">
                   <SelectValue placeholder="Select case status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -185,7 +206,7 @@ const CaseDetailsForm = () => {
                 defaultValue={watch("matterPriority")}
                 value={watch("matterPriority")}
               >
-                <SelectTrigger className="w-full pl-9">
+                <SelectTrigger className="focus:border-2-primary rounded-full bg-white pl-12 text-dark placeholder:text-dark/60 focus:border-2 focus:ring-dark">
                   <SelectValue placeholder="Select priority" />
                 </SelectTrigger>
                 <SelectContent>
@@ -206,7 +227,7 @@ const CaseDetailsForm = () => {
                 defaultValue={watch("stage")}
                 value={watch("stage")}
               >
-                <SelectTrigger className="w-full pl-9">
+                <SelectTrigger className="focus:border-2-primary rounded-full bg-white pl-12 text-dark placeholder:text-dark/60 focus:border-2 focus:ring-dark">
                   <SelectValue placeholder="Select case stage" />
                 </SelectTrigger>
                 <SelectContent>
@@ -242,7 +263,7 @@ const CaseDetailsForm = () => {
                 defaultValue={watch("practiseArea")}
                 value={watch("practiseArea")}
               >
-                <SelectTrigger className="w-full pl-9">
+                <SelectTrigger className="focus:border-2-primary rounded-full bg-white pl-12 text-dark placeholder:text-dark/60 focus:border-2 focus:ring-dark">
                   <SelectValue placeholder="Select practice area" />
                 </SelectTrigger>
                 <SelectContent>
@@ -253,32 +274,6 @@ const CaseDetailsForm = () => {
                   ))}
                 </SelectContent>
               </Select>
-            </div>
-          </FormField>
-
-          {/* Members Id */}
-          <FormField label="Member ID" error={errors.clientId?.message}>
-            <div className="relative">
-              <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-primary" />
-              <Input
-                {...register("teamMemberIds")}
-                className="rounded-full border border-primary/60 bg-white pl-9 transition-all focus:ring-1 focus:ring-dark"
-                placeholder="Enter member ID"
-                disabled={createCaseMutation.isPending}
-              />
-            </div>
-          </FormField>
-
-          {/* Client ID */}
-          <FormField label="Client ID" error={errors.clientId?.message}>
-            <div className="relative">
-              <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-primary" />
-              <Input
-                {...register("clientId")}
-                className="rounded-full border border-primary/60 bg-white pl-9 transition-all focus:ring-1 focus:ring-dark"
-                placeholder="Enter client ID"
-                disabled={createCaseMutation.isPending}
-              />
             </div>
           </FormField>
 
@@ -429,6 +424,56 @@ const CaseDetailsForm = () => {
                 />
               </PopoverContent>
             </Popover>
+          </FormField>
+
+          {/* Members Id */}
+          <FormField label="Member ID" error={errors.clientId?.message}>
+            <div className="relative">
+              <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-primary" />
+              <Select onValueChange={onMemberSelect} value="">
+                <SelectTrigger className="focus:border-2-primary rounded-full bg-white pl-12 text-dark placeholder:text-dark/60 focus:border-2 focus:ring-dark">
+                  <SelectValue placeholder="Select a member to add" />
+                </SelectTrigger>
+                <SelectContent>
+                  {members
+                    ?.filter((m) => !selectedMembers.some((s) => s.id === m.id))
+                    .map((member) => (
+                      <SelectItem key={member.id} value={member.id}>
+                        <div className="flex items-center gap-x-2">
+                          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+                            {member.firstName.charAt(0).toUpperCase() +
+                              member.lastName?.charAt(0)}
+                          </span>
+                          {`${member.firstName} ${member.lastName}`}
+                        </div>
+                      </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </FormField>
+
+          {/* Client ID */}
+          <FormField label="Client ID" error={errors.clientId?.message}>
+            <div className="relative">
+              <User className="absolute left-3 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-primary" />
+              <Select
+                onValueChange={(value) => setValue("clientId", value as any)}
+                defaultValue={watch("clientId")}
+                value={watch("clientId")}
+              >
+                <SelectTrigger className="focus:border-2-primary rounded-full bg-white pl-12 text-dark placeholder:text-dark/60 focus:border-2 focus:ring-dark">
+                  <SelectValue placeholder="Select client for case" />
+                </SelectTrigger>
+                <SelectContent>
+                  {clients?.map((client) => (
+                    <SelectItem key={client.id} value={client.id}>
+                      {`${client.firstName} ${client.lastName}`}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </FormField>
         </div>
 

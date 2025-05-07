@@ -20,3 +20,8 @@ export interface Participants {
   userName: string;
   createdAt: string;
 }
+
+export interface SelectedMembersType {
+  id: string;
+  name: string;
+}
