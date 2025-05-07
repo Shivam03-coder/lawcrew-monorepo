@@ -7,11 +7,11 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        inter: ["var(--font-inter)", ...fontFamily.sans],
-        poppins: ["var(--font-poppins)", ...fontFamily.sans],
-        lexend: ["var(--font-lexend)", ...fontFamily.sans],
-        spaceGrotesk: ["var(--font-spaceGrotesk)", ...fontFamily.sans],
-        manrope: ["var(--font-manrope)", ...fontFamily.sans],
+        inter: ["var(--font-inter)"],
+        poppins: ["var(--font-poppins)"],
+        lexend: ["var(--font-lexend)"],
+        spaceGrotesk: ["var(--font-spaceGrotesk)"],
+        mulish: ["var(--font-Mulish)"],
       },
       colors: {
         primary: "#111827",

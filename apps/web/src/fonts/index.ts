@@ -5,6 +5,7 @@ import {
   Lexend,
   Space_Grotesk,
   Manrope,
+  Mulish,
 } from "next/font/google";
 
 const inter = Inter({
@@ -30,11 +31,10 @@ const spaceGrotesk = Space_Grotesk({
   weight: ["400", "700"],
 });
 
-const manrope = Manrope({
+const mulish = Mulish({
   subsets: ["latin"],
-  variable: "--font-manrope",
+  variable: "--font-Mulish",
   weight: ["400", "600", "800"],
 });
 
-
-export const appfonts = `${inter.variable} ${poppins.variable} ${lexend.variable} ${manrope.variable} ${spaceGrotesk.variable} antialiased`;
+export const appfonts = `${inter.variable} ${poppins.variable} ${lexend.variable} ${mulish.variable} ${spaceGrotesk.variable} antialiased`;

@@ -108,7 +108,7 @@ const CaseDetailsForm = ({
       onSuccess: (res) => {
         SuccessToast({ title: "Case created successfully!" });
         setSelectedMembers([]);
-        console.log(res?.res);
+        reset();
       },
       onError: () => {
         ErrorToast({ title: "Failed to create case. Please try again." });

@@ -148,10 +148,9 @@ model Case {
   CaseNote     CaseNote[]
   CaseReminder CaseReminder[]
   CaseInvoice  CaseInvoice[]
-  CasePayment  CasePayment[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  CaseBillings CaseBilling?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
 }
 
 model CaseDocument {
@@ -193,15 +192,43 @@ model CaseInvoice {
   updatedAt DateTime @updatedAt
 }
 
-model CasePayment {
-  id          String       @id @default(cuid())
-  caseId      String
-  case        Case         @relation(fields: [caseId], references: [id], onDelete: Cascade)
-  amount      Float
-  rateType    CaseRateType @default(FIXED)
-  paymentDate DateTime
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+model CaseBilling {
+  id     String @id @default(cuid())
+  caseId String @unique
+  case   Case   @relation(fields: [caseId], references: [id])
+
+  amount        Float
+  currency      String        @default("USD")
+  rateType      CaseRateType  @default(FIXED)
+  paymentStatus PaymentStatus @default(PENDING)
+  paymentMethod PaymentMethod @default(BANK_TRANSFER)
+  paymentDate   DateTime?
+  billingNote   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum CaseRateType {
+  FIXED
+  HOURLY
+  RETAINER
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  BANK_TRANSFER
+  CREDIT_CARD
+  CASH
+  CHEQUE
+  ONLINE
 }
 
 enum UserRole {
@@ -249,9 +276,4 @@ enum CaseStage {
   UNDER_SETTLEMENT
   SETTLED_CLOSED
   DISPUTE
-}
-
-enum CaseRateType {
-  HOURLY
-  FIXED
 }

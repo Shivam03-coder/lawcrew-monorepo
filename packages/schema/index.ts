@@ -130,3 +130,21 @@ export const caseDetailsSchema = z.object({
   note: z.string(),
 });
 export type CaseDetailsType = z.infer<typeof caseDetailsSchema>;
+
+export const caseBillingSchema = z.object({
+  caseId: z.string().min(1, "Case ID is required"),
+  amount: z.number().positive("Amount must be a positive number"),
+  rateType: z.enum(["FIXED", "HOURLY", "RETAINER"]),
+  paymentStatus: z.enum(["PENDING", "PAID", "FAILED", "CANCELLED", "REFUNDED"]),
+  paymentMethod: z.enum([
+    "BANK_TRANSFER",
+    "CREDIT_CARD",
+    "CASH",
+    "CHEQUE",
+    "ONLINE",
+  ]),
+
+  paymentDate: z.string().datetime("Invalid payment date format"),
+  billingNote: z.string().optional(),
+});
+export type CaseBillingType = z.infer<typeof caseDetailsSchema>;

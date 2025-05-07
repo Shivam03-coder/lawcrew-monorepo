@@ -1,5 +1,6 @@
-import { caseDetailsSchema } from "@lawcrew/schema";
+import { caseBillingSchema, caseDetailsSchema } from "@lawcrew/schema";
 import { protectedProcedure, publicProcedure, router } from "../trpc";
+import { ApiError } from "../utils/api-error";
 
 export const caseDetailsRoutes = router({
   createCase: protectedProcedure
@@ -85,5 +86,25 @@ export const caseDetailsRoutes = router({
           res: createdCase,
         };
       });
+    }),
+  createBillings: protectedProcedure
+    .input(caseBillingSchema)
+    .mutation(async ({ ctx, input }) => {
+      const isExist = await ctx.db.case.findUnique({
+        where: {
+          id: input.caseId,
+        },
+      });
+      if (!isExist) ApiError("No Litigation Found");
+
+      await ctx.db.caseBilling.create({
+        data: {
+          ...input,
+        },
+      });
+
+      return {
+        message: "Billing details saved succesfully.",
+      };
     }),
 });
