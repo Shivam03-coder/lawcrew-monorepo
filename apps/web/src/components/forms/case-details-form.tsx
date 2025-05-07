@@ -2,7 +2,6 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -19,9 +18,7 @@ import {
   Hash,
   StickyNote,
   Tag,
-  UploadCloud,
   User,
-  Gavel,
   AlertCircle,
   Layers,
   Scale,
@@ -45,8 +42,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Textarea } from "../ui/textarea";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { SelectedMembersType } from "@/types/global";
+import UplaodFile from "./uplaod-case-file-form";
 
 interface CaseDetailsFormProps {
   selectedMembers: SelectedMembersType[];
@@ -55,9 +53,11 @@ interface CaseDetailsFormProps {
   >;
   onMemberSelect: (memberId: string) => void;
 }
+
 const CaseDetailsForm = ({
   selectedMembers,
   onMemberSelect,
+  setSelectedMembers,
 }: CaseDetailsFormProps) => {
   const {
     register,
@@ -65,6 +65,7 @@ const CaseDetailsForm = ({
     formState: { errors },
     setValue,
     watch,
+    reset,
   } = useForm<CaseDetailsType>({
     resolver: zodResolver(caseDetailsSchema),
     defaultValues: {
@@ -74,10 +75,10 @@ const CaseDetailsForm = ({
       status: "OPEN",
       internalRefNumber: "",
       teamMemberIds: [],
-      arrivalDate: new Date(),
-      filedDate: new Date(),
-      closedDate: new Date(),
-      estimatedCloseDate: new Date(),
+      arrivalDate: new Date().toISOString(),
+      filedDate: new Date().toISOString(),
+      closedDate: null,
+      estimatedCloseDate: new Date().toISOString(),
       docsUrl: "",
       clientId: "",
       matterPriority: "HIGH",
@@ -89,9 +90,8 @@ const CaseDetailsForm = ({
 
   const { data: clients } = api.participant.getClient.useQuery();
   const { data: members } = api.participant.getMember.useQuery();
-  const router = useRouter();
-  const { ErrorToast, SuccessToast } = useAppToasts();
   const createCaseMutation = api.litigation.createCase.useMutation();
+  const { ErrorToast, SuccessToast } = useAppToasts();
 
   useEffect(() => {
     setValue(
@@ -100,16 +100,32 @@ const CaseDetailsForm = ({
     );
   }, [selectedMembers, setValue]);
 
-  const onSubmit = (data: CaseDetailsType) => {
-    console.log(data);
+  const onSubmit = (caseDetails: CaseDetailsType) => {
+    if (!caseDetails) return;
+    console.log(caseDetails);
+
+    createCaseMutation.mutate(caseDetails, {
+      onSuccess: (res) => {
+        SuccessToast({ title: "Case created successfully!" });
+        setSelectedMembers([]);
+        console.log(res?.res);
+      },
+      onError: () => {
+        ErrorToast({ title: "Failed to create case. Please try again." });
+      },
+    });
   };
 
   const handleDateChange =
     (field: keyof CaseDetailsType) => (date: Date | undefined) => {
-      if (date) {
-        setValue(field, date);
-      }
+      setValue(field, date?.toISOString() || null);
     };
+
+  const parseDate = (
+    dateString: string | null | undefined,
+  ): Date | undefined => {
+    return dateString ? new Date(dateString) : undefined;
+  };
 
   return (
     <div className="max-h-[80%] w-[730px] overflow-y-visible bg-white px-5 font-lexend shadow-none">
@@ -293,18 +309,10 @@ const CaseDetailsForm = ({
             </div>
           </FormField>
 
-          {/* Docs URL */}
-          <FormField label="Upload Docs" error={errors.docsUrl?.message}>
-            <div className="relative">
-              <UploadCloud className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-primary" />
-              <Input
-                type="file"
-                accept=".pdf,.doc,.docx,.jpg,.png"
-                className="rounded-full border border-primary/60 bg-white pl-9 text-primary transition-all file:mr-4 file:rounded-full file:border-0 file:bg-primary/10 file:px-4 file:py-1 file:text-sm file:font-medium file:text-gray-500 focus:ring-1 focus:ring-dark"
-                disabled={createCaseMutation.isPending}
-              />
-            </div>
-          </FormField>
+          <UplaodFile
+            isLoading={createCaseMutation.isPending}
+            setvalue={setValue}
+          />
 
           {/* Date Fields */}
           <FormField label="Arrival Date" error={errors.arrivalDate?.message}>
@@ -319,7 +327,7 @@ const CaseDetailsForm = ({
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {watch("arrivalDate") ? (
-                    format(watch("arrivalDate"), "PPP")
+                    format(parseDate(watch("arrivalDate"))!, "PPP")
                   ) : (
                     <span>Pick a date</span>
                   )}
@@ -328,7 +336,7 @@ const CaseDetailsForm = ({
               <PopoverContent className="w-auto p-0">
                 <Calendar
                   mode="single"
-                  selected={watch("arrivalDate")}
+                  selected={parseDate(watch("arrivalDate"))}
                   onSelect={handleDateChange("arrivalDate")}
                   initialFocus
                 />
@@ -348,7 +356,7 @@ const CaseDetailsForm = ({
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {watch("filedDate") ? (
-                    format(watch("filedDate"), "PPP")
+                    format(parseDate(watch("filedDate"))!, "PPP")
                   ) : (
                     <span>Pick a date</span>
                   )}
@@ -357,7 +365,7 @@ const CaseDetailsForm = ({
               <PopoverContent className="w-auto p-0">
                 <Calendar
                   mode="single"
-                  selected={watch("filedDate")}
+                  selected={parseDate(watch("filedDate"))}
                   onSelect={handleDateChange("filedDate")}
                   initialFocus
                 />
@@ -380,7 +388,7 @@ const CaseDetailsForm = ({
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {watch("estimatedCloseDate") ? (
-                    format(watch("estimatedCloseDate"), "PPP")
+                    format(parseDate(watch("estimatedCloseDate"))!, "PPP")
                   ) : (
                     <span>Pick a date</span>
                   )}
@@ -389,7 +397,7 @@ const CaseDetailsForm = ({
               <PopoverContent className="w-auto p-0">
                 <Calendar
                   mode="single"
-                  selected={watch("estimatedCloseDate")}
+                  selected={parseDate(watch("estimatedCloseDate"))}
                   onSelect={handleDateChange("estimatedCloseDate")}
                   initialFocus
                 />
@@ -409,7 +417,7 @@ const CaseDetailsForm = ({
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {watch("closedDate") ? (
-                    format(watch("closedDate"), "PPP")
+                    format(parseDate(watch("closedDate"))!, "PPP")
                   ) : (
                     <span>Pick a date</span>
                   )}
@@ -418,7 +426,7 @@ const CaseDetailsForm = ({
               <PopoverContent className="w-auto p-0">
                 <Calendar
                   mode="single"
-                  selected={watch("closedDate")}
+                  selected={parseDate(watch("closedDate"))}
                   onSelect={handleDateChange("closedDate")}
                   initialFocus
                 />
@@ -426,7 +434,6 @@ const CaseDetailsForm = ({
             </Popover>
           </FormField>
 
-          {/* Members Id */}
           <FormField label="Member ID" error={errors.clientId?.message}>
             <div className="relative">
               <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-primary" />
@@ -436,9 +443,15 @@ const CaseDetailsForm = ({
                 </SelectTrigger>
                 <SelectContent>
                   {members
-                    ?.filter((m) => !selectedMembers.some((s) => s.id === m.id))
+                    ?.filter(
+                      (m) =>
+                        !selectedMembers.some((s) => s.id === m.TeamMember?.id),
+                    )
                     .map((member) => (
-                      <SelectItem key={member.id} value={member.id}>
+                      <SelectItem
+                        key={member.TeamMember?.id}
+                        value={member.TeamMember?.id as string}
+                      >
                         <div className="flex items-center gap-x-2">
                           <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
                             {member.firstName.charAt(0).toUpperCase() +
@@ -467,7 +480,10 @@ const CaseDetailsForm = ({
                 </SelectTrigger>
                 <SelectContent>
                   {clients?.map((client) => (
-                    <SelectItem key={client.id} value={client.id}>
+                    <SelectItem
+                      key={client.TeamClient?.id}
+                      value={client.TeamClient?.id as string}
+                    >
                       {`${client.firstName} ${client.lastName}`}
                     </SelectItem>
                   ))}

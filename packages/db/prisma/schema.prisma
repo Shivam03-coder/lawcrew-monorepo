@@ -19,8 +19,7 @@ model User {
   phoneNumber String   @unique
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  role UserRole @default(ADMIN)
+  role        UserRole @default(ADMIN)
 
   Session     Session?
   UserAddress Address?
@@ -36,7 +35,7 @@ model Address {
   state     String
   country   String
   userId    String?   @unique
-  user      User?     @relation(fields: [userId], references: [id])
+  user      User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime  @default(now())
   Opponent  Opponent?
 }
@@ -56,7 +55,7 @@ model Session {
 model TeamAdmin {
   id         String   @id @default(cuid())
   userId     String?  @unique
-  user       User?    @relation(fields: [userId], references: [id])
+  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   role       UserRole @default(ADMIN)
   isVerified Boolean  @default(false)
   createdAt  DateTime @default(now())
@@ -67,7 +66,7 @@ model TeamAdmin {
 model TeamMember {
   id        String   @id @default(cuid())
   userId    String?  @unique
-  user      User?    @relation(fields: [userId], references: [id])
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   role      UserRole @default(MEMBER)
   createdAt DateTime @default(now())
 
@@ -83,14 +82,14 @@ model Opponent {
   emial           String?
   phoneNumber     String?
   addressId       String?  @unique
-  opponentAddress Address? @relation(fields: [addressId], references: [id])
+  opponentAddress Address? @relation(fields: [addressId], references: [id], onDelete: Cascade)
   Case            Case?
 }
 
 model TeamClient {
   id        String   @id @default(cuid())
   userId    String?  @unique
-  user      User?    @relation(fields: [userId], references: [id])
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   role      UserRole @default(CLIENT)
   createdAt DateTime @default(now())
 
@@ -101,7 +100,7 @@ model CaseTag {
   id     String @id @default(cuid())
   label  String
   caseId String
-  case   Case   @relation(fields: [caseId], references: [id])
+  case   Case   @relation(fields: [caseId], references: [id], onDelete: Cascade)
 
   @@unique([label, caseId])
 }
@@ -109,14 +108,14 @@ model CaseTag {
 model TeamMembership {
   id           String     @id @default(cuid())
   teamMemberId String
-  teamMember   TeamMember @relation(fields: [teamMemberId], references: [id])
+  teamMember   TeamMember @relation(fields: [teamMemberId], references: [id], onDelete: Cascade)
 
-  teamId String
-  team   Case   @relation(fields: [teamId], references: [id])
+  caseId String
+  case   Case   @relation(fields: [caseId], references: [id], onDelete: Cascade)
 
   joinedAt DateTime @default(now())
 
-  @@unique([teamMemberId, teamId])
+  @@unique([teamMemberId, caseId])
 }
 
 model Case {
@@ -134,15 +133,15 @@ model Case {
   stage              CaseStage      @default(RECONCILIATION_COMMITTEE)
 
   clientId String
-  client   TeamClient @relation(fields: [clientId], references: [id])
+  client   TeamClient @relation(fields: [clientId], references: [id], onDelete: Cascade)
 
   adminId String
-  admin   TeamAdmin @relation(fields: [adminId], references: [id])
+  admin   TeamAdmin @relation(fields: [adminId], references: [id], onDelete: Cascade)
 
-  TeamMembership TeamMembership[]
+  members TeamMembership[]
 
   opponentId String?   @unique
-  Opponent   Opponent? @relation(fields: [opponentId], references: [id])
+  Opponent   Opponent? @relation(fields: [opponentId], references: [id], onDelete: Cascade)
 
   CaseTag      CaseTag[]
   CaseDocument CaseDocument[]
@@ -158,9 +157,8 @@ model Case {
 model CaseDocument {
   id          String   @id @default(cuid())
   caseId      String
-  case        Case     @relation(fields: [caseId], references: [id])
+  case        Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
   documentUrl String
-  uploadedBy  String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -168,9 +166,8 @@ model CaseDocument {
 model CaseNote {
   id        String   @id @default(cuid())
   caseId    String
-  case      Case     @relation(fields: [caseId], references: [id])
+  case      Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
   note      String
-  createdBy String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -178,10 +175,9 @@ model CaseNote {
 model CaseReminder {
   id           String   @id @default(cuid())
   caseId       String
-  case         Case     @relation(fields: [caseId], references: [id])
+  case         Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
   reminderDate DateTime
   description  String
-  createdBy    String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
@@ -189,7 +185,7 @@ model CaseReminder {
 model CaseInvoice {
   id        String   @id @default(cuid())
   caseId    String
-  case      Case     @relation(fields: [caseId], references: [id])
+  case      Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
   amount    Float
   status    String
   dueDate   DateTime
@@ -200,7 +196,7 @@ model CaseInvoice {
 model CasePayment {
   id          String       @id @default(cuid())
   caseId      String
-  case        Case         @relation(fields: [caseId], references: [id])
+  case        Case         @relation(fields: [caseId], references: [id], onDelete: Cascade)
   amount      Float
   rateType    CaseRateType @default(FIXED)
   paymentDate DateTime

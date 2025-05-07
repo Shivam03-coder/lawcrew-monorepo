@@ -14,14 +14,14 @@ getMediaUrlRoute.post(
         return;
       }
 
-      const imageUrl = await CloudinaryService.getFileUrl(req);
+      const url = await CloudinaryService.getFileUrl(req);
 
-      if (!imageUrl) {
+      if (!url) {
         res.status(400).json({ error: "Image upload failed" });
         return;
       }
 
-      res.status(200).json({ imageUrl });
+      res.status(200).json({ url });
     } catch (error) {
       console.error("Error uploading file:", error);
       res.status(500).json({ error: "Internal server error" });

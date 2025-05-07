@@ -37,24 +37,39 @@ export const authRoutes = router({
 
       const hashedPassword = await AuthServices.hashPassword(password);
 
-      const newUser = await ctx.db.user.create({
-        data: {
-          firstName,
-          lastName,
-          userName,
-          email,
-          password: hashedPassword,
-          UserAddress: {
-            create: { city, state, country, zip },
+      const newUser = await ctx.db.$transaction(async (tx) => {
+        const user = await tx.user.create({
+          data: {
+            firstName,
+            lastName,
+            userName,
+            email,
+            password: hashedPassword,
+            UserAddress: {
+              create: { city, state, country, zip },
+            },
+            phoneNumber,
           },
-          phoneNumber,
-        },
-        select: {
-          id: true,
-          email: true,
-          userName: true,
-          createdAt: true,
-        },
+          select: {
+            id: true,
+            email: true,
+            userName: true,
+            createdAt: true,
+          },
+        });
+
+        await tx.teamAdmin.create({
+          data: {
+            userId: user.id,
+          },
+        });
+
+        return {
+          id: user.id,
+          email: user.email,
+          userName: user.userName,
+          createdAt: user.createdAt,
+        };
       });
 
       return { user: newUser };

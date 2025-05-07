@@ -12,6 +12,7 @@ import {
   ChevronDown,
   Plus,
   PlusCircleIcon,
+  UserCircle,
 } from "lucide-react";
 import {
   Sidebar,
@@ -67,7 +68,7 @@ const AdminAppsidebar = () => {
     {
       title: "Clients",
       url: links?.clientList,
-      icon: Users,
+      icon: UserCircle,
     },
     {
       title: "Members",

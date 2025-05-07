@@ -1,5 +1,4 @@
 import { z } from "zod";
-
 export const signupSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().optional(),
@@ -116,13 +115,13 @@ export const caseDetailsSchema = z.object({
   title: z.string(),
   description: z.string(),
   practiseArea: PracticeAreaEnum,
-  arrivalDate: z.date(),
   status: CaseStatusEnum,
   matterPriority: MatterPriorityEnum,
   internalRefNumber: z.string(),
-  filedDate: z.date(),
-  closedDate: z.date(),
-  estimatedCloseDate: z.date(),
+  arrivalDate: z.string().datetime(), // Changed to string
+  filedDate: z.string().datetime(), // Changed to string
+  closedDate: z.string().datetime().nullable().optional(), // Changed to string
+  estimatedCloseDate: z.string().datetime(), // Changed to string
   stage: CaseStageEnum,
   clientId: z.string(),
   teamMemberIds: z.array(z.string()),
@@ -130,5 +129,4 @@ export const caseDetailsSchema = z.object({
   labels: z.string(),
   note: z.string(),
 });
-
 export type CaseDetailsType = z.infer<typeof caseDetailsSchema>;

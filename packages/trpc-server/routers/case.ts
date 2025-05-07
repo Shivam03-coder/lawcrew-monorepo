@@ -5,24 +5,85 @@ export const caseDetailsRoutes = router({
   createCase: protectedProcedure
     .input(caseDetailsSchema)
     .mutation(async ({ ctx, input }) => {
-      const adminId = ctx.auth.id;
-      const caseDetails = await ctx.db.case.create({
-        data: {
-          ...input,
-          adminId,
-          CaseTag: {
-            create: {
-              label: input.labels as string,
-            },
-          },
-          CaseNote: {
-            create: {
-              note: input.note as string,
-              createdBy: adminId,
-            },
-          },
+      const teamAdmin = await ctx.db.teamAdmin.findFirst({
+        where: {
+          userId: ctx.auth.id,
+        },
+        select: {
+          id: true,
         },
       });
-      return caseDetails;
+
+      if (!teamAdmin) return;
+
+      const {
+        arrivalDate,
+        clientId,
+        description,
+        docsUrl,
+        estimatedCloseDate,
+        filedDate,
+        internalRefNumber,
+        labels,
+        matterPriority,
+        note,
+        practiseArea,
+        stage,
+        status,
+        teamMemberIds,
+        title,
+        closedDate,
+      } = input;
+
+      await ctx.db.$transaction(async (tx) => {
+        const createdCase = await tx.case.create({
+          data: {
+            title,
+            adminId: teamAdmin?.id,
+            clientId,
+            arrivalDate,
+            closedDate,
+            description,
+            filedDate,
+            estimatedCloseDate,
+            internalRefNumber,
+            stage,
+            status,
+            practiseArea,
+            CaseNote: {
+              create: {
+                note,
+              },
+            },
+            CaseTag: {
+              create: {
+                label: labels,
+              },
+            },
+            CaseDocument: {
+              create: {
+                documentUrl: docsUrl,
+              },
+            },
+            matterPriority,
+          },
+        });
+
+        await Promise.all(
+          teamMemberIds.map((teamMemberId) =>
+            tx.teamMembership.create({
+              data: {
+                caseId: createdCase.id,
+                teamMemberId,
+              },
+            })
+          )
+        );
+
+        return {
+          message: "Litigation Case Created",
+          res: createdCase,
+        };
+      });
     }),
 });

@@ -16,7 +16,7 @@ const AddCasePage = () => {
   const { data: members } = api.participant.getMember.useQuery();
 
   const handleMemberSelect = (memberId: string) => {
-    const member = members?.find((m) => m.id === memberId);
+    const member = members?.find((m) => m.TeamMember?.id === memberId);
     if (!member) return;
 
     setSelectedMembers((prev) => {

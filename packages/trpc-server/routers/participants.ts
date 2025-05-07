@@ -19,26 +19,33 @@ export const participantsRoutes = router({
         zip,
       } = input;
 
-      const member = await ctx.db.user.create({
-        data: {
-          email,
-          firstName,
-          lastName,
-          password,
-          phoneNumber,
-          userName,
-          UserAddress: {
-            create: {
-              city,
-              state,
-              country,
-              zip,
+      await ctx.db.$transaction(async (tx) => {
+        const user = await tx.user.create({
+          data: {
+            email,
+            firstName,
+            lastName,
+            password,
+            phoneNumber,
+            userName,
+            UserAddress: {
+              create: {
+                city,
+                state,
+                country,
+                zip,
+              },
             },
+            role: "MEMBER",
           },
-          role: "MEMBER",
-        },
+        });
+
+        await tx.teamMember.create({
+          data: {
+            userId: user.id,
+          },
+        });
       });
-      return member;
     }),
   addClient: protectedProcedure
     .input(addParticipantsSchema)
@@ -56,26 +63,33 @@ export const participantsRoutes = router({
         zip,
       } = input;
 
-      const client = await ctx.db.user.create({
-        data: {
-          email,
-          firstName,
-          lastName,
-          password,
-          phoneNumber,
-          userName,
-          UserAddress: {
-            create: {
-              city,
-              state,
-              country,
-              zip,
+      await ctx.db.$transaction(async (tx) => {
+        const user = await tx.user.create({
+          data: {
+            email,
+            firstName,
+            lastName,
+            password,
+            phoneNumber,
+            userName,
+            UserAddress: {
+              create: {
+                city,
+                state,
+                country,
+                zip,
+              },
             },
+            role: "CLIENT",
           },
-          role: "CLIENT",
-        },
+        });
+
+        await tx.teamClient.create({
+          data: {
+            userId: user.id,
+          },
+        });
       });
-      return client;
     }),
   getClient: protectedProcedure.query(async ({ ctx, input }) => {
     const client = await ctx.db.user.findMany({
@@ -97,6 +111,11 @@ export const participantsRoutes = router({
         password: true,
         userName: true,
         createdAt: true,
+        TeamClient: {
+          select: {
+            id: true,
+          },
+        },
       },
       orderBy: {
         createdAt: "desc",
@@ -124,6 +143,11 @@ export const participantsRoutes = router({
         password: true,
         userName: true,
         createdAt: true,
+        TeamMember: {
+          select: {
+            id: true,
+          },
+        },
       },
       orderBy: {
         createdAt: "desc",
