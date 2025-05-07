@@ -1,4 +1,4 @@
-import { addParticipantsSchema } from "@lawcrew/schema";
+import { addParticipantsSchema, createOpponentSchema } from "@lawcrew/schema";
 import { router, protectedProcedure } from "../trpc";
 import { z } from "zod";
 
@@ -170,5 +170,18 @@ export const participantsRoutes = router({
         },
       });
       return deletedParticipant;
+    }),
+
+  createOpponent: protectedProcedure
+    .input(createOpponentSchema)
+    .mutation(async ({ ctx, input }) => {
+      const newOpponent = await ctx.db.opponent.create({
+        data: {
+          ...input,
+        },
+      });
+      return {
+        message: "Opponent created successfully",
+      };
     }),
 });

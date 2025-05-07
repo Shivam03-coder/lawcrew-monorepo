@@ -29,15 +29,15 @@ model User {
 }
 
 model Address {
-  id        String    @id @default(cuid())
-  zip       String
-  city      String
-  state     String
-  country   String
-  userId    String?   @unique
-  user      User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime  @default(now())
-  Opponent  Opponent?
+  id         String   @id @default(cuid())
+  zip        String
+  city       String
+  state      String
+  country    String
+  userId     String?  @unique
+  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  opponentId String?
 }
 
 model Session {
@@ -74,16 +74,17 @@ model TeamMember {
 }
 
 model Opponent {
-  id              String   @id @default(cuid())
-  title           String?
-  firstName       String
-  lastName        String
-  jobTitle        String?
-  emial           String?
-  phoneNumber     String?
-  addressId       String?  @unique
-  opponentAddress Address? @relation(fields: [addressId], references: [id], onDelete: Cascade)
-  Case            Case?
+  id          String  @id @default(cuid())
+  firstName   String
+  lastName    String
+  jobTitle    String?
+  email       String?
+  phoneNumber String?
+  zip         String
+  city        String
+  state       String
+  country     String
+  Case        Case?
 }
 
 model TeamClient {
