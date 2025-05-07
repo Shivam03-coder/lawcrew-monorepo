@@ -198,7 +198,7 @@ model CaseBilling {
   case   Case   @relation(fields: [caseId], references: [id])
 
   amount        Float
-  currency      String        @default("USD")
+  currency      String        @default("INR")
   rateType      CaseRateType  @default(FIXED)
   paymentStatus PaymentStatus @default(PENDING)
   paymentMethod PaymentMethod @default(BANK_TRANSFER)

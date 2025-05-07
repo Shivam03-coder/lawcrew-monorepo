@@ -147,4 +147,4 @@ export const caseBillingSchema = z.object({
   paymentDate: z.string().datetime("Invalid payment date format"),
   billingNote: z.string().optional(),
 });
-export type CaseBillingType = z.infer<typeof caseDetailsSchema>;
+export type CaseBillingType = z.infer<typeof caseBillingSchema>;

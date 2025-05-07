@@ -107,4 +107,11 @@ export const caseDetailsRoutes = router({
         message: "Billing details saved succesfully.",
       };
     }),
+
+  getCasedetails: protectedProcedure.query(async ({ ctx }) => {
+    const caseDetails = await ctx.db.case.findMany();
+    return {
+      caseDetails,
+    };
+  }),
 });

@@ -140,7 +140,7 @@ const CaseDetailsForm = ({
               <FileText className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-primary" />
               <Input
                 {...register("title")}
-                className="rounded-full border border-primary/60 bg-white pl-9 transition-all focus:ring-1 focus:ring-dark"
+                className="rounded-full border border-primary/60 bg-white pl-9 transition-all focus:ring-1 focus:ring-primary"
                 placeholder="Enter case title"
                 disabled={createCaseMutation.isPending}
               />
@@ -153,7 +153,7 @@ const CaseDetailsForm = ({
               <StickyNote className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-primary" />
               <Input
                 {...register("note")}
-                className="rounded-full border border-primary/60 bg-white pl-9 transition-all focus:ring-1 focus:ring-dark"
+                className="rounded-full border border-primary/60 bg-white pl-9 transition-all focus:ring-1 focus:ring-primary"
                 placeholder="Enter case note"
                 disabled={createCaseMutation.isPending}
               />
@@ -166,7 +166,7 @@ const CaseDetailsForm = ({
               <Tag className="absolute left-3 top-3 h-4 w-4 text-primary" />
               <Textarea
                 {...register("labels")}
-                className="min-h-[100px] w-full rounded-lg border border-primary/60 bg-white p-3 pl-9 transition-all focus:ring-1 focus:ring-dark"
+                className="min-h-[100px] w-full rounded-lg border border-primary/60 bg-white p-3 pl-9 transition-all focus:ring-1 focus:ring-primary"
                 placeholder="Enter case Tags"
                 disabled={createCaseMutation.isPending}
               />
@@ -183,7 +183,7 @@ const CaseDetailsForm = ({
               <ClipboardList className="absolute left-3 top-3 h-4 w-4 text-primary" />
               <Textarea
                 {...register("description")}
-                className="min-h-[100px] w-full rounded-lg border border-primary/60 bg-white p-3 pl-9 transition-all focus:ring-1 focus:ring-dark"
+                className="min-h-[100px] w-full rounded-lg border border-primary/60 bg-white p-3 pl-9 transition-all focus:ring-1 focus:ring-primary"
                 placeholder="Enter case description"
                 disabled={createCaseMutation.isPending}
               />
@@ -199,7 +199,7 @@ const CaseDetailsForm = ({
                 defaultValue={watch("status")}
                 value={watch("status")}
               >
-                <SelectTrigger className="focus:border-2-primary rounded-full bg-white pl-12 text-dark placeholder:text-dark/60 focus:border-2 focus:ring-dark">
+                <SelectTrigger className="focus:border-2-primary rounded-full bg-white pl-12 text-primary placeholder:text-primary/60 focus:border-2 focus:ring-primary">
                   <SelectValue placeholder="Select case status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -222,7 +222,7 @@ const CaseDetailsForm = ({
                 defaultValue={watch("matterPriority")}
                 value={watch("matterPriority")}
               >
-                <SelectTrigger className="focus:border-2-primary rounded-full bg-white pl-12 text-dark placeholder:text-dark/60 focus:border-2 focus:ring-dark">
+                <SelectTrigger className="focus:border-2-primary rounded-full bg-white pl-12 text-primary placeholder:text-primary/60 focus:border-2 focus:ring-primary">
                   <SelectValue placeholder="Select priority" />
                 </SelectTrigger>
                 <SelectContent>
@@ -243,7 +243,7 @@ const CaseDetailsForm = ({
                 defaultValue={watch("stage")}
                 value={watch("stage")}
               >
-                <SelectTrigger className="focus:border-2-primary rounded-full bg-white pl-12 text-dark placeholder:text-dark/60 focus:border-2 focus:ring-dark">
+                <SelectTrigger className="focus:border-2-primary rounded-full bg-white pl-12 text-primary placeholder:text-primary/60 focus:border-2 focus:ring-primary">
                   <SelectValue placeholder="Select case stage" />
                 </SelectTrigger>
                 <SelectContent>
@@ -279,7 +279,7 @@ const CaseDetailsForm = ({
                 defaultValue={watch("practiseArea")}
                 value={watch("practiseArea")}
               >
-                <SelectTrigger className="focus:border-2-primary rounded-full bg-white pl-12 text-dark placeholder:text-dark/60 focus:border-2 focus:ring-dark">
+                <SelectTrigger className="focus:border-2-primary rounded-full bg-white pl-12 text-primary placeholder:text-primary/60 focus:border-2 focus:ring-primary">
                   <SelectValue placeholder="Select practice area" />
                 </SelectTrigger>
                 <SelectContent>
@@ -302,7 +302,7 @@ const CaseDetailsForm = ({
               <Hash className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-primary" />
               <Input
                 {...register("internalRefNumber")}
-                className="rounded-full border border-primary/60 bg-white pl-9 transition-all focus:ring-1 focus:ring-dark"
+                className="rounded-full border border-primary/60 bg-white pl-9 transition-all focus:ring-1 focus:ring-primary"
                 placeholder="Enter reference number"
                 disabled={createCaseMutation.isPending}
               />
@@ -438,7 +438,7 @@ const CaseDetailsForm = ({
             <div className="relative">
               <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-primary" />
               <Select onValueChange={onMemberSelect} value="">
-                <SelectTrigger className="focus:border-2-primary rounded-full bg-white pl-12 text-dark placeholder:text-dark/60 focus:border-2 focus:ring-dark">
+                <SelectTrigger className="focus:border-2-primary rounded-full bg-white pl-12 text-primary placeholder:text-primary/60 focus:border-2 focus:ring-primary">
                   <SelectValue placeholder="Select a member to add" />
                 </SelectTrigger>
                 <SelectContent>
@@ -475,7 +475,7 @@ const CaseDetailsForm = ({
                 defaultValue={watch("clientId")}
                 value={watch("clientId")}
               >
-                <SelectTrigger className="focus:border-2-primary rounded-full bg-white pl-12 text-dark placeholder:text-dark/60 focus:border-2 focus:ring-dark">
+                <SelectTrigger className="focus:border-2-primary rounded-full bg-white pl-12 text-primary placeholder:text-primary/60 focus:border-2 focus:ring-primary">
                   <SelectValue placeholder="Select client for case" />
                 </SelectTrigger>
                 <SelectContent>
