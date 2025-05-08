@@ -5,14 +5,11 @@ import {
   Calendar,
   Settings,
   User2,
-  ChevronUp,
   CheckSquare,
   Ellipsis,
-  Projector,
-  ChevronDown,
-  Plus,
   PlusCircleIcon,
   UserCircle,
+  Files,
 } from "lucide-react";
 import {
   Sidebar,
@@ -41,17 +38,11 @@ import { Users, Gavel, Contact } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import useAuth from "@/hooks/use-auth";
 import useAppLinks from "@/hooks/use-app-links";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 import useMount from "@/hooks/use-mount";
 
 const AdminAppsidebar = () => {
-  const user = useAuth();
   const links = useAppLinks();
-  const Mount = useMount()
+  const Mount = useMount();
   if (!links || Object.values(links).some((link) => !link)) return null;
 
   const items = [
@@ -86,6 +77,11 @@ const AdminAppsidebar = () => {
       icon: Calendar,
     },
     {
+      title: "Documents",
+      url: links?.documents,
+      icon: Files,
+    },
+    {
       title: "Contacts",
       url: links?.contacts,
       icon: Contact,
@@ -101,7 +97,7 @@ const AdminAppsidebar = () => {
       icon: PlusCircleIcon,
     },
   ];
-  if(!Mount) return null
+  if (!Mount) return null;
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="py-4">

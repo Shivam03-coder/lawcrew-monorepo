@@ -17,6 +17,7 @@ const useAppLinks = () => {
     contacts: `${legalBasePath}/contacts`,
     settings: `${legalBasePath}/settings`,
     addcase: `${legalBasePath}/add-case`,
+    documents: `${legalBasePath}/documents`,
   };
 };
 
