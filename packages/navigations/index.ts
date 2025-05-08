@@ -1,8 +1,10 @@
-// LAW NAVIAGTIONS
 import useAuth from "@lawcrew/web/src/hooks/use-auth";
-export const useLegalNavs = () => {
+
+const useAppLinks = () => {
   const user = useAuth();
+
   if (!user?.role || !user?.id) return null;
+
   const legalBasePath = `/legal-management/${user.role.toLowerCase()}/${user.id}`;
 
   return {
@@ -14,5 +16,9 @@ export const useLegalNavs = () => {
     tasks: `${legalBasePath}/tasks`,
     contacts: `${legalBasePath}/contacts`,
     settings: `${legalBasePath}/settings`,
+    addcase: `${legalBasePath}/add-case`,
+    documents: `${legalBasePath}/documents`,
   };
 };
+
+export default useAppLinks;

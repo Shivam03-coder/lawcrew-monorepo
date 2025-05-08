@@ -33,13 +33,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
 import { Users, Gavel, Contact } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import useAuth from "@/hooks/use-auth";
-import useAppLinks from "@/hooks/use-app-links";
 import useMount from "@/hooks/use-mount";
-
+import useAppLinks from "@lawcrew/navigations";
 const AdminAppsidebar = () => {
   const links = useAppLinks();
   const Mount = useMount();

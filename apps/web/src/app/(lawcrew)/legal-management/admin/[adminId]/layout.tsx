@@ -13,7 +13,7 @@ const AdminRootLayout = async ({ children }: { children: React.ReactNode }) => {
         <AdminAppsidebar />
         <div className="w-full overflow-x-visible">
           <AdminNavbar />
-          <div className="px-4">{children}</div>
+          <div>{children}</div>
         </div>
       </SidebarProvider>
     </main>
