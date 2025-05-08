@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 import { Toaster } from "../ui/toaster";
 import useThemeStore from "@/store/user-theme-store";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
+
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const isDarkMode = useThemeStore((state) => state.isDarkMode);
 
@@ -25,10 +27,10 @@ const AppLayout = ({ children }: { children: React.ReactNode }) => {
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   return (
-    <>
+    <NuqsAdapter>
       <Toaster />
       <AppLayout>{children}</AppLayout>
-    </>
+    </NuqsAdapter>
   );
 };
 
