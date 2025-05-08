@@ -215,7 +215,7 @@ export function TableShell<TData, TValue>({
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow
                     key={headerGroup.id}
-                    className="bg-blue-200 font-lexend text-primary"
+                    className="bg-primary/20 font-lexend text-primary"
                   >
                     {headerGroup.headers.map((header) => (
                       <TableHead
@@ -239,7 +239,7 @@ export function TableShell<TData, TValue>({
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
-                    className={` ${i % 2 === 0 ? "bg-white" : "bg-gray-50"} transition-colors hover:bg-blue-50 ${row.getIsSelected() ? "bg-green-200 hover:bg-green-200" : ""} `}
+                    className={` ${i % 2 === 0 ? "bg-white" : "bg-gray-50"} transition-colors hover:bg-primary/20 ${row.getIsSelected() ? "bg-green-100 hover:bg-green-100" : ""} `}
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id} className="px-4 py-3 text-sm">

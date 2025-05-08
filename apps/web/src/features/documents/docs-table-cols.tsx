@@ -1,6 +1,6 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, FileTextIcon, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -47,7 +47,12 @@ export const documentColumns: ColumnDef<DocumentsType>[] = [
     ),
     cell: ({ row }) => {
       const title = row.getValue("title") as string | null;
-      return <span className="font-medium">{title}</span>;
+      return (
+        <div className="flex items-center gap-2 font-medium">
+          <FileTextIcon className="text-main h-4 w-4" />
+          <span>{title}</span>
+        </div>
+      );
     },
   },
   {
@@ -88,16 +93,7 @@ export const documentColumns: ColumnDef<DocumentsType>[] = [
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(document.id)}
-            >
-              Copy Document ID
-            </DropdownMenuItem>
-            <DropdownMenuItem>Open Document</DropdownMenuItem>
-            <DropdownMenuItem>Rename</DropdownMenuItem>
+          <DropdownMenuContent className="bg-white" align="end">
             <DropdownMenuItem className="text-red-600">
               Delete Document
             </DropdownMenuItem>

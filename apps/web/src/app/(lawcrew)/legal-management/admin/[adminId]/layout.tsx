@@ -8,12 +8,14 @@ const AdminRootLayout = async ({ children }: { children: React.ReactNode }) => {
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
 
   return (
-    <main className="flex min-h-screen w-full flex-col">
+    <main className="flex h-screen w-full overflow-hidden">
       <SidebarProvider defaultOpen={defaultOpen}>
         <AdminAppsidebar />
-        <div className="w-full overflow-x-visible">
+        <div className="flex flex-col flex-1 h-full overflow-hidden">
           <AdminNavbar />
-          <div className="w-full px-4">{children}</div>
+          <div className="flex-1 overflow-y-auto px-4">
+            {children}
+          </div>
         </div>
       </SidebarProvider>
     </main>
