@@ -25,3 +25,12 @@ export interface SelectedMembersType {
   id: string;
   name: string;
 }
+
+export interface DocumentsType{
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
+  title: string | null;
+  initialContent: string | null;
+}
