@@ -264,7 +264,7 @@ export function TableShell<TData, TValue>({
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected
         </div>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 mr-5">
           <Button
             variant="outline"
             size="sm"

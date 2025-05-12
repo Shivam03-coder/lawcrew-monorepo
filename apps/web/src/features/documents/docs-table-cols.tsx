@@ -22,6 +22,19 @@ import { format } from "date-fns";
 import { DocumentsType } from "@/types/global";
 import { useState } from "react";
 import RenameDocs from "@/components/dialogs/rename-docs";
+import { api } from "@lawcrew/trpc-client/src/client";
+import { useAppToasts } from "@/hooks/use-app-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export const documentColumns: ColumnDef<DocumentsType>[] = [
   {
@@ -94,6 +107,28 @@ export const documentColumns: ColumnDef<DocumentsType>[] = [
     cell: ({ row }) => {
       const document = row.original;
       const [openRename, setOpenRename] = useState(false);
+      const [openAlert, setOpenAlert] = useState(false); // <-- state for alert
+      const deleteDoc = api.document.deleteDoc.useMutation();
+      const { ErrorToast, SuccessToast } = useAppToasts();
+      const apiUtils = api.useUtils();
+      const handleDeleteDocs = async (docId: string) => {
+        await deleteDoc.mutateAsync(
+          { docId },
+          {
+            onSuccess: () => {
+              SuccessToast({
+                title: "Document deleted successfully",
+              });
+              apiUtils.document.getAllDocs.invalidate();
+            },
+            onError: () => {
+              ErrorToast({
+                title: "Failed to delete document",
+              });
+            },
+          },
+        );
+      };
 
       return (
         <>
@@ -108,9 +143,41 @@ export const documentColumns: ColumnDef<DocumentsType>[] = [
                 <Pencil className="mr-2 h-4 w-4" />
                 Rename Document
               </DropdownMenuItem>
-              <DropdownMenuItem className="text-red-600">
-                <Trash className="mr-2 h-4 w-4" />
-                Delete Document
+
+              <DropdownMenuItem
+                onSelect={(e) => e.preventDefault()} // prevents auto close
+              >
+                <AlertDialog open={openAlert} onOpenChange={setOpenAlert}>
+                  <AlertDialogTrigger asChild>
+                    <button
+                      onClick={() => setOpenAlert(true)}
+                      className="flex items-center text-red-600"
+                    >
+                      <Trash className="mr-2 h-4 w-4" />
+                      Delete Document
+                    </button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Are you sure you want to delete this document?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently
+                        delete <strong>{document.title}</strong>.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => handleDeleteDocs(document.id)}
+                        className="bg-red-600 text-white hover:bg-red-700"
+                      >
+                        Yes, delete it
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

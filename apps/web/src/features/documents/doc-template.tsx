@@ -30,6 +30,7 @@ import {
 import { api } from "@lawcrew/trpc-client/src/client";
 import { useRouter } from "next/navigation";
 import useAppLinks from "@lawcrew/navigations";
+import { useLocalStorage } from "usehooks-ts";
 
 const TEMPLATES = [
   {
@@ -136,6 +137,7 @@ const TemplateCard = ({
 
 export default function TemplateCarousel() {
   const createDocs = api.document.createDoc.useMutation();
+  const [_, setValue] = useLocalStorage("document-id", "");
   const router = useRouter();
   const link = useAppLinks();
   const onTemplateClick = (title: string, initialContent: string) => {
@@ -143,6 +145,7 @@ export default function TemplateCarousel() {
       { title, initialContent },
       {
         onSuccess: ({ id }) => {
+          setValue(id);
           router.push(`${link?.documents}/${id}`);
         },
       },

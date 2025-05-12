@@ -30,8 +30,13 @@ import {
   Underline,
   Strikethrough,
 } from "lucide-react";
+import { AppRouterType } from "@lawcrew/trpc-server/routers/root";
+type GetDocsByIdOutput = AppRouterType["document"]["getDocsbyId"];
 
-export default function DocsMenuBar() {
+interface DocsMenuBarProps {
+  docs: GetDocsByIdOutput;
+}
+export default function DocsMenuBar({ docs }: DocsMenuBarProps) {
   const { editor } = useEditorStore();
 
   const insertTable = ({ cols, rows }: { rows: number; cols: number }) => {
@@ -46,13 +51,16 @@ export default function DocsMenuBar() {
     a.click();
   };
 
+  const baseFileName =
+    docs?.title?.replace(/\s+/g, "_").toLowerCase() || "document";
+
   const onSaveJSON = () => {
     if (!editor) return;
     const content = editor.getJSON();
     const blob = new Blob([JSON.stringify(content, null, 2)], {
       type: "application/json",
     });
-    onDownload(blob, "document.json");
+    onDownload(blob, `${baseFileName}.json`);
   };
 
   const onSaveHTML = () => {
@@ -61,7 +69,7 @@ export default function DocsMenuBar() {
     const blob = new Blob([content], {
       type: "text/html",
     });
-    onDownload(blob, "document.html");
+    onDownload(blob, `${baseFileName}.html`);
   };
 
   const onSaveTEXT = () => {
@@ -70,7 +78,7 @@ export default function DocsMenuBar() {
     const blob = new Blob([content], {
       type: "text/plain",
     });
-    onDownload(blob, "document.txt");
+    onDownload(blob, `${baseFileName}.txt`);
   };
 
   const onSavePDF = async () => {
@@ -81,13 +89,11 @@ export default function DocsMenuBar() {
 
     if (printWindow) {
       printWindow.document.write(`
-        <html>
-          <head>
-            <title>LawCrew PDF</title>
-          </head>
-          <body>${htmlContent}</body>
-        </html>
-      `);
+      <html>
+        <head><title>${baseFileName}</title></head>
+        <body>${htmlContent}</body>
+      </html>
+    `);
       printWindow.document.close();
       printWindow.focus();
       printWindow.print();

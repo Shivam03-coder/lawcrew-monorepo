@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
-import { title } from "process";
+import { ApiError } from "../utils/api-error";
 
 export const documentsRoutes = router({
   createDoc: protectedProcedure
@@ -65,5 +65,29 @@ export const documentsRoutes = router({
           ...(initialContent && { initialContent }),
         },
       });
+    }),
+
+  getDocsbyId: protectedProcedure
+    .input(
+      z.object({
+        docId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const isDoc = await ctx.db.document.findUnique({
+        where: {
+          id: input.docId,
+        },
+      });
+
+      if (!isDoc) ApiError("No Documnet Found");
+
+      const doc = await ctx.db.document.findFirst({
+        where: {
+          id: input.docId,
+        },
+      });
+
+      return doc;
     }),
 });
