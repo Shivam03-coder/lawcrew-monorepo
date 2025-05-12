@@ -1,6 +1,12 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, FileTextIcon, MoreHorizontal } from "lucide-react";
+import {
+  ArrowUpDown,
+  FileTextIcon,
+  MoreHorizontal,
+  Pencil,
+  Trash,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -14,6 +20,8 @@ import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 import { format } from "date-fns";
 import { DocumentsType } from "@/types/global";
+import { useState } from "react";
+import RenameDocs from "@/components/dialogs/rename-docs";
 
 export const documentColumns: ColumnDef<DocumentsType>[] = [
   {
@@ -49,7 +57,7 @@ export const documentColumns: ColumnDef<DocumentsType>[] = [
       const title = row.getValue("title") as string | null;
       return (
         <div className="flex items-center gap-2 font-medium">
-          <FileTextIcon className="text-main h-4 w-4" />
+          <FileTextIcon className="h-4 w-4 text-main" />
           <span>{title}</span>
         </div>
       );
@@ -85,20 +93,36 @@ export const documentColumns: ColumnDef<DocumentsType>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const document = row.original;
+      const [openRename, setOpenRename] = useState(false);
 
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="bg-white" align="end">
-            <DropdownMenuItem className="text-red-600">
-              Delete Document
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-white" align="end">
+              <DropdownMenuItem onClick={() => setOpenRename(true)}>
+                <Pencil className="mr-2 h-4 w-4" />
+                Rename Document
+              </DropdownMenuItem>
+              <DropdownMenuItem className="text-red-600">
+                <Trash className="mr-2 h-4 w-4" />
+                Delete Document
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Rename dialog */}
+          <RenameDocs
+            open={openRename}
+            setOpen={setOpenRename}
+            docId={document.id}
+            currentTitle={document.title as string}
+          />
+        </>
       );
     },
   },

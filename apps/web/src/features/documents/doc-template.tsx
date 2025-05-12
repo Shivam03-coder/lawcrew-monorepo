@@ -195,7 +195,7 @@ function NewDocumentCard({ onTemplateClick }: { onTemplateClick: Function }) {
         </Badge>
         <Badge className="bg-green-100 text-xs text-green-800">No Cost</Badge>
         <Button
-          onClick={() => onTemplateClick("Law-Crew", "")}
+          onClick={() => onTemplateClick("Untitled Documents", "")}
           className="w-full bg-black text-white hover:bg-gray-800"
         >
           Create Document

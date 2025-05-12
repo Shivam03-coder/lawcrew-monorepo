@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
+import { title } from "process";
 
 export const documentsRoutes = router({
   createDoc: protectedProcedure
@@ -38,7 +39,31 @@ export const documentsRoutes = router({
     }),
 
   getAllDocs: protectedProcedure.query(async ({ ctx, input }) => {
-    const Docs = await ctx.db.document.findMany({});
+    const Docs = await ctx.db.document.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
     return Docs;
   }),
+
+  updateDocs: protectedProcedure
+    .input(
+      z.object({
+        docId: z.string(),
+        title: z.string().optional(),
+        initialContent: z.string().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { docId, title, initialContent } = input;
+
+      await ctx.db.document.update({
+        where: { id: docId },
+        data: {
+          ...(title && { title }),
+          ...(initialContent && { initialContent }),
+        },
+      });
+    }),
 });
