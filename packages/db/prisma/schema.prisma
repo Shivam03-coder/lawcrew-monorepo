@@ -214,7 +214,7 @@ model CaseBilling {
 model Document {
   id             String   @id @default(cuid())
   title          String?
-  initialContent String?
+  initialContent String?  @db.LongText
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   userId         String

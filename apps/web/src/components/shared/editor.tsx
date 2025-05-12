@@ -20,11 +20,26 @@ import TextAlign from "@tiptap/extension-text-align";
 import ToolBar from "@/features/documents/toolbar";
 import Ruler from "@/features/documents/ruler";
 import { useEditorStore } from "@/store/use-editor-store";
-const Editor = () => {
+import { api } from "@lawcrew/trpc-client/src/client"; // Import API for mutation
+
+const Editor = ({
+  initialContent,
+  documentId,
+}: {
+  initialContent: string;
+  documentId: string;
+}) => {
   const { setEditor } = useEditorStore();
+
+  // Initialize editor
   const editor = useEditor({
+    content: initialContent,
     onCreate({ editor }) {
       setEditor(editor);
+    },
+    onUpdate({ editor }) {
+      const updatedContent = editor.getHTML(); // Get updated content
+      saveContent(updatedContent); // Call function to save content
     },
     immediatelyRender: false,
     editorProps: {
@@ -37,12 +52,8 @@ const Editor = () => {
     extensions: [
       StarterKit,
       TaskList,
-      TaskItem.configure({
-        nested: true,
-      }),
-      Table.configure({
-        resizable: true,
-      }),
+      TaskItem.configure({ nested: true }),
+      Table.configure({ resizable: true }),
       TableRow,
       TableHeader,
       TableCell,
@@ -64,6 +75,25 @@ const Editor = () => {
       }),
     ],
   });
+
+  const apiUtils = api.useUtils();
+
+  // Mutation to save content
+  const { mutate: updateDoc } = api.document.updateDocs.useMutation();
+
+  const saveContent = (content: string) => {
+    updateDoc(
+      { docId: documentId, initialContent: content },
+      {
+        onSuccess: () => {
+          apiUtils.document.getDocsbyId.invalidate({ docId: documentId });
+        },
+        onError: (error) => {
+          console.error("Failed to save document:", error);
+        },
+      },
+    );
+  };
 
   return (
     <>

@@ -1,12 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import {
   Carousel,
   CarouselContent,
@@ -16,74 +11,12 @@ import {
 } from "@/components/ui/carousel";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  FileText,
-  FileSignature,
-  Handshake,
-  Briefcase,
-  Landmark,
-  ScrollText,
-  Gem,
-  Shield,
-  Plus,
-} from "lucide-react";
+import { Plus } from "lucide-react";
 import { api } from "@lawcrew/trpc-client/src/client";
 import { useRouter } from "next/navigation";
 import useAppLinks from "@lawcrew/navigations";
 import { useLocalStorage } from "usehooks-ts";
-
-const TEMPLATES = [
-  {
-    title: "Shareholders Agreement",
-    category: "Corporate",
-    icon: <Handshake className="h-8 w-8" />,
-  },
-  {
-    title: "Mutual Divorce Petition",
-    category: "Family",
-    icon: <FileSignature className="h-8 w-8" />,
-  },
-  {
-    title: "Employment Agreement",
-    category: "Employment",
-    icon: <Briefcase className="h-8 w-8" />,
-  },
-  {
-    title: "GST Consultant Agreement",
-    category: "Tax",
-    icon: <Landmark className="h-8 w-8" />,
-  },
-  {
-    title: "Trademark License Agreement",
-    category: "IP",
-    icon: <Shield className="h-8 w-8" />,
-  },
-  {
-    title: "Lease Agreement",
-    category: "Property",
-    icon: <ScrollText className="h-8 w-8" />,
-  },
-  {
-    title: "Power of Attorney",
-    category: "Legal",
-    icon: <Gem className="h-8 w-8" />,
-  },
-  {
-    title: "Last Will and Testament",
-    category: "Estate",
-    icon: <FileSignature className="h-8 w-8" />,
-  },
-  {
-    title: "Cross Border NDA",
-    category: "Corporate",
-    icon: <Shield className="h-8 w-8" />,
-  },
-  {
-    title: "Master Service Agreement",
-    category: "Business",
-    icon: <Handshake className="h-8 w-8" />,
-  },
-];
+import { TEMPLATES } from "@/constants/template";
 
 const TemplateCard = ({
   template,
@@ -135,21 +68,28 @@ const TemplateCard = ({
   );
 };
 
-export default function TemplateCarousel() {
+export default function TemplateCarousel({
+  setisDocLoading,
+}: {
+  setisDocLoading: (val: boolean) => void;
+}) {
   const createDocs = api.document.createDoc.useMutation();
   const [_, setValue] = useLocalStorage("document-id", "");
   const router = useRouter();
   const link = useAppLinks();
   const onTemplateClick = (title: string, initialContent: string) => {
+    setisDocLoading(createDocs.isPending);
     createDocs.mutateAsync(
       { title, initialContent },
       {
         onSuccess: ({ id }) => {
           setValue(id);
-          router.push(`${link?.documents}/${id}`);
+          const encodedContent = encodeURIComponent(initialContent);
+          router.push(`${link?.documents}/${id}?content=${encodedContent}`);
         },
       },
     );
+    setisDocLoading(createDocs.isPending);
   };
 
   return (
@@ -168,7 +108,9 @@ export default function TemplateCarousel() {
             >
               <div className="p-2">
                 <TemplateCard
-                  onTemplateClick={onTemplateClick}
+                  onTemplateClick={() =>
+                    onTemplateClick(template.title, template.initialContent)
+                  }
                   template={template}
                 />
               </div>
@@ -189,7 +131,7 @@ function NewDocumentCard({ onTemplateClick }: { onTemplateClick: Function }) {
         <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-gray-100">
           <Plus className="h-8 w-8 text-gray-600" />
         </div>
-        <h3 className="text-sm font-medium">Start New Document</h3>
+        <h3 className="text-sm font-medium">Untitled Document</h3>
       </CardHeader>
 
       <CardFooter className="flex flex-col items-center gap-2">
