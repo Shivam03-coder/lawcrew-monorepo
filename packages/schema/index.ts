@@ -144,10 +144,10 @@ export const caseBillingSchema = z.object({
 });
 
 export const createOpponentSchema = z.object({
+  caseId: z.string().optional(),
   ...baseNameSchema,
   jobTitle: z.string().optional(),
-  email: z.string().email("Invalid email").optional(),
-  phoneNumber: z.string().optional(),
+  ...baseContactSchema,
   ...baseLocationSchema,
 });
 

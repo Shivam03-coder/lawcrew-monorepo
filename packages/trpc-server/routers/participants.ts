@@ -1,6 +1,7 @@
 import { addParticipantsSchema, createOpponentSchema } from "@lawcrew/schema";
 import { router, protectedProcedure } from "../trpc";
 import { z } from "zod";
+import { ApiError } from "../utils/api-error";
 
 export const participantsRoutes = router({
   addMember: protectedProcedure
@@ -123,7 +124,7 @@ export const participantsRoutes = router({
     });
     return client;
   }),
-  getMember: protectedProcedure.query(async ({ ctx, input }) => {
+  getMember: protectedProcedure.query(async ({ ctx }) => {
     const member = await ctx.db.user.findMany({
       where: {
         role: "MEMBER",
@@ -175,7 +176,14 @@ export const participantsRoutes = router({
   createOpponent: protectedProcedure
     .input(createOpponentSchema)
     .mutation(async ({ ctx, input }) => {
-      const newOpponent = await ctx.db.opponent.create({
+      const caseDetails = await ctx.db.case.findUnique({
+        where: {
+          id: input.caseId,
+        },
+      });
+      if (!caseDetails) ApiError("Case not found");
+
+      await ctx.db.opponent.create({
         data: {
           ...input,
         },
@@ -184,4 +192,8 @@ export const participantsRoutes = router({
         message: "Opponent created successfully",
       };
     }),
+
+  getAllOpponent: protectedProcedure.query(async ({ ctx, input }) => {
+    return await ctx.db.opponent.findMany({});
+  }),
 });

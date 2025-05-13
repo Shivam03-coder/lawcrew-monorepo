@@ -1,6 +1,11 @@
-import { caseBillingSchema, caseDetailsSchema } from "@lawcrew/schema";
+import {
+  caseBillingSchema,
+  caseDetailsSchema,
+  createOpponentSchema,
+} from "@lawcrew/schema";
 import { protectedProcedure, publicProcedure, router } from "../trpc";
 import { ApiError } from "../utils/api-error";
+import { z } from "zod";
 
 export const caseDetailsRoutes = router({
   createCase: protectedProcedure
@@ -114,4 +119,67 @@ export const caseDetailsRoutes = router({
       caseDetails,
     };
   }),
+
+  editCaseOpponentsDetails: protectedProcedure
+    .input(
+      z.object({
+        caseId: z.string(),
+        opponentId: z.string().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { caseId, opponentId } = input;
+
+      const caseExists = await ctx.db.case.findUnique({
+        where: { id: caseId },
+      });
+
+      if (!caseExists) {
+        throw new Error("Case not found");
+      }
+
+      const updateData: any = {};
+
+      if (opponentId) {
+        updateData.opponent = {
+          connect: { id: opponentId },
+        };
+      }
+
+      const updatedCase = await ctx.db.case.update({
+        where: { id: caseId },
+        data: updateData,
+      });
+
+      return {
+        message: "Case updated successfully",
+        data: updatedCase,
+      };
+    }),
+
+  deleteCase: protectedProcedure
+    .input(
+      z.object({
+        caseId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { caseId } = input;
+
+      const caseExists = await ctx.db.case.findUnique({
+        where: { id: caseId },
+      });
+
+      if (!caseExists) {
+        throw new Error("Case not found");
+      }
+
+      await ctx.db.case.delete({
+        where: { id: caseId },
+      });
+
+      return {
+        message: "Case deleted successfully",
+      };
+    }),
 });
