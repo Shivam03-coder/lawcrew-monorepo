@@ -3,27 +3,22 @@
 import React, { useState } from "react";
 import clsx from "clsx";
 
-const formNavs = [
-  "Case Details",
-  "Billing Details",
-  "Opponent Details",
-  "Notes",
-];
+const formNavs = ["Case Details", "Billing Details", "Opponent Details"];
 
-interface AddClientFormNavsProps {
+interface AddCaseFormNavsProps {
   active: string;
   setActive: (active: string) => void;
 }
 
-const AddClientFormNavs = ({
+const AddCaseFormSubNavsProps = ({
   active,
   setActive,
-}: AddClientFormNavsProps & {
+}: AddCaseFormNavsProps & {
   active: string;
   setActive: (active: string) => void;
 }) => {
   return (
-    <nav className="w-full mb-5 space-y-1 border-2 border-primary/15 p-3">
+    <nav className="mb-5 w-full space-y-1 border-2 border-primary/15 p-3">
       {formNavs.map((item) => (
         <button
           key={item}
@@ -42,4 +37,4 @@ const AddClientFormNavs = ({
   );
 };
 
-export default AddClientFormNavs;
+export default AddCaseFormSubNavsProps;

@@ -2,7 +2,7 @@
 import AddOpponentForm from "@/components/forms/add-opponents-form";
 import BillingDetailsForm from "@/components/forms/billing-details-form";
 import AddClientForm from "@/components/forms/case-details-form";
-import AddClientFormNavs from "@/components/shared/add-client-form-nav";
+import AddCaseFormSubNavsProps from "@/components/shared/add-case-forms-sub-nav";
 import AddCleintPoster from "@/components/shared/add-client-poster";
 import LoaderSpinner from "@/components/shared/laoder";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -40,7 +40,7 @@ const AddCasePage = () => {
     <main className="flex h-screen overflow-hidden py-6">
       {/* Sidebar */}
       <ScrollArea className="flex w-[350px] flex-col border-r border-none py-6">
-        <AddClientFormNavs active={activeTab} setActive={setActiveTab} />
+        <AddCaseFormSubNavsProps active={activeTab} setActive={setActiveTab} />
         <AddCleintPoster />
         <SelectedMembers
           onMemberSelect={handleMemberSelect}
