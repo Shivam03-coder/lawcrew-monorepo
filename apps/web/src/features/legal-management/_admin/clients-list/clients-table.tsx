@@ -2,7 +2,7 @@
 
 import { TableShell } from "@/components/data-table/table-shell";
 import { TableToolbar } from "@/components/data-table/table-toolbar";
-import { Participants } from "@/types/global";
+import { ClientListType, Participants } from "@/types/global";
 import { userColumns } from "./clients-cols";
 import AddClient from "./add-client";
 import ExportToExcel from "@/components/shared/export-to-excel";
@@ -10,7 +10,7 @@ import { Row } from "@tanstack/react-table";
 import { api } from "@lawcrew/trpc-client/src/client";
 import { useAppToasts } from "@/hooks/use-app-toast";
 
-export default function ClientsTable({ data }: { data: Participants[] }) {
+export default function ClientsTable({ data }: { data: ClientListType[] }) {
   const DeleteParticipant = api.participant.deleteParticipant.useMutation();
   const { SuccessToast } = useAppToasts();
   const apiUtils = api.useUtils();

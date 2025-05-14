@@ -12,12 +12,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
-import { Participants } from "@/types/global";
+import { ClientListType, Participants } from "@/types/global";
 import { useRouter } from "next/navigation";
 import useAuth from "@/hooks/use-auth";
 import Link from "next/link";
 
-export const userColumns: ColumnDef<Participants>[] = [
+export const userColumns: ColumnDef<ClientListType>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -51,7 +51,7 @@ export const userColumns: ColumnDef<Participants>[] = [
     cell: ({ row }) => {
       const router = useRouter();
       const userName = row.getValue("userName") as string;
-      const clientId = row.original.id;
+      const clientId = row.original.TeamClient?.id as string;
       const user = useAuth();
 
       return (

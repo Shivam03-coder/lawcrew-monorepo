@@ -107,6 +107,8 @@ export const participantsRoutes = router({
           select: {
             city: true,
             state: true,
+            country: true,
+            zip: true,
           },
         },
         password: true,
@@ -117,6 +119,7 @@ export const participantsRoutes = router({
             id: true,
           },
         },
+        role: true,
       },
       orderBy: {
         createdAt: "desc",
@@ -189,4 +192,35 @@ export const participantsRoutes = router({
   getAllOpponent: protectedProcedure.query(async ({ ctx, input }) => {
     return await ctx.db.opponent.findMany({});
   }),
+
+  getClientDetailsById: protectedProcedure
+    .input(
+      z.object({
+        clientId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.teamClient.findFirst({
+        where: {
+          id: input.clientId,
+        },
+        select: {
+          id: true,
+          cases: true,
+          createdAt: true,
+          user: {
+            include: {
+              UserAddress: {
+                select: {
+                  city: true,
+                  country: true,
+                  state: true,
+                  zip: true,
+                },
+              },
+            },
+          },
+        },
+      });
+    }),
 });

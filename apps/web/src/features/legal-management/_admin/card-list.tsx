@@ -108,7 +108,7 @@ const latestTransactions = [
 const CardList = ({ title }: { title: string }) => {
   const list = title === "Clients List" ? popularContent : latestTransactions;
   return (
-    <div className="fontin h-[430px] overflow-scroll">
+    <div className="fontin h-[470px] overflow-scroll">
       <h1 className="mb-6 font-inter text-base font-semibold">{title}</h1>
       <div className="flex flex-col gap-2">
         {list.map((item) => (

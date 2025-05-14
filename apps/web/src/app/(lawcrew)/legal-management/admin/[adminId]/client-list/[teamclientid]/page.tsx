@@ -1,48 +1,59 @@
-import { Badge } from "@/components/ui/badge";
-import React from "react";
-import { Progress } from "@/components/ui/progress";
-import { Pencil } from "lucide-react";
-import { Sheet, SheetTrigger } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+"use client";
+import React, { useEffect, useState } from "react";
 import CaseLineChart from "@/features/legal-management/_admin/case-line-chart";
-import EditUser from "@/features/legal-management/_admin/edit-user";
 import CardList from "@/features/legal-management/_admin/card-list";
 import AppBreadcrumb from "@/components/shared/app-breadcrumb";
 import UserStatusContainer from "@/features/legal-management/_admin/user-status-container";
 import UserInfoContainer from "@/features/legal-management/_admin/user-info-container";
 import UserCaseContainer from "@/features/legal-management/_admin/user-case-container";
+import { api } from "@lawcrew/trpc-client/src/client";
+import useAppLinks from "@lawcrew/navigations";
+import { AppRouterType } from "@lawcrew/trpc-server/routers/root";
+import { ClientType } from "@/types/global";
 
-const UserPage = () => {
+interface ClientPageProps {
+  params: Promise<{
+    teamclientid: string;
+  }>;
+}
+
+const ClientPage = ({ params }: ClientPageProps) => {
+  const links = useAppLinks();
+  const { teamclientid } = React.use(params);
+  const [clientName, setClientName] = useState<string>("");
+  const { data } = api.participant.getClientDetailsById.useQuery({
+    clientId: teamclientid,
+  });
+  const [userInfo, setUserInfo] = useState<ClientType>();
+
+  useEffect(() => {
+    if (data?.user?.userName) {
+      setClientName(data.user.userName);
+      setUserInfo(data.user);
+    }
+
+    return () => {
+      setClientName("");
+    };
+  }, [data]);
+
   const userCrumbs = [
-    { label: "Dashboard", href: "/" },
-    { label: "Users", href: "/users" },
-    { label: "John Doe" },
+    { label: "Dashboard", href: links?.base },
+    { label: "Clinets-List", href: links?.clientList },
+    { label: clientName },
   ];
+
   return (
     <div className="page">
       <AppBreadcrumb items={userCrumbs} />
-      {/* CONTAINER */}
       <div className="mt-4 flex flex-col gap-8 xl:flex-row">
-        {/* LEFT */}
         <div className="w-full space-y-6 xl:w-1/3">
-          {/* USER STATUS CONTAINER */}
-          <UserStatusContainer
-            isVerified={true}
-            isClientCustomer={true}
-            isOnline={true}
-          />
-
-          {/* INFORMATION CONTAINER */}
-          <UserInfoContainer />
-          {/* CARD LIST CONTAINER */}
+          {userInfo && <UserInfoContainer {...userInfo} />}
           <div className="mainCard rounded-lg p-4">
             <CardList title="Recent Transactions" />
           </div>
         </div>
-        {/* RIGHT */}
         <div className="w-full space-y-6 xl:w-2/3">
-          {/* USER CARD CONTAINER */}
           <UserCaseContainer
             userName="John Doe"
             userImage="https://avatars.githubusercontent.com/u/1486366"
@@ -59,7 +70,6 @@ const UserPage = () => {
             ]}
           />
 
-          {/* CHART CONTAINER */}
           <div className="mainCard rounded-lg p-4">
             <h1 className="text-xl font-semibold">User Activity</h1>
             <CaseLineChart />
@@ -70,4 +80,4 @@ const UserPage = () => {
   );
 };
 
-export default UserPage;
+export default ClientPage;
