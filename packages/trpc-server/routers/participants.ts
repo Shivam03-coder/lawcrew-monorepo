@@ -173,16 +173,9 @@ export const participantsRoutes = router({
       return deletedParticipant;
     }),
 
-  createOpponent: protectedProcedure
+  createNewOpponent: protectedProcedure
     .input(createOpponentSchema)
     .mutation(async ({ ctx, input }) => {
-      const caseDetails = await ctx.db.case.findUnique({
-        where: {
-          id: input.caseId,
-        },
-      });
-      if (!caseDetails) ApiError("Case not found");
-
       await ctx.db.opponent.create({
         data: {
           ...input,

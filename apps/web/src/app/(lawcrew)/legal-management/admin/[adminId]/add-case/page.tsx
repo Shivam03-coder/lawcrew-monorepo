@@ -1,8 +1,10 @@
 "use client";
+import AddOpponentForm from "@/components/forms/add-opponents-form";
 import BillingDetailsForm from "@/components/forms/billing-details-form";
 import AddClientForm from "@/components/forms/case-details-form";
 import AddClientFormNavs from "@/components/shared/add-client-form-nav";
 import AddCleintPoster from "@/components/shared/add-client-poster";
+import LoaderSpinner from "@/components/shared/laoder";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import SelectedMembers from "@/features/legal-management/_admin/selected-members";
 import { SelectedMembersType } from "@/types/global";
@@ -15,7 +17,8 @@ const AddCasePage = () => {
     [],
   );
 
-  const { data: members = [] } = api.participant.getMember.useQuery();
+  const { data: members = [], isLoading } =
+    api.participant.getMember.useQuery();
 
   const handleMemberSelect = useCallback(
     (memberId: string) => {
@@ -32,6 +35,7 @@ const AddCasePage = () => {
     [members],
   );
 
+  if (isLoading) return <LoaderSpinner />;
   return (
     <main className="flex h-screen overflow-hidden py-6">
       {/* Sidebar */}
@@ -54,6 +58,7 @@ const AddCasePage = () => {
           />
         )}
         {activeTab === "Billing Details" && <BillingDetailsForm />}
+        {activeTab === "Opponent Details" && <AddOpponentForm  />}
       </div>
     </main>
   );

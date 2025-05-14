@@ -182,4 +182,36 @@ export const caseDetailsRoutes = router({
         message: "Case deleted successfully",
       };
     }),
+  getCaseDetailsById: protectedProcedure
+    .input(
+      z.object({
+        caseId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { caseId } = input;
+
+      const caseExists = await ctx.db.case.findUnique({
+        where: { id: caseId },
+      });
+
+      if (!caseExists) {
+        throw new Error("Case not found");
+      }
+
+      const litigation = await ctx.db.case.findFirst({
+        where: { id: caseId },
+      });
+
+      return litigation;
+    }),
+
+  getOpponentsIds: protectedProcedure.query(async ({ ctx, input }) => {
+    return await ctx.db.opponent.findMany({
+      select: {
+        id: true,
+        firstName: true,
+      },
+    });
+  }),
 });

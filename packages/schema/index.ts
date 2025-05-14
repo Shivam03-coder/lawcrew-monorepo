@@ -144,7 +144,6 @@ export const caseBillingSchema = z.object({
 });
 
 export const createOpponentSchema = z.object({
-  caseId: z.string().optional(),
   ...baseNameSchema,
   jobTitle: z.string().optional(),
   ...baseContactSchema,
@@ -158,4 +157,4 @@ export type ForgotPasswordType = z.infer<typeof forgotPasswordSchema>;
 export type AddParticipantsType = z.infer<typeof addParticipantsSchema>;
 export type CaseDetailsType = z.infer<typeof caseDetailsSchema>;
 export type CaseBillingType = z.infer<typeof caseBillingSchema>;
-export type CreateOpponentInput = z.infer<typeof createOpponentSchema>;
+export type CreateOpponentType = z.infer<typeof createOpponentSchema>;
