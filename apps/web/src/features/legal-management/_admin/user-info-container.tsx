@@ -4,14 +4,19 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { Pencil } from "lucide-react";
-import EditUser from "./edit-user";
 import { ClientType } from "@/types/global";
-
+import { format } from "date-fns";
+import EditClientForm from "@/components/forms/edit-client-info-form";
 const UserInfoContainer = ({
   userName,
   email,
   phoneNumber,
   UserAddress,
+  createdAt,
+  role,
+  firstName,
+  lastName,
+  id,
 }: ClientType) => {
   const getLocation = useCallback(() => {
     return UserAddress
@@ -42,13 +47,24 @@ const UserInfoContainer = ({
               Edit User <Pencil size={14} className="ml-1" />
             </Button>
           </SheetTrigger>
-          <EditUser />
+          <EditClientForm
+            clientId={id}
+            city={UserAddress?.city!}
+            country={UserAddress?.country!}
+            email={email}
+            firstName={firstName}
+            lastName={lastName!}
+            phoneNumber={phoneNumber}
+            role={role!}
+            state={UserAddress?.state!}
+            zip={UserAddress?.zip!}
+          />
         </Sheet>
       </div>
 
       <div className="mt-4 space-y-4">
         <div className="mb-8 space-y-2">
-          <p className="text-sm text-muted-foreground">Case completion</p>
+          <p className="text-muted-foreground text-sm">Case completion</p>
           <Progress value={66} />
         </div>
 
@@ -59,7 +75,9 @@ const UserInfoContainer = ({
         <InfoRow label="Role" value={<Badge>Admin</Badge>} />
       </div>
 
-      <p className="mt-4 text-sm text-muted-foreground">Joined on 2025.01.01</p>
+      <p className="text-muted-foreground mt-4 text-sm">
+        Joined on {format(new Date(createdAt), "yyyy.MM.dd")}
+      </p>
     </div>
   );
 };

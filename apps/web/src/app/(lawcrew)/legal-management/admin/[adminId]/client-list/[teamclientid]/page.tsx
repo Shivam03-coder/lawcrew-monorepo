@@ -3,12 +3,10 @@ import React, { useEffect, useState } from "react";
 import CaseLineChart from "@/features/legal-management/_admin/case-line-chart";
 import CardList from "@/features/legal-management/_admin/card-list";
 import AppBreadcrumb from "@/components/shared/app-breadcrumb";
-import UserStatusContainer from "@/features/legal-management/_admin/user-status-container";
 import UserInfoContainer from "@/features/legal-management/_admin/user-info-container";
 import UserCaseContainer from "@/features/legal-management/_admin/user-case-container";
 import { api } from "@lawcrew/trpc-client/src/client";
 import useAppLinks from "@lawcrew/navigations";
-import { AppRouterType } from "@lawcrew/trpc-server/routers/root";
 import { ClientType } from "@/types/global";
 
 interface ClientPageProps {

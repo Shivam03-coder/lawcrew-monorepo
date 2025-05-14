@@ -150,6 +150,14 @@ export const createOpponentSchema = z.object({
   ...baseLocationSchema,
 });
 
+export const editClientSchema = z.object({
+  clientId: z.string(),
+  ...baseNameSchema,
+  ...baseContactSchema,
+  ...baseLocationSchema,
+  role: z.enum(["ADMIN", "MEMBER", "CLIENT"]),
+});
+
 // ==================== Type Definitions ====================
 export type SignupType = z.infer<typeof signupSchema>;
 export type LoginType = z.infer<typeof loginSchema>;
@@ -158,3 +166,4 @@ export type AddParticipantsType = z.infer<typeof addParticipantsSchema>;
 export type CaseDetailsType = z.infer<typeof caseDetailsSchema>;
 export type CaseBillingType = z.infer<typeof caseBillingSchema>;
 export type CreateOpponentType = z.infer<typeof createOpponentSchema>;
+export type EditClientType = z.infer<typeof editClientSchema>;

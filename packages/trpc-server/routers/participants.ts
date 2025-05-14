@@ -1,4 +1,8 @@
-import { addParticipantsSchema, createOpponentSchema } from "@lawcrew/schema";
+import {
+  addParticipantsSchema,
+  createOpponentSchema,
+  editClientSchema,
+} from "@lawcrew/schema";
 import { router, protectedProcedure } from "../trpc";
 import { z } from "zod";
 import { ApiError } from "../utils/api-error";
@@ -222,5 +226,49 @@ export const participantsRoutes = router({
           },
         },
       });
+    }),
+
+  editClientInfo: protectedProcedure
+    .input(editClientSchema)
+    .mutation(async ({ ctx, input }) => {
+      const {
+        city,
+        clientId,
+        country,
+        email,
+        firstName,
+        lastName,
+        phoneNumber,
+        role,
+        state,
+        zip,
+      } = input;
+      await ctx.db.teamClient.update({
+        where: {
+          userId: input.clientId,
+        },
+        data: {
+          user: {
+            update: {
+              ...(firstName && { firstName }),
+              ...(lastName && { lastName }),
+              ...(role && { role }),
+              UserAddress: {
+                update: {
+                  ...(city && { city }),
+                  ...(country && { country }),
+                  ...(state && { state }),
+                  ...(zip && { zip }),
+                },
+              },
+              ...(email && { email }),
+              ...(phoneNumber && { phoneNumber }),
+            },
+          },
+        },
+      });
+      return {
+        message: "Client edited succesfully",
+      };
     }),
 });
