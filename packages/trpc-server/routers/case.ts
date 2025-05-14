@@ -41,7 +41,7 @@ export const caseDetailsRoutes = router({
         closedDate,
       } = input;
 
-      await ctx.db.$transaction(async (tx) => {
+      const newCase = await ctx.db.$transaction(async (tx) => {
         const createdCase = await tx.case.create({
           data: {
             title,
@@ -91,6 +91,8 @@ export const caseDetailsRoutes = router({
           res: createdCase,
         };
       });
+
+      return newCase.res;
     }),
   createBillings: protectedProcedure
     .input(caseBillingSchema)
@@ -141,7 +143,7 @@ export const caseDetailsRoutes = router({
       const updateData: any = {};
 
       if (opponentId) {
-        updateData.opponent = {
+        updateData.Opponent = {
           connect: { id: opponentId },
         };
       }

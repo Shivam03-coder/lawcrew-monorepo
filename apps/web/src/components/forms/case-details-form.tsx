@@ -45,6 +45,7 @@ import { Textarea } from "../ui/textarea";
 import { useEffect } from "react";
 import { SelectedMembersType } from "@/types/global";
 import UplaodFile from "./uplaod-case-file-form";
+import { useLocalStorage } from "usehooks-ts";
 
 interface CaseDetailsFormProps {
   selectedMembers: SelectedMembersType[];
@@ -92,6 +93,7 @@ const CaseDetailsForm = ({
   const { data: members } = api.participant.getMember.useQuery();
   const createCaseMutation = api.litigation.createCase.useMutation();
   const { ErrorToast, SuccessToast } = useAppToasts();
+  const [caseId, setCaseId] = useLocalStorage<string | undefined>("caseId", "");
 
   useEffect(() => {
     setValue(
@@ -109,9 +111,10 @@ const CaseDetailsForm = ({
         SuccessToast({ title: "Case created successfully!" });
         setSelectedMembers([]);
         reset();
+        setCaseId(res?.id as string);
       },
       onError: () => {
-        ErrorToast({ title: "Failed to create case. Please try again." });
+        ErrorToast({ title: "Failed to create case." });
       },
     });
   };

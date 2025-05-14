@@ -60,13 +60,10 @@ const NewOpponentDetailsForm = ({
   });
 
   const { ErrorToast, SuccessToast } = useAppToasts();
-  const apiUtils = api.useUtils();
-  const { data: cases, isLoading: isCasesLoading } =
-    api.litigation.getCasedetails.useQuery();
+
   const createOpponent = api.participant.createNewOpponent.useMutation();
 
   const onSubmit = async (data: CreateOpponentType) => {
-    console.log("🚀 ~ onSubmit ~ data:", data);
     await createOpponent.mutateAsync(data, {
       onSuccess: () => {
         SuccessToast({ title: "Opponent created successfully!" });
@@ -226,7 +223,7 @@ const NewOpponentDetailsForm = ({
         <Button
           type="submit"
           className="hover:bg-primary-dark w-full bg-primary text-secondary"
-          disabled={createOpponent.isPending || isCasesLoading}
+          disabled={createOpponent.isPending}
         >
           {createOpponent.isPending ? (
             <Spinner color="#f2f8ff" />

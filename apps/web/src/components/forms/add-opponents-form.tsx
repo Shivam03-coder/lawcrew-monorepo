@@ -17,6 +17,8 @@ import FormField from "../shared/form-field";
 import AddNewOpponents from "../dialogs/add-new-opponents";
 import { api } from "@lawcrew/trpc-client/src/client";
 import { useAppToasts } from "@/hooks/use-app-toast";
+import { useReadLocalStorage } from "usehooks-ts";
+import Spinner from "../shared/spinner";
 
 type FormValues = {
   opponent: string;
@@ -28,13 +30,33 @@ export default function AddOpponentForm() {
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>();
-  const { SuccessToast, ErrorToast } = useAppToasts();
+  const { ErrorToast, SuccessToast } = useAppToasts();
+  const caseId = useReadLocalStorage("caseId") as string;
+  console.log("🚀 ~ AddOpponentForm ~ caseId:", caseId)
   const { data: ids, isLoading } = api.litigation.getOpponentsIds.useQuery();
+  const editCaseOpponentsDetails =
+    api.litigation.editCaseOpponentsDetails.useMutation();
 
   const onSubmit = (data: FormValues) => {
-    SuccessToast({
-      title: data.opponent,
-    });
+    console.log("🚀 ~ onSubmit ~ data:", data)
+    editCaseOpponentsDetails.mutateAsync(
+      {
+        caseId,
+        opponentId: data.opponent,
+      },
+      {
+        onSuccess: () => {
+          SuccessToast({
+            title: "Opponent added to case.",
+          });
+        },
+        onError: () => {
+          ErrorToast({
+            title: "Opponent failed to add in  case.",
+          });
+        },
+      },
+    );
   };
 
   return (
@@ -96,9 +118,10 @@ export default function AddOpponentForm() {
 
       <button
         type="submit"
-        className="w-full rounded-full bg-primary px-6 py-2 text-white hover:bg-primary/90"
+        disabled={editCaseOpponentsDetails.isPending}
+        className="center w-full rounded-full bg-primary px-6 py-2 text-white hover:bg-primary/90"
       >
-        Add Opponent
+        {editCaseOpponentsDetails.isPaused ? <Spinner /> : "Add Opponent"}
       </button>
     </form>
   );
