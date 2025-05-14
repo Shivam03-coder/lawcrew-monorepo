@@ -56,17 +56,17 @@ export const caseDetailsRoutes = router({
             stage,
             status,
             practiseArea,
-            CaseNote: {
+            caseNote: {
               create: {
                 note,
               },
             },
-            CaseTag: {
+            caseTag: {
               create: {
                 label: labels,
               },
             },
-            CaseDocument: {
+            caseDocument: {
               create: {
                 documentUrl: docsUrl,
               },

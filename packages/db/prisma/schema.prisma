@@ -145,13 +145,22 @@ model Case {
   opponentId String?   @unique
   Opponent   Opponent? @relation(fields: [opponentId], references: [id], onDelete: Cascade)
 
-  CaseTag      CaseTag[]
-  CaseDocument CaseDocument[]
-  CaseReminder CaseReminder[]
-  CaseInvoice  CaseInvoice[]
-  CaseBillings CaseBilling?
+  caseTag      CaseTag[]
+  caseDocument CaseDocument[]
+  caseReminder CaseReminder[]
+  caseInvoice  CaseInvoice[]
+  caseBillings CaseBilling?
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
+  caseNote     CaseNote?
+}
+
+model CaseNote {
+  id        String   @id @default(cuid())
+  note      String?
+  caseId    String   @unique
+  case      Case?    @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 }
 
 model CaseDocument {
