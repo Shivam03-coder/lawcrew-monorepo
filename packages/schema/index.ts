@@ -152,10 +152,15 @@ export const createOpponentSchema = z.object({
 
 export const editClientSchema = z.object({
   clientId: z.string(),
-  ...baseNameSchema,
-  ...baseContactSchema,
-  ...baseLocationSchema,
-  role: z.enum(["ADMIN", "MEMBER", "CLIENT"]),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  email: z.string().email().optional(),
+  phoneNumber: z.string().optional(),
+  role: z.enum(["ADMIN", "MEMBER", "CLIENT"]).optional(),
+  country: z.string().optional(),
+  state: z.string().optional(),
+  city: z.string().optional(),
+  zip: z.string().optional(),
 });
 
 // ==================== Type Definitions ====================
