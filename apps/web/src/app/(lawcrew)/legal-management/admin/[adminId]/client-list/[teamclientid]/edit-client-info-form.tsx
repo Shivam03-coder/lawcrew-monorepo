@@ -9,13 +9,6 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { editClientSchema, EditClientType } from "@lawcrew/schema";
 import { api } from "@lawcrew/trpc-client/src/client";
@@ -28,17 +21,14 @@ import Spinner from "@/components/shared/spinner";
 
 interface EditClientFormProps {
   user: ClientType;
-  open: boolean;
   setOpen: (open: boolean) => void;
 }
 
-const EditClientForm = ({ user, open, setOpen }: EditClientFormProps) => {
+const EditClientForm = ({ user, setOpen }: EditClientFormProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
-    watch,
     reset,
   } = useForm<EditClientType>({
     resolver: zodResolver(editClientSchema),
@@ -52,7 +42,6 @@ const EditClientForm = ({ user, open, setOpen }: EditClientFormProps) => {
         firstName: user.firstName ?? undefined,
         email: user.email ?? undefined,
         phoneNumber: user.phoneNumber ?? undefined,
-        role: user.role ?? undefined,
         country: user?.UserAddress?.country ?? undefined,
         state: user?.UserAddress?.state ?? undefined,
         city: user?.UserAddress?.city ?? undefined,

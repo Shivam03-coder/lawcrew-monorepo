@@ -101,10 +101,10 @@ model TeamClient {
 model CaseTag {
   id     String @id @default(cuid())
   label  String
-  caseId String
-  case   Case   @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  caseId String @unique
+  case   Case   @relation("CaseTags", fields: [caseId], references: [id], onDelete: Cascade)
 
-  @@unique([label, caseId])
+  @@unique([label])
 }
 
 model TeamMembership {
@@ -122,8 +122,8 @@ model TeamMembership {
 
 model Case {
   id                 String         @id @default(cuid())
-  title              String
-  description        String?
+  title              String         @db.LongText
+  description        String?        @db.LongText
   practiseArea       PracticeArea   @default(CRIMINAL)
   arrivalDate        DateTime?      @default(now())
   status             CaseStatus?    @default(OPEN)
@@ -145,7 +145,7 @@ model Case {
   opponentId String?   @unique
   Opponent   Opponent? @relation(fields: [opponentId], references: [id], onDelete: Cascade)
 
-  caseTag      CaseTag[]
+  caseTag      CaseTag?       @relation("CaseTags")
   caseDocument CaseDocument[]
   caseReminder CaseReminder[]
   caseInvoice  CaseInvoice[]
@@ -157,7 +157,7 @@ model Case {
 
 model CaseNote {
   id        String   @id @default(cuid())
-  note      String?
+  note      String?  @db.LongText
   caseId    String   @unique
   case      Case?    @relation(fields: [caseId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())

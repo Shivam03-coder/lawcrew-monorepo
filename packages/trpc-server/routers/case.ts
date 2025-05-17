@@ -217,4 +217,47 @@ export const caseDetailsRoutes = router({
       },
     });
   }),
+
+  getCaseDetailsByClientId: protectedProcedure
+    .input(
+      z.object({
+        clientId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { clientId } = input;
+
+      const caseExists = await ctx.db.case.findMany({
+        where: { clientId },
+      });
+
+      if (!caseExists) {
+        throw new Error("Case not found for this client");
+      }
+
+      const litigation = await ctx.db.case.findMany({
+        where: { clientId },
+        include: {
+          members: {
+            include: {
+              teamMember: {
+                include: {
+                  user: true,
+                },
+              },
+            },
+          },
+          caseTag: {
+            select: {
+              label: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+      return litigation;
+    }),
 });

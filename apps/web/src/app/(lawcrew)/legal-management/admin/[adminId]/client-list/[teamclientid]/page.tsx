@@ -5,9 +5,9 @@ import useAppLinks from "@lawcrew/navigations";
 import { ClientType } from "@/types/global";
 import AppBreadcrumb from "@/components/shared/app-breadcrumb";
 import CardList from "@/components/shared/card-list";
+import CaseLineChart from "./case-line-chart";
 import ClientInfoContainer from "./client-info-container";
 import ClientCaseContainer from "./client-case-container";
-import CaseLineChart from "./case-line-chart";
 
 interface ClientPageProps {
   params: Promise<{
@@ -25,10 +25,10 @@ const ClientPage = ({ params }: ClientPageProps) => {
   const [userInfo, setUserInfo] = useState<ClientType>();
 
   useEffect(() => {
-    if (data?.user?.userName) {
-      setClientName(data.user.userName);
+    if (data?.userName) {
+      setClientName(data.userName);
       setUserInfo({
-        ...data.user,
+        ...data,
         clientId: teamclientid,
       });
     }
@@ -58,17 +58,8 @@ const ClientPage = ({ params }: ClientPageProps) => {
           <ClientCaseContainer
             userName="John Doe"
             userImage="https://avatars.githubusercontent.com/u/1486366"
-            userInitials="JD"
-            caseTitle="Property Dispute Case"
-            startDate="2024-01-15"
-            endDate="2024-05-10"
-            description="This case deals with a property ownership issue between two parties."
-            caseType="Civil"
-            members={[
-              { name: "Alice Smith" },
-              { name: "Bob Johnson" },
-              { name: "Carol White" },
-            ]}
+            userInitials={userInfo?.email.slice(0, 2) as string}
+            clientId={teamclientid}
           />
 
           <div className="mainCard rounded-lg p-4">

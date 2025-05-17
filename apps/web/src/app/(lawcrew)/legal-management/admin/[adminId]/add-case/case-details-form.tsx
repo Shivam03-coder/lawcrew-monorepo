@@ -104,7 +104,6 @@ const CaseDetailsForm = ({
 
   const onSubmit = (caseDetails: CaseDetailsType) => {
     if (!caseDetails) return;
-    console.log(caseDetails);
 
     createCaseMutation.mutate(caseDetails, {
       onSuccess: (res) => {
@@ -170,7 +169,7 @@ const CaseDetailsForm = ({
               <Textarea
                 {...register("labels")}
                 className="min-h-[100px] w-full rounded-lg border border-primary/60 bg-white p-3 pl-9 transition-all focus:ring-1 focus:ring-primary"
-                placeholder="Enter case Tags"
+                placeholder="Enter case Tags seprated by comma,"
                 disabled={createCaseMutation.isPending}
               />
             </div>

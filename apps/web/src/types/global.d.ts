@@ -69,7 +69,6 @@ export interface ClientType {
   createdAt: string;
   userProfile: string | null;
   updatedAt: string;
-  role: "MEMBER" | "CLIENT";
   UserAddress: {
     city: string;
     country: string;
@@ -77,3 +76,5 @@ export interface ClientType {
     zip: string;
   } | null;
 }
+
+

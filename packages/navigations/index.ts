@@ -1,3 +1,4 @@
+"use client"
 import useAuth from "@lawcrew/web/src/hooks/use-auth";
 
 const useAppLinks = () => {

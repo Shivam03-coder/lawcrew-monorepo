@@ -240,7 +240,7 @@ const AddMembersForm = () => {
       {createMembers.isPending ? (
         <Spinner color="#f2f8ff" />
       ) : (
-        "Create Client Account"
+        "Create Member Account"
       )}
     </Button>
   </form>

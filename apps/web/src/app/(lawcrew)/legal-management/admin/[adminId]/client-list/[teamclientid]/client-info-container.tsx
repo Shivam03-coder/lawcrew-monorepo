@@ -39,7 +39,7 @@ const ClientInfoContainer = (client: ClientType) => {
               Edit User <Pencil size={14} className="ml-1" />
             </Button>
           </SheetTrigger>
-          <EditClientForm open={open} setOpen={setOpen} user={{ ...client }} />
+          <EditClientForm setOpen={setOpen} user={{ ...client }} />
         </Sheet>
       </div>
 
@@ -53,10 +53,6 @@ const ClientInfoContainer = (client: ClientType) => {
         <InfoRow label="Email" value={client.email} />
         <InfoRow label="Phone" value={client.phoneNumber} />
         <InfoRow label="Location" value={getLocation()} />
-        <InfoRow
-          label="Role"
-          value={<Badge>{client.role.toUpperCase()}</Badge>}
-        />
       </div>
 
       <p className="text-muted-foreground mt-4 text-sm">

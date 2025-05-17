@@ -204,28 +204,56 @@ export const participantsRoutes = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      return await ctx.db.teamClient.findFirst({
+      const client = await ctx.db.teamClient.findFirst({
         where: {
           id: input.clientId,
         },
         select: {
           id: true,
-          cases: true,
           createdAt: true,
           user: {
-            include: {
+            select: {
+              id: true,
+              userName: true,
+              password: true,
+              email: true,
+              phoneNumber: true,
+              firstName: true,
+              lastName: true,
+              createdAt: true,
+              updatedAt: true,
+              userProfile: true,
+              role: true,
               UserAddress: {
                 select: {
                   city: true,
+                  zip: true,
                   country: true,
                   state: true,
-                  zip: true,
                 },
               },
             },
           },
         },
       });
+
+      if (!client || !client.user) return null;
+
+      return {
+        clientId: input.clientId,
+        userName: client.user.userName,
+        password: client.user.password,
+        email: client.user.email,
+        phoneNumber: client.user.phoneNumber,
+        firstName: client.user.firstName,
+        lastName: client.user.lastName,
+        id: client.user.id,
+        createdAt: client.user.createdAt,
+        updatedAt: client.user.updatedAt,
+        userProfile: client.user.userProfile,
+        role: client.user.role,
+        UserAddress: client.user.UserAddress,
+      };
     }),
 
   editClientInfo: protectedProcedure
