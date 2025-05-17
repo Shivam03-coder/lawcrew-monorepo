@@ -184,6 +184,7 @@ export const caseDetailsRoutes = router({
         message: "Case deleted successfully",
       };
     }),
+
   getCaseDetailsById: protectedProcedure
     .input(
       z.object({

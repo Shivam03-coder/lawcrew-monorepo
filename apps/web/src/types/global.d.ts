@@ -58,7 +58,8 @@ export interface DocumentsType {
 }
 
 export interface ClientType {
-  userName: string;
+  clientId: string;
+  userName: string | null;
   password: string;
   email: string;
   phoneNumber: string;

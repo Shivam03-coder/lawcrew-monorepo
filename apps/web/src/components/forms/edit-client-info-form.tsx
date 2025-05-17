@@ -20,56 +20,64 @@ import { Button } from "@/components/ui/button";
 import { editClientSchema, EditClientType } from "@lawcrew/schema";
 import { api } from "@lawcrew/trpc-client/src/client";
 import FormField from "@/components/shared/form-field";
-import { Bookmark, FileText, User, Calendar } from "lucide-react";
+import { Bookmark, FileText, User } from "lucide-react";
 import { useAppToasts } from "@/hooks/use-app-toast";
 import Spinner from "../shared/spinner";
+import { ClientType } from "@/types/global";
+import { useEffect } from "react";
 
-const EditClientForm = (user: EditClientType) => {
+interface EditClientFormProps {
+  user: ClientType;
+}
+
+const EditClientForm = ({ user }: EditClientFormProps) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     setValue,
     watch,
     reset,
   } = useForm<EditClientType>({
     resolver: zodResolver(editClientSchema),
     defaultValues: {
-      city: user.city,
-      country: user.country,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      phoneNumber: user.phoneNumber,
-      role: user.role,
-      state: user.state,
-      zip: user.zip,
+      city: user.UserAddress?.city || "",
+      country: user.UserAddress?.country || "",
+      email: user.email || "",
+      firstName: user.firstName || "",
+      lastName: user.lastName || "",
+      phoneNumber: user.phoneNumber || "",
+      role: user.role || "CLIENT",
+      state: user.UserAddress?.state || "",
+      zip: user.UserAddress?.zip || "",
     },
   });
+
   const { ErrorToast, SuccessToast } = useAppToasts();
   const apiUtils = api.useUtils();
 
-  const editClientInfo = api.participant.editClientInfo.useMutation();
+  const editClientInfo = api.participant.editClientInfo.useMutation({
+    onSuccess: () => {
+      SuccessToast({ title: "Client updated successfully" });
+      apiUtils.participant.invalidate();
+    },
+    onError: (error) => {
+      ErrorToast({
+        title: "Failed to update client",
+        description: error.message,
+      });
+    },
+  });
+
   const onSubmit = async (clientDetails: EditClientType) => {
-    if (!clientDetails) return null;
-    await editClientInfo.mutateAsync(clientDetails, {
-      onSuccess: () => {
-        SuccessToast({
-          title: "Client updated successfully",
-          description: "The client information has been updated.",
-        });
-        apiUtils.participant.getClientDetailsById.invalidate({
-          clientId: clientDetails.clientId,
-        });
-      },
-      onError: () => {
-        ErrorToast({
-          title: "Error updating client",
-          description: "Please check the details and try again.",
-        });
-      },
-    });
+    try {
+      console.log("Submitting form data:", clientDetails);
+      await editClientInfo.mutateAsync(clientDetails);
+    } catch (error) {
+      console.error("Submit error", error);
+    }
   };
+
   return (
     <SheetContent className="h-full overflow-y-scroll bg-white dark:bg-primary">
       <SheetHeader>
@@ -145,7 +153,6 @@ const EditClientForm = (user: EditClientType) => {
                   <Bookmark className="absolute left-3 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-primary" />
                   <Select
                     onValueChange={(value) => setValue("role", value as any)}
-                    defaultValue={watch("role")}
                     value={watch("role")}
                   >
                     <SelectTrigger className="focus:border-2-primary rounded-full bg-white pl-12 text-primary placeholder:text-primary/60 focus:border-2 focus:ring-primary">
@@ -153,14 +160,14 @@ const EditClientForm = (user: EditClientType) => {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="ADMIN">Admin</SelectItem>
-                      <SelectItem value="USER">User</SelectItem>
+                      <SelectItem value="MEMBER">Member</SelectItem>
                       <SelectItem value="CLIENT">Client</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </FormField>
 
-              {/* Address Fields */}
+              {/* Country */}
               <FormField label="Country" error={errors.country?.message}>
                 <div className="relative">
                   <FileText className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-primary" />
@@ -173,6 +180,7 @@ const EditClientForm = (user: EditClientType) => {
                 </div>
               </FormField>
 
+              {/* State */}
               <FormField label="State" error={errors.state?.message}>
                 <div className="relative">
                   <FileText className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-primary" />
@@ -185,6 +193,7 @@ const EditClientForm = (user: EditClientType) => {
                 </div>
               </FormField>
 
+              {/* City */}
               <FormField label="City" error={errors.city?.message}>
                 <div className="relative">
                   <FileText className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-primary" />
@@ -197,6 +206,7 @@ const EditClientForm = (user: EditClientType) => {
                 </div>
               </FormField>
 
+              {/* Zip Code */}
               <FormField label="Zip Code" error={errors.zip?.message}>
                 <div className="relative">
                   <FileText className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-primary" />
@@ -213,7 +223,6 @@ const EditClientForm = (user: EditClientType) => {
             <Button
               type="submit"
               className="mt-6 w-full bg-primary text-secondary"
-              disabled={editClientInfo.isPending}
             >
               {editClientInfo.isPending ? <Spinner /> : "Save Changes"}
             </Button>

@@ -27,7 +27,10 @@ const ClientPage = ({ params }: ClientPageProps) => {
   useEffect(() => {
     if (data?.user?.userName) {
       setClientName(data.user.userName);
-      setUserInfo(data.user);
+      setUserInfo({
+        ...data.user,
+        clientId: teamclientid,
+      });
     }
 
     return () => {

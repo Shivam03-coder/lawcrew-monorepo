@@ -7,22 +7,12 @@ import { Pencil } from "lucide-react";
 import { ClientType } from "@/types/global";
 import { format } from "date-fns";
 import EditClientForm from "@/components/forms/edit-client-info-form";
-const UserInfoContainer = ({
-  userName,
-  email,
-  phoneNumber,
-  UserAddress,
-  createdAt,
-  role,
-  firstName,
-  lastName,
-  id,
-}: ClientType) => {
+const UserInfoContainer = (client: ClientType) => {
   const getLocation = useCallback(() => {
-    return UserAddress
-      ? Object.values(UserAddress).filter(Boolean).join(", ")
+    return client.UserAddress
+      ? Object.values(client.UserAddress).filter(Boolean).join(", ")
       : "";
-  }, [UserAddress]);
+  }, [client.UserAddress]);
 
   const InfoRow = ({
     label,
@@ -47,18 +37,7 @@ const UserInfoContainer = ({
               Edit User <Pencil size={14} className="ml-1" />
             </Button>
           </SheetTrigger>
-          <EditClientForm
-            clientId={id}
-            city={UserAddress?.city!}
-            country={UserAddress?.country!}
-            email={email}
-            firstName={firstName}
-            lastName={lastName!}
-            phoneNumber={phoneNumber}
-            role={role!}
-            state={UserAddress?.state!}
-            zip={UserAddress?.zip!}
-          />
+          <EditClientForm user={{ ...client }} />
         </Sheet>
       </div>
 
@@ -68,15 +47,15 @@ const UserInfoContainer = ({
           <Progress value={66} />
         </div>
 
-        <InfoRow label="Username" value={userName} />
-        <InfoRow label="Email" value={email} />
-        <InfoRow label="Phone" value={phoneNumber} />
+        <InfoRow label="Username" value={client.userName} />
+        <InfoRow label="Email" value={client.email} />
+        <InfoRow label="Phone" value={client.phoneNumber} />
         <InfoRow label="Location" value={getLocation()} />
         <InfoRow label="Role" value={<Badge>Admin</Badge>} />
       </div>
 
       <p className="text-muted-foreground mt-4 text-sm">
-        Joined on {format(new Date(createdAt), "yyyy.MM.dd")}
+        Joined on {format(new Date(client.createdAt), "yyyy.MM.dd")}
       </p>
     </div>
   );

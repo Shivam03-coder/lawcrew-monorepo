@@ -11,46 +11,33 @@ function MainCards() {
   if (!user) return null;
   const services = [
     {
-      title: "Legal Services",
+      title: "Legal Management",
       icon: <Scale className="h-12 w-12 text-indigo-600" />,
-      description: "Expert legal solutions for all your needs",
+      description: "Expert legal solutions tailored for you.",
       features: [
         "Legal Consultation",
         "Document Review",
         "Contract Drafting",
         "Legal Representation",
       ],
-      path: `/legal-management/${user?.role?.toLocaleLowerCase()}/${user?.id}/`,
+      path: `/legal-management/${user?.role?.toLowerCase()}/${user?.id}/`,
     },
     {
-      title: "Financial Services",
+      title: "Financial Management",
       icon: <Briefcase className="h-12 w-12 text-emerald-600" />,
-      description: "Comprehensive financial planning ",
+      description: "Handle tax, income & wealth effortlessly.",
       features: [
+        "Taxation",
+        "Income Tracking",
         "Financial Planning",
-        "Investment Advisory",
-        "Tax Consultation",
         "Wealth Management",
       ],
-      path: `/legal-management/${user?.role}/${user?.id}/`,
-    },
-    {
-      title: "Income Services",
-      icon: <MonitorCheck className="h-12 w-12 text-emerald-600" />,
-      description: "Comprehensive financial planning.",
-      features: [
-        "Financial Planning",
-        "Investment Advisory",
-        "Tax Consultation",
-        "Wealth Management",
-      ],
-      path: `/legal-management/${user?.role}/${user?.id}/`,
+      path: `/finance-management/${user?.role?.toLowerCase()}/${user?.id}/`,
     },
   ];
 
   const handleServiceClick = (path: string) => {
     console.log(`Navigating to ${path}`);
-    // Navigation logic will go here
   };
 
   return (
@@ -59,16 +46,15 @@ function MainCards() {
         <h1 className="textDark font-lexend text-4xl font-normal">
           Welcome to LawCrew
         </h1>
-        <p className="mt-2 font-manrope text-xl text-gray-600 dark:text-slate-300">
+        <p className="font-manrope mt-2 text-xl text-gray-600 dark:text-slate-300">
           Choose your service to get started
         </p>
       </div>
 
-      <div className="mt-10 grid max-w-6xl grid-cols-1 gap-11 font-lexend sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-10 grid max-w-4xl grid-cols-1 gap-10 font-lexend sm:grid-cols-2">
         {services.map((service) => (
           <Card
             key={service.title}
-            onClick={() => handleServiceClick(service.path)}
             className="group relative cursor-pointer overflow-hidden rounded-2xl border border-gray-800 bg-white text-primary shadow-md transition-all duration-300 hover:scale-105 hover:shadow-2xl"
           >
             <CardHeader className="flex flex-col items-center text-center">
@@ -97,7 +83,10 @@ function MainCards() {
                 ))}
               </div>
 
-              <Link href={service.path} className="mt-auto flex justify-center">
+              <Link
+                href={service.path}
+                className="mt-auto flex w-full justify-center"
+              >
                 <Button
                   variant="outline"
                   className="w-full rounded-full border-white bg-primary text-secondary transition-all"
