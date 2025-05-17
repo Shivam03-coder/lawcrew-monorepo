@@ -1,9 +1,9 @@
 import {
   caseBillingSchema,
   caseDetailsSchema,
-  createOpponentSchema,
+  editCaseDetailsSchema,
 } from "@lawcrew/schema";
-import { protectedProcedure, publicProcedure, router } from "../trpc";
+import { protectedProcedure, router } from "../trpc";
 import { ApiError } from "../utils/api-error";
 import { z } from "zod";
 
@@ -259,5 +259,73 @@ export const caseDetailsRoutes = router({
       });
 
       return litigation;
+    }),
+
+  editcaseDetails: protectedProcedure
+    .input(editCaseDetailsSchema)
+    .mutation(async ({ ctx, input }) => {
+      const {
+        caseId,
+        title,
+        description,
+        practiseArea,
+        status,
+        matterPriority,
+        internalRefNumber,
+        arrivalDate,
+        filedDate,
+        closedDate,
+        estimatedCloseDate,
+        stage,
+        teamMemberIds,
+      } = input;
+
+      if (!caseId) throw new Error("Case ID is required");
+
+      const caseExists = await ctx.db.case.findUnique({
+        where: { id: caseId },
+      });
+
+      if (!caseExists) throw new Error("Case not found");
+
+      await ctx.db.$transaction(async (tx) => {
+        await tx.case.update({
+          where: { id: caseId },
+          data: {
+            ...(title && { title }),
+            ...(description && { description }),
+            ...(practiseArea && { practiseArea }),
+            ...(status && { status }),
+            ...(matterPriority && { matterPriority }),
+            ...(internalRefNumber && { internalRefNumber }),
+            ...(arrivalDate && { arrivalDate: new Date(arrivalDate) }),
+            ...(filedDate && { filedDate: new Date(filedDate) }),
+            ...(closedDate !== undefined && {
+              closedDate: closedDate ? new Date(closedDate) : null,
+            }),
+            ...(estimatedCloseDate && {
+              estimatedCloseDate: new Date(estimatedCloseDate),
+            }),
+            ...(stage && { stage }),
+          },
+        });
+
+        if (teamMemberIds?.length) {
+          await tx.teamMembership.deleteMany({
+            where: { caseId },
+          });
+
+          await tx.teamMembership.createMany({
+            data: teamMemberIds.map((teamMemberId) => ({
+              caseId,
+              teamMemberId,
+            })),
+          });
+        }
+      });
+
+      return {
+        message: "Case updated successfully",
+      };
     }),
 });

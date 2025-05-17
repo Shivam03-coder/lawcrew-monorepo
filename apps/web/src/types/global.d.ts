@@ -1,3 +1,5 @@
+import { CaseStageEnum, CaseStatusEnum, MatterPriorityEnum, PracticeAreaEnum } from "@lawcrew/schema";
+
 export interface MetaProps {
   title: string;
   description?: string;
@@ -77,4 +79,21 @@ export interface ClientType {
   } | null;
 }
 
-
+export interface EditCaseType {
+  caseId: string;
+  title?: string;
+  description?: string;
+  practiseArea?: z.infer<typeof PracticeAreaEnum>;
+  status?: z.infer<typeof CaseStatusEnum>;
+  matterPriority?: z.infer<typeof MatterPriorityEnum>;
+  internalRefNumber?: string;
+  arrivalDate?: Date;
+  filedDate?: Date;
+  closedDate?: Date ;
+  estimatedCloseDate?: Date;
+  stage?: z.infer<typeof CaseStageEnum>;
+  teamMemberIds?: string[];
+  note?: string;
+  labels?: string;
+  docsUrl?: string;
+}

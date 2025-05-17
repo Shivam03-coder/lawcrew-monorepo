@@ -46,10 +46,10 @@ export const PracticeAreaEnum = z.enum([
   "TAXATION",
 ]);
 
-const CaseStatusEnum = z.enum(["OPEN", "CLOSED", "PENDING"]);
-const MatterPriorityEnum = z.enum(["HIGH", "MEDIUM", "LOW"]);
+export const CaseStatusEnum = z.enum(["OPEN", "CLOSED", "PENDING"]);
+export const MatterPriorityEnum = z.enum(["HIGH", "MEDIUM", "LOW"]);
 
-const CaseStageEnum = z.enum([
+export const CaseStageEnum = z.enum([
   "RECONCILIATION_COMMITTEE",
   "FIRST_INSTANCE_COURT",
   "APPEAL_COURT",
@@ -132,6 +132,21 @@ export const caseDetailsSchema = z.object({
   labels: z.string(),
   note: z.string(),
 });
+export const editCaseDetailsSchema = z.object({
+  caseId: z.string().optional(),
+  title: z.string(),
+  description: z.string(),
+  practiseArea: PracticeAreaEnum,
+  status: CaseStatusEnum,
+  matterPriority: MatterPriorityEnum,
+  internalRefNumber: z.string(),
+  arrivalDate: z.string().datetime(),
+  filedDate: z.string().datetime(),
+  closedDate: z.string().datetime().nullable().optional(),
+  estimatedCloseDate: z.string().datetime(),
+  stage: CaseStageEnum,
+  teamMemberIds: z.array(z.string()),
+});
 
 export const caseBillingSchema = z.object({
   caseId: z.string().min(1, "Case ID is required"),
@@ -171,3 +186,4 @@ export type CaseDetailsType = z.infer<typeof caseDetailsSchema>;
 export type CaseBillingType = z.infer<typeof caseBillingSchema>;
 export type CreateOpponentType = z.infer<typeof createOpponentSchema>;
 export type EditClientType = z.infer<typeof editClientSchema>;
+export type EditCaseDetailsType = z.infer<typeof editCaseDetailsSchema>;

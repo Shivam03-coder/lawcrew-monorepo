@@ -56,7 +56,7 @@ const ClientPage = ({ params }: ClientPageProps) => {
         </div>
         <div className="w-full space-y-6 xl:w-2/3">
           <ClientCaseContainer
-            userName="John Doe"
+            userName={`${userInfo?.firstName} ${userInfo?.lastName}`}
             userImage="https://avatars.githubusercontent.com/u/1486366"
             userInitials={userInfo?.email.slice(0, 2) as string}
             clientId={teamclientid}
