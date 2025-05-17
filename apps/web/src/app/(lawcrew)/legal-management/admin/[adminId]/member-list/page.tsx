@@ -1,14 +1,13 @@
 "use client";
-import MembersTable from "@/features/legal-management/_admin/members-list/members-table";
-import DataLoader from "@/components/shared/loader";
+import LoaderSpinner from "@/components/shared/laoder";
 import { api } from "@lawcrew/trpc-client/src/client";
+import MembersListTable from "./members-list-table";
 
 const MembersListPage = () => {
   const { data: users = [], isLoading } = api.participant.getMember.useQuery();
-  if (isLoading) return <DataLoader />;
-  console.log("🚀 ~ MembersListPage ~ users:", users);
-
-  return <MembersTable data={users} />;
+  if (isLoading) return <LoaderSpinner />;
+  // @ts-ignore
+  return <MembersListTable data={users} />;
 };
 
-export default MembersListPage;
+export default MembersListPage

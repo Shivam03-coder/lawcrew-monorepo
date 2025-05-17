@@ -1,9 +1,9 @@
-import CustomerReview from "@/features/home/customer-review";
-import Goal from "@/features/home/goals";
-import Hero from "@/features/home/hero";
-import Payment from "@/features/home/payment";
-import Solution from "@/features/home/solution";
-import Footer from "@/components/shared/footer";
+import CustomerReview from "@/app/(home)/customer-review";
+import Hero from "./hero";
+import Solution from "./solution";
+import Goal from "./goals";
+import Payment from "./payment";
+import Footer from "./footer";
 
 function Home() {
   return (

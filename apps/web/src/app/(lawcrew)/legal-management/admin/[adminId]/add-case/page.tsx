@@ -1,15 +1,15 @@
 "use client";
-import AddOpponentForm from "@/components/forms/add-opponents-form";
-import BillingDetailsForm from "@/components/forms/billing-details-form";
-import AddClientForm from "@/components/forms/case-details-form";
-import AddCaseFormSubNavsProps from "@/components/shared/add-case-forms-sub-nav";
-import AddCleintPoster from "@/components/shared/add-client-poster";
 import LoaderSpinner from "@/components/shared/laoder";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import SelectedMembers from "@/features/legal-management/_admin/selected-members";
 import { SelectedMembersType } from "@/types/global";
 import { api } from "@lawcrew/trpc-client/src/client";
 import React, { useCallback, useState } from "react";
+import BillingDetailsForm from "./billing-details-form";
+import AddOpponentForm from "./add-opponents-form";
+import CaseDetailsForm from "./case-details-form";
+import SelectedMembers from "./selected-members";
+import Image from "next/image";
+import AddCaseFormSubNavsProps from "./add-case-forms-sub-nav";
 
 const AddCasePage = () => {
   const [activeTab, setActiveTab] = useState("Case Details");
@@ -41,7 +41,14 @@ const AddCasePage = () => {
       {/* Sidebar */}
       <ScrollArea className="flex w-[350px] flex-col border-r border-none py-6">
         <AddCaseFormSubNavsProps active={activeTab} setActive={setActiveTab} />
-        <AddCleintPoster />
+        <Image
+          className="mb-5 border-2 border-primary/15"
+          src="/law-apperance.jpg"
+          width={350}
+          height={350}
+          alt="apperance"
+        />
+        ;
         <SelectedMembers
           onMemberSelect={handleMemberSelect}
           selectedMembers={selectedMembers}
@@ -51,14 +58,14 @@ const AddCasePage = () => {
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto p-5">
         {activeTab === "Case Details" && (
-          <AddClientForm
+          <CaseDetailsForm
             selectedMembers={selectedMembers}
             setSelectedMembers={setSelectedMembers}
             onMemberSelect={handleMemberSelect}
           />
         )}
         {activeTab === "Billing Details" && <BillingDetailsForm />}
-        {activeTab === "Opponent Details" && <AddOpponentForm  />}
+        {activeTab === "Opponent Details" && <AddOpponentForm />}
       </div>
     </main>
   );

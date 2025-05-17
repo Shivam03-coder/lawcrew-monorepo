@@ -1,5 +1,4 @@
 "use client";
-import ThemeToggle from "@/components/theme-toogle";
 import { api } from "@lawcrew/trpc-client/src/client";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
@@ -25,6 +24,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import ThemeToggle from "./theme-toogle";
 
 const HeaderSettings = () => {
   const { data, isLoading } = api.auth.userinfo.useQuery();

@@ -1,8 +1,8 @@
 "use client";
-import Editor from "@/components/shared/editor";
 import { api } from "@lawcrew/trpc-client/src/client";
 import { Loader } from "lucide-react";
 import React, { FC } from "react";
+import Editor from "./editor";
 
 interface DocsProps {
   params: Promise<{

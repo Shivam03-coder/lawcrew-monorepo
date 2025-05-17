@@ -1,16 +1,13 @@
 "use client";
 
 import LoaderSpinner from "@/components/shared/laoder";
-import DocsTemplate from "@/features/documents/doc-template";
-import DocsList from "@/features/documents/docs-list";
-import { Loader } from "lucide-react";
 import React, { useState } from "react";
+import DocsList from "./docs-list";
+import DocsTemplate from "./doc-template";
 
 const DocumentsPage = () => {
   const [isDocLoading, setisDocLoading] = useState<boolean>(false);
-
-  if (isDocLoading) return;
-  <LoaderSpinner />;
+  if (isDocLoading) return <LoaderSpinner />;
 
   return (
     <div className="flex h-screen w-full flex-col p-4">

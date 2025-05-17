@@ -1,5 +1,5 @@
-import Navbar from "@/components/shared/navbar";
 import React from "react";
+import Navbar from "./navbar";
 
 const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   return (

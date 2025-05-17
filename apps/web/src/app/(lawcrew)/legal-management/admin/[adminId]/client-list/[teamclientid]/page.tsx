@@ -1,13 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import CaseLineChart from "@/features/legal-management/_admin/case-line-chart";
-import CardList from "@/features/legal-management/_admin/card-list";
-import AppBreadcrumb from "@/components/shared/app-breadcrumb";
-import UserInfoContainer from "@/features/legal-management/_admin/user-info-container";
-import UserCaseContainer from "@/features/legal-management/_admin/user-case-container";
 import { api } from "@lawcrew/trpc-client/src/client";
 import useAppLinks from "@lawcrew/navigations";
 import { ClientType } from "@/types/global";
+import AppBreadcrumb from "@/components/shared/app-breadcrumb";
+import CardList from "@/components/shared/card-list";
+import ClientInfoContainer from "./client-info-container";
+import ClientCaseContainer from "./client-case-container";
+import CaseLineChart from "./case-line-chart";
 
 interface ClientPageProps {
   params: Promise<{
@@ -49,13 +49,13 @@ const ClientPage = ({ params }: ClientPageProps) => {
       <AppBreadcrumb items={userCrumbs} />
       <div className="mt-4 flex flex-col gap-8 xl:flex-row">
         <div className="w-full space-y-6 xl:w-1/3">
-          {userInfo && <UserInfoContainer {...userInfo} />}
+          {userInfo && <ClientInfoContainer {...userInfo} />}
           <div className="mainCard rounded-lg p-4">
             <CardList title="Recent Transactions" />
           </div>
         </div>
         <div className="w-full space-y-6 xl:w-2/3">
-          <UserCaseContainer
+          <ClientCaseContainer
             userName="John Doe"
             userImage="https://avatars.githubusercontent.com/u/1486366"
             userInitials="JD"

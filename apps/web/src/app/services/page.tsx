@@ -1,12 +1,13 @@
-import Navbar from "@/features/service/lawcrew-header";
-import MainCards from "@/features/service/main-cards";
 import React from "react";
+import MainCards from "./service-cards";
+import LawCrewNavbar from "./lawcrew-header";
+import ServicesCards from "./service-cards";
 
 function LawcrewPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-primary">
-      <Navbar />
-      <MainCards />
+      <LawCrewNavbar />
+      <ServicesCards />
     </div>
   );
 }
