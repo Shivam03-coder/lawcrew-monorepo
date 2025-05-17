@@ -156,7 +156,6 @@ export const editClientSchema = z.object({
   lastName: z.string().optional(),
   email: z.string().email().optional(),
   phoneNumber: z.string().optional(),
-  role: z.enum(["ADMIN", "MEMBER", "CLIENT"]).optional(),
   country: z.string().optional(),
   state: z.string().optional(),
   city: z.string().optional(),

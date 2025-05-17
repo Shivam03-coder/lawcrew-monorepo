@@ -239,20 +239,18 @@ export const participantsRoutes = router({
         firstName,
         lastName,
         phoneNumber,
-        role,
         state,
         zip,
       } = input;
       await ctx.db.teamClient.update({
         where: {
-          userId: input.clientId,
+          id: clientId,
         },
         data: {
           user: {
             update: {
               ...(firstName && { firstName }),
               ...(lastName && { lastName }),
-              ...(role && { role }),
               UserAddress: {
                 update: {
                   ...(city && { city }),

@@ -69,7 +69,7 @@ export interface ClientType {
   createdAt: string;
   userProfile: string | null;
   updatedAt: string;
-  role: "ADMIN" | "MEMBER" | "CLIENT";
+  role: "MEMBER" | "CLIENT";
   UserAddress: {
     city: string;
     country: string;

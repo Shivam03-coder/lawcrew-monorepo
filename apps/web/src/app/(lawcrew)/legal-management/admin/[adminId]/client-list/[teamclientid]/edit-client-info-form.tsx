@@ -28,54 +28,65 @@ import Spinner from "@/components/shared/spinner";
 
 interface EditClientFormProps {
   user: ClientType;
+  open: boolean;
+  setOpen: (open: boolean) => void;
 }
 
-const EditClientForm = ({ user }: EditClientFormProps) => {
+const EditClientForm = ({ user, open, setOpen }: EditClientFormProps) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     setValue,
     watch,
     reset,
   } = useForm<EditClientType>({
     resolver: zodResolver(editClientSchema),
-    defaultValues: {
-      city: user.UserAddress?.city || "",
-      country: user.UserAddress?.country || "",
-      email: user.email || "",
-      firstName: user.firstName || "",
-      lastName: user.lastName || "",
-      phoneNumber: user.phoneNumber || "",
-      role: user.role || "CLIENT",
-      state: user.UserAddress?.state || "",
-      zip: user.UserAddress?.zip || "",
-    },
   });
+
+  useEffect(() => {
+    if (user) {
+      const sanitizedUser = {
+        ...user,
+        lastName: user.lastName ?? undefined,
+        firstName: user.firstName ?? undefined,
+        email: user.email ?? undefined,
+        phoneNumber: user.phoneNumber ?? undefined,
+        role: user.role ?? undefined,
+        country: user?.UserAddress?.country ?? undefined,
+        state: user?.UserAddress?.state ?? undefined,
+        city: user?.UserAddress?.city ?? undefined,
+        zip: user?.UserAddress?.zip ?? undefined,
+        clientId: user.clientId,
+      };
+
+      reset(sanitizedUser);
+    }
+  }, []);
 
   const { ErrorToast, SuccessToast } = useAppToasts();
   const apiUtils = api.useUtils();
-
-  const editClientInfo = api.participant.editClientInfo.useMutation({
-    onSuccess: () => {
-      SuccessToast({ title: "Client updated successfully" });
-      apiUtils.participant.invalidate();
-    },
-    onError: (error) => {
-      ErrorToast({
-        title: "Failed to update client",
-        description: error.message,
-      });
-    },
-  });
+  const editClientInfo = api.participant.editClientInfo.useMutation();
 
   const onSubmit = async (clientDetails: EditClientType) => {
-    try {
-      console.log("Submitting form data:", clientDetails);
-      await editClientInfo.mutateAsync(clientDetails);
-    } catch (error) {
-      console.error("Submit error", error);
-    }
+    editClientInfo.mutateAsync(clientDetails, {
+      onSuccess: ({ message }) => {
+        SuccessToast({
+          title: message,
+        });
+
+        apiUtils.participant.getClientDetailsById.invalidate({
+          clientId: clientDetails.clientId,
+        });
+
+        setOpen(false);
+      },
+      onError: ({ message }) => {
+        ErrorToast({
+          title: message,
+        });
+      },
+    });
   };
 
   return (
@@ -100,7 +111,6 @@ const EditClientForm = ({ user }: EditClientFormProps) => {
                     {...register("firstName")}
                     className="rounded-full border border-primary/60 bg-white pl-9 transition-all focus:ring-1 focus:ring-primary"
                     placeholder="Enter first name"
-                    disabled={editClientInfo.isPending}
                   />
                 </div>
               </FormField>
@@ -113,7 +123,6 @@ const EditClientForm = ({ user }: EditClientFormProps) => {
                     {...register("lastName")}
                     className="rounded-full border border-primary/60 bg-white pl-9 transition-all focus:ring-1 focus:ring-primary"
                     placeholder="Enter last name"
-                    disabled={editClientInfo.isPending}
                   />
                 </div>
               </FormField>
@@ -126,7 +135,6 @@ const EditClientForm = ({ user }: EditClientFormProps) => {
                     {...register("email")}
                     className="rounded-full border border-primary/60 bg-white pl-9 transition-all focus:ring-1 focus:ring-primary"
                     placeholder="Enter email"
-                    disabled={editClientInfo.isPending}
                   />
                 </div>
               </FormField>
@@ -142,28 +150,7 @@ const EditClientForm = ({ user }: EditClientFormProps) => {
                     {...register("phoneNumber")}
                     className="rounded-full border border-primary/60 bg-white pl-9 transition-all focus:ring-1 focus:ring-primary"
                     placeholder="Enter phone number"
-                    disabled={editClientInfo.isPending}
                   />
-                </div>
-              </FormField>
-
-              {/* Role */}
-              <FormField label="Role" error={errors.role?.message}>
-                <div className="relative">
-                  <Bookmark className="absolute left-3 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-primary" />
-                  <Select
-                    onValueChange={(value) => setValue("role", value as any)}
-                    value={watch("role")}
-                  >
-                    <SelectTrigger className="focus:border-2-primary rounded-full bg-white pl-12 text-primary placeholder:text-primary/60 focus:border-2 focus:ring-primary">
-                      <SelectValue placeholder="Select user role" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="ADMIN">Admin</SelectItem>
-                      <SelectItem value="MEMBER">Member</SelectItem>
-                      <SelectItem value="CLIENT">Client</SelectItem>
-                    </SelectContent>
-                  </Select>
                 </div>
               </FormField>
 
@@ -175,7 +162,6 @@ const EditClientForm = ({ user }: EditClientFormProps) => {
                     {...register("country")}
                     className="rounded-full border border-primary/60 bg-white pl-9 transition-all focus:ring-1 focus:ring-primary"
                     placeholder="Enter country"
-                    disabled={editClientInfo.isPending}
                   />
                 </div>
               </FormField>
@@ -188,7 +174,6 @@ const EditClientForm = ({ user }: EditClientFormProps) => {
                     {...register("state")}
                     className="rounded-full border border-primary/60 bg-white pl-9 transition-all focus:ring-1 focus:ring-primary"
                     placeholder="Enter state"
-                    disabled={editClientInfo.isPending}
                   />
                 </div>
               </FormField>
@@ -201,7 +186,6 @@ const EditClientForm = ({ user }: EditClientFormProps) => {
                     {...register("city")}
                     className="rounded-full border border-primary/60 bg-white pl-9 transition-all focus:ring-1 focus:ring-primary"
                     placeholder="Enter city"
-                    disabled={editClientInfo.isPending}
                   />
                 </div>
               </FormField>
@@ -214,7 +198,6 @@ const EditClientForm = ({ user }: EditClientFormProps) => {
                     {...register("zip")}
                     className="rounded-full border border-primary/60 bg-white pl-9 transition-all focus:ring-1 focus:ring-primary"
                     placeholder="Enter zip code"
-                    disabled={editClientInfo.isPending}
                   />
                 </div>
               </FormField>
@@ -224,7 +207,7 @@ const EditClientForm = ({ user }: EditClientFormProps) => {
               type="submit"
               className="mt-6 w-full bg-primary text-secondary"
             >
-              {editClientInfo.isPending ? <Spinner /> : "Save Changes"}
+              {editClientInfo.isPending ? <Spinner /> : "SAVE"}
             </Button>
           </form>
         </SheetDescription>
