@@ -1,4 +1,9 @@
-import { CaseStageEnum, CaseStatusEnum, MatterPriorityEnum, PracticeAreaEnum } from "@lawcrew/schema";
+import {
+  CaseStageEnum,
+  CaseStatusEnum,
+  MatterPriorityEnum,
+  PracticeAreaEnum,
+} from "@lawcrew/schema";
 
 export interface MetaProps {
   title: string;
@@ -89,11 +94,66 @@ export interface EditCaseType {
   internalRefNumber?: string;
   arrivalDate?: Date;
   filedDate?: Date;
-  closedDate?: Date ;
+  closedDate?: Date;
   estimatedCloseDate?: Date;
   stage?: z.infer<typeof CaseStageEnum>;
   teamMemberIds?: string[];
   note?: string;
   labels?: string;
   docsUrl?: string;
+}
+
+export interface LegalCase {
+  id: string;
+  arrivalDate: string;
+  closedDate: string | null;
+  stage: CaseStage;
+  status: CaseStatus;
+  practiseArea: PracticeArea;
+  filedDate: string;
+  internalRefNumber: string;
+  matterPriority: MatterPriority;
+  caseDocument: {
+    documentUrl: string;
+  } | null;
+  Opponent: {
+    firstName: string;
+    lastName: string;
+  } | null;
+}
+
+export enum CaseStage {
+  RECONCILIATION_COMMITTEE = "RECONCILIATION_COMMITTEE",
+  FIRST_INSTANCE_COURT = "FIRST_INSTANCE_COURT",
+  APPEAL_COURT = "APPEAL_COURT",
+  CASSATION_HIGH_COURT = "CASSATION_HIGH_COURT",
+  EXECUTION = "EXECUTION",
+  UNDER_SETTLEMENT = "UNDER_SETTLEMENT",
+  SETTLED_CLOSED = "SETTLED_CLOSED",
+  DISPUTE = "DISPUTE",
+}
+
+export enum CaseStatus {
+  OPEN = "OPEN",
+  CLOSED = "CLOSED",
+  PENDING = "PENDING",
+}
+
+export enum MatterPriority {
+  LOW = "LOW",
+  MEDIUM = "MEDIUM",
+  HIGH = "HIGH",
+}
+
+export enum PracticeArea {
+  CRIMINAL = "CRIMINAL",
+  CIVIL = "CIVIL",
+  COMMERCIAL = "COMMERCIAL",
+  ADMINISTRATIVE = "ADMINISTRATIVE",
+  LABOR = "LABOR",
+  FAMILY = "FAMILY",
+  REAL_ESTATE = "REAL_ESTATE",
+  INTELLECTUAL_PROPERTY = "INTELLECTUAL_PROPERTY",
+  ENVIRONMENTAL = "ENVIRONMENTAL",
+  TAXATION = "TAXATION",
 }

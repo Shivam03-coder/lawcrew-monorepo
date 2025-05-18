@@ -119,6 +119,25 @@ export const caseDetailsRoutes = router({
     const caseDetails = await ctx.db.case.findMany({
       select: {
         id: true,
+        arrivalDate: true,
+        closedDate: true,
+        stage: true,
+        status: true,
+        practiseArea: true,
+        filedDate: true,
+        internalRefNumber: true,
+        matterPriority: true,
+        caseDocument: {
+          select: {
+            documentUrl: true,
+          },
+        },
+        Opponent: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
       },
     });
     return {
