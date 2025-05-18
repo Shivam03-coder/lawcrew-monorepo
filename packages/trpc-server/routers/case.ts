@@ -116,7 +116,11 @@ export const caseDetailsRoutes = router({
     }),
 
   getCasedetails: protectedProcedure.query(async ({ ctx }) => {
-    const caseDetails = await ctx.db.case.findMany();
+    const caseDetails = await ctx.db.case.findMany({
+      select: {
+        id: true,
+      },
+    });
     return {
       caseDetails,
     };

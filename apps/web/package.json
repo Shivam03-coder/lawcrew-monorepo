@@ -16,6 +16,7 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache"
   },
   "dependencies": {
+    "@hello-pangea/dnd": "^18.0.1",
     "@hookform/resolvers": "^5.0.1",
     "@lawcrew/navigations": "workspace:^",
     "@lawcrew/schema": "workspace:^",

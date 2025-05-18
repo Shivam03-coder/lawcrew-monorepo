@@ -273,6 +273,9 @@
     }
   }
 }
+.taskCard {
+  @apply max-h-[300px] max-w-[400px];
+}
 
 .cl-headerTitle {
   @apply py-3 text-2xl font-normal text-green-50;
