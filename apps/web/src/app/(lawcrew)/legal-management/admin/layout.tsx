@@ -1,8 +1,8 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { cookies } from "next/headers";
 import RouteLoader from "@/utils/route-loader";
-import AdminAppsidebar from "./[adminId]/(dashboard)/admin-app-sidebar";
-import AdminNavbar from "./[adminId]/(dashboard)/admin-navabar";
+import AdminAppsidebar from "./admin-app-sidebar";
+import AdminNavbar from "./admin-navabar";
 const AdminRootLayout = async ({ children }: { children: React.ReactNode }) => {
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";

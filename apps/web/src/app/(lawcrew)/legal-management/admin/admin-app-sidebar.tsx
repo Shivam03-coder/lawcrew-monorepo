@@ -55,12 +55,7 @@ const AdminAppsidebar = () => {
       icon: Home,
       tooltip: "Go to your dashboard home",
     },
-    {
-      title: "Task",
-      url: links?.tasks,
-      icon: CheckSquare,
-      tooltip: "View and manage your tasks",
-    },
+
     {
       title: "Clients",
       url: links?.clientList,
@@ -78,12 +73,6 @@ const AdminAppsidebar = () => {
       url: links?.cases,
       icon: Gavel,
       tooltip: "View and manage legal cases",
-    },
-    {
-      title: "Calendar",
-      url: links?.calendar,
-      icon: Calendar,
-      tooltip: "See events and court dates",
     },
     {
       title: "Documents",
@@ -142,7 +131,7 @@ const AdminAppsidebar = () => {
                           </Link>
                         </SidebarMenuButton>
                       </TooltipTrigger>
-                      <TooltipContent side="right" className="max-w-[200px]">
+                      <TooltipContent side="right" className="max-w-[300px]">
                         {item.tooltip}
                       </TooltipContent>
                     </Tooltip>

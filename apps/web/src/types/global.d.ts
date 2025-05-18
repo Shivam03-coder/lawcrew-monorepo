@@ -103,10 +103,10 @@ export interface EditCaseType {
   docsUrl?: string;
 }
 
-export interface LegalCase {
+export interface LegalCaseType {
   id: string;
   arrivalDate: string;
-  closedDate: string | null;
+  closedDate: string;
   stage: CaseStage;
   status: CaseStatus;
   practiseArea: PracticeArea;
@@ -115,11 +115,11 @@ export interface LegalCase {
   matterPriority: MatterPriority;
   caseDocument: {
     documentUrl: string;
-  } | null;
+  };
   Opponent: {
     firstName: string;
     lastName: string;
-  } | null;
+  };
 }
 
 export enum CaseStage {

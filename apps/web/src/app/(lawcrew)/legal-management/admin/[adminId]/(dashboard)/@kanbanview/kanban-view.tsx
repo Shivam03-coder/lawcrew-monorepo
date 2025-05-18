@@ -81,12 +81,9 @@ const KanBanView: FC<DataKanban> = ({ data }) => {
           return (
             <div
               key={board}
-              className="mr-6 flex flex-col rounded-md bg-secondary p-2 dark:bg-gray-800"
+              className="mr-8 flex flex-col rounded-md bg-secondary p-2 dark:bg-gray-800"
             >
-              <KanbanHeader
-                board={board}
-                taskCount={task[board].length}
-              />
+              <KanbanHeader board={board} taskCount={task[board].length} />
               <Droppable droppableId={board.toString()}>
                 {(provided, snapshot) => {
                   return (

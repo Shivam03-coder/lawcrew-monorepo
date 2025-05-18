@@ -1,4 +1,5 @@
 "use client";
+
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,14 +10,13 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
-import { ClientListType, Participants } from "@/types/global";
-import { useRouter } from "next/navigation";
-import useAuth from "@/hooks/use-auth";
-import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { LegalCaseType, CaseStage, CaseStatus, MatterPriority, PracticeArea } from "@/types/global";
+import badgeClass from "@/utils/badge-class";
 
-export const clientTableColumns: ColumnDef<ClientListType>[] = [
+export const caseTableColumns: ColumnDef<LegalCaseType>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -39,88 +39,97 @@ export const clientTableColumns: ColumnDef<ClientListType>[] = [
     enableHiding: false,
     size: 40,
   },
-
   {
-    accessorKey: "userName",
+    accessorKey: "internalRefNumber",
     header: ({ column }) => (
       <Button variant="ghost" onClick={() => column.toggleSorting()}>
-        Username <ArrowUpDown className="ml-2 h-4 w-4" />
+        Ref. No. <ArrowUpDown className="ml-2 h-4 w-4" />
       </Button>
     ),
+  },
+  {
+    accessorKey: "arrivalDate",
+    header: "Arrival",
+    cell: ({ row }) => (
+      <span>{new Date(row.getValue("arrivalDate")).toLocaleDateString()}</span>
+    ),
+  },
+  {
+    accessorKey: "filedDate",
+    header: "Filed",
+    cell: ({ row }) => (
+      <span>{new Date(row.getValue("filedDate")).toLocaleDateString()}</span>
+    ),
+  },
+  {
+    accessorKey: "closedDate",
+    header: "Closed",
     cell: ({ row }) => {
-      const router = useRouter();
-      const userName = row.getValue("userName") as string;
-      const clientId = row.original.TeamClient?.id as string;
-      const user = useAuth();
-
-      return (
-        <Link
-          href={`/legal-management/${user?.role?.toLocaleLowerCase()}/${user?.id}/client-list/${clientId}`}
-          className="lowercase text-primary underline transition hover:text-dark"
-        >
-          {userName}
-        </Link>
+      const date = row.getValue("closedDate") as string | null;
+      return <span>{date ? new Date(date).toLocaleDateString() : "N/A"}</span>;
+    },
+  },
+  {
+    accessorKey: "stage",
+    header: "Stage",
+    cell: ({ row }) => {
+      const stage = row.getValue("stage") as CaseStage;
+      return <Badge className={badgeClass(stage)}>{stage.replace(/_/g, " ")}</Badge>;
+    },
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => {
+      const status = row.getValue("status") as CaseStatus;
+      return <Badge className={badgeClass(status)}>{status}</Badge>;
+    },
+  },
+  {
+    accessorKey: "matterPriority",
+    header: "Priority",
+    cell: ({ row }) => {
+      const priority = row.getValue("matterPriority") as MatterPriority;
+      return <Badge className={badgeClass(priority)}>{priority}</Badge>;
+    },
+  },
+  {
+    accessorKey: "practiseArea",
+    header: "Practice Area",
+    cell: ({ row }) => {
+      const area = row.getValue("practiseArea") as PracticeArea;
+      return <Badge className={badgeClass(area)}>{area.replace(/_/g, " ")}</Badge>;
+    },
+  },
+  {
+    id: "opponent",
+    header: "Opponent",
+    cell: ({ row }) => {
+      const opponent = row.original.Opponent;
+      return opponent ? (
+        <span>{`${opponent.firstName} ${opponent.lastName}`}</span>
+      ) : (
+        <span className="text-muted-foreground">N/A</span>
       );
     },
   },
   {
-    accessorKey: "firstName",
-    header: ({ column }) => (
-      <Button variant="ghost" onClick={() => column.toggleSorting()}>
-        Name <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-    ),
+    id: "document",
+    header: "Document",
     cell: ({ row }) => {
-      const firstName = row.getValue("firstName");
-      const lastName = row.original.lastName;
-      return <span>{`${firstName} ${lastName}`}</span>;
-    },
-  },
-  {
-    accessorKey: "email",
-    header: ({ column }) => (
-      <Button variant="ghost" onClick={() => column.toggleSorting()}>
-        Email <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-    ),
-  },
-  {
-    accessorKey: "phoneNumber",
-    header: ({ column }) => (
-      <Button variant="ghost" onClick={() => column.toggleSorting()}>
-        Contacts <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-    ),
-  },
-  {
-    accessorKey: "password",
-    header: "Password",
-
-    cell: () => <span>********</span>,
-  },
-  {
-    id: "address",
-    header: ({ column }) => (
-      <Button variant="ghost" onClick={() => column.toggleSorting()}>
-        Address <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-    ),
-    cell: ({ row }) => {
-      const { city, state } = row.original.UserAddress || {};
-      return <span className="lowercase">{city ? `${city}` : "N/A"}</span>;
-    },
-    enableSorting: false, // optional: remove if UserAddress isn't sortable
-  },
-  {
-    accessorKey: "createdAt",
-    header: ({ column }) => (
-      <Button variant="ghost" onClick={() => column.toggleSorting()}>
-        Created At <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
-    ),
-    cell: ({ row }) => {
-      const createdAt = new Date(row.getValue("createdAt"));
-      return <span>{new Date(createdAt).toLocaleDateString()}</span>;
+      const doc = row.original.caseDocument;
+      return doc ? (
+        <a
+          href={doc.documentUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-primary underline"
+        >
+          View
+        </a>
+      ) : (
+        <span className="text-muted-foreground">N/A</span>
+      );
     },
   },
   {
@@ -128,7 +137,7 @@ export const clientTableColumns: ColumnDef<ClientListType>[] = [
     header: "Actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original;
+      const caseId = row.original.id;
 
       return (
         <DropdownMenu>
@@ -140,14 +149,10 @@ export const clientTableColumns: ColumnDef<ClientListType>[] = [
           <DropdownMenuContent className="bg-white" align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
+            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(caseId)}>
+              Copy Case ID
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem>View Details</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
