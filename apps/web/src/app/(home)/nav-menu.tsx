@@ -100,24 +100,22 @@ const AppHeaderNavMenu = () => {
 
         {/* About Us */}
         <NavigationMenuItem>
-          <Link href="/about">
-            <NavigationMenuLink
-              className={(navigationMenuTriggerStyle(), "textDark")}
-            >
-              About Us
-            </NavigationMenuLink>
-          </Link>
+          <NavigationMenuLink
+            href="/about"
+            className={(navigationMenuTriggerStyle(), "textDark")}
+          >
+            About Us
+          </NavigationMenuLink>
         </NavigationMenuItem>
 
         {/* Services */}
         <NavigationMenuItem>
-          <Link href="/services" legacyBehavior passHref>
-            <NavigationMenuLink
-              className={(navigationMenuTriggerStyle(), "textDark ml-4")}
-            >
-              Services
-            </NavigationMenuLink>
-          </Link>
+          <NavigationMenuLink
+            href="/services"
+            className={(navigationMenuTriggerStyle(), "textDark ml-4")}
+          >
+            Services
+          </NavigationMenuLink>
         </NavigationMenuItem>
 
         {/* Blogs */}
@@ -142,13 +140,12 @@ const AppHeaderNavMenu = () => {
 
         {/* Contact Us */}
         <NavigationMenuItem>
-          <Link href="/contact" legacyBehavior passHref>
-            <NavigationMenuLink
-              className={(navigationMenuTriggerStyle(), "textDark")}
-            >
-              Contact Us
-            </NavigationMenuLink>
-          </Link>
+          <NavigationMenuLink
+            href="/contact"
+            className={(navigationMenuTriggerStyle(), "textDark")}
+          >
+            Contact Us
+          </NavigationMenuLink>
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>

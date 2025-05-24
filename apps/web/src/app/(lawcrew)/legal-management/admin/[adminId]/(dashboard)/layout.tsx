@@ -7,6 +7,7 @@ interface DashboardRootLayout {
   casepiechart: ReactNode;
   todolist: ReactNode;
   kanbanview: ReactNode;
+  clientlistcard: ReactNode;
 }
 
 const DashboardRootLayout = ({
@@ -15,13 +16,12 @@ const DashboardRootLayout = ({
   casepiechart,
   todolist,
   kanbanview,
+  clientlistcard,
 }: DashboardRootLayout) => {
   return (
     <main className="grid grid-cols-1 gap-4 pb-5 pt-3 lg:grid-cols-4">
       <div className="mainCard shadow lg:col-span-2">{casebarchart}</div>
-      <div className="mainCard">
-        <CardList title="Clients List" />
-      </div>
+      <div className="mainCard">{clientlistcard}</div>
       <div className="mainCard">{casepiechart}</div>
       <div className="mainCard">{todolist}</div>
       <div className="mainCard shadow lg:col-span-2">{caseareachart}</div>
