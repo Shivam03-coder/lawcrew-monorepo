@@ -178,6 +178,11 @@ export const editClientSchema = z.object({
   zip: z.string().optional(),
 });
 
+export const addTaskSchema = z.object({
+  task: z.string(),
+  taskForDate: z.coerce.date(),
+});
+
 // ==================== Type Definitions ====================
 export type SignupType = z.infer<typeof signupSchema>;
 export type LoginType = z.infer<typeof loginSchema>;
@@ -188,3 +193,4 @@ export type CaseBillingType = z.infer<typeof caseBillingSchema>;
 export type CreateOpponentType = z.infer<typeof createOpponentSchema>;
 export type EditClientType = z.infer<typeof editClientSchema>;
 export type EditCaseDetailsType = z.infer<typeof editCaseDetailsSchema>;
+export type AddTaskSchemaType = z.infer<typeof addTaskSchema>;

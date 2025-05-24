@@ -1,8 +1,9 @@
 import { protectedProcedure, publicProcedure, router } from "../trpc";
-import { signupSchema, loginSchema } from "@lawcrew/schema";
+import { signupSchema, loginSchema, addTaskSchema } from "@lawcrew/schema";
 import AuthServices from "@lawcrew/api/src/services/auth-services";
 import { GlobalUtils } from "@lawcrew/api/src/global";
 import { ApiError } from "../utils/api-error";
+import { z } from "zod";
 
 export const authRoutes = router({
   signup: publicProcedure
@@ -142,4 +143,65 @@ export const authRoutes = router({
 
     return { user };
   }),
+  
+  addToDo: protectedProcedure
+    .input(addTaskSchema)
+    .mutation(async ({ ctx, input }) => {
+      const { task, taskForDate } = input;
+
+      await ctx.db.toDoList.create({
+        data: {
+          task,
+          taskForDate,
+          userId: ctx.auth.id,
+        },
+      });
+
+      return { message: "Password reset successfully" };
+    }),
+
+  getToDoByDate: protectedProcedure
+    .input(
+      z.object({
+        taskForDate: z.date(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.toDoList.findMany({
+        where: {
+          taskForDate: input.taskForDate,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    }),
+
+  updateToDo: protectedProcedure
+    .input(
+      z.object({
+        todoId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { todoId } = input;
+
+      const existingTodo = await ctx.db.toDoList.findUnique({
+        where: { id: todoId },
+        select: { isTaskChecked: true },
+      });
+
+      if (!existingTodo) {
+        throw new Error("Todo not found");
+      }
+
+      await ctx.db.toDoList.update({
+        where: { id: todoId },
+        data: {
+          isTaskChecked: !existingTodo.isTaskChecked,
+        },
+      });
+
+      return { message: "Task toggle successful" };
+    }),
 });

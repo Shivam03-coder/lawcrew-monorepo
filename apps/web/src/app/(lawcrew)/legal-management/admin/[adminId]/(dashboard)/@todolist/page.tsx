@@ -3,19 +3,27 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
+import AddTask from "./add-task-form";
 
 const TodoList = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [open, setOpen] = useState(false);
   return (
     <div className="">
-      <h1 className="mb-6 font-inter text-base font-semibold">Todo List</h1>
+      <div className="flex mb-6 items-center justify-between px-2">
+        <h1 className="font-inter text-base font-semibold">Todo List</h1>
+        <AddTask />
+      </div>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button className="w-full bg-primary text-secondary">
@@ -23,7 +31,7 @@ const TodoList = () => {
             {date ? format(date, "PPP") : <span>Pick a date</span>}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="p-0 w-auto">
+        <PopoverContent className="w-auto p-0">
           <Calendar
             mode="single"
             selected={date}
@@ -35,13 +43,13 @@ const TodoList = () => {
         </PopoverContent>
       </Popover>
       {/* LIST */}
-      <ScrollArea className=" max-h-[350px] mt-4 overflow-y-auto">
+      <ScrollArea className="mt-4 max-h-[350px] overflow-y-auto">
         <div className="flex flex-col gap-4">
           {/* LIST ITEM */}
           <Card className="p-4 shadow-inner">
             <div className="flex items-center gap-4">
               <Checkbox id="item1" checked />
-              <label htmlFor="item1" className="text-sm text-muted-foreground">
+              <label htmlFor="item1" className="text-muted-foreground text-sm">
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit.
               </label>
             </div>
@@ -50,7 +58,7 @@ const TodoList = () => {
           <Card className="p-4">
             <div className="flex items-center gap-4">
               <Checkbox id="item1" checked />
-              <label htmlFor="item1" className="text-sm text-muted-foreground">
+              <label htmlFor="item1" className="text-muted-foreground text-sm">
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit.
               </label>
             </div>
@@ -59,7 +67,7 @@ const TodoList = () => {
           <Card className="p-4">
             <div className="flex items-center gap-4">
               <Checkbox id="item1" />
-              <label htmlFor="item1" className="text-sm text-muted-foreground">
+              <label htmlFor="item1" className="text-muted-foreground text-sm">
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit.
               </label>
             </div>
@@ -68,7 +76,7 @@ const TodoList = () => {
           <Card className="p-4">
             <div className="flex items-center gap-4">
               <Checkbox id="item1" />
-              <label htmlFor="item1" className="text-sm text-muted-foreground">
+              <label htmlFor="item1" className="text-muted-foreground text-sm">
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit.
               </label>
             </div>
@@ -77,7 +85,7 @@ const TodoList = () => {
           <Card className="p-4">
             <div className="flex items-center gap-4">
               <Checkbox id="item1" />
-              <label htmlFor="item1" className="text-sm text-muted-foreground">
+              <label htmlFor="item1" className="text-muted-foreground text-sm">
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit.
               </label>
             </div>
@@ -86,7 +94,7 @@ const TodoList = () => {
           <Card className="p-4">
             <div className="flex items-center gap-4">
               <Checkbox id="item1" />
-              <label htmlFor="item1" className="text-sm text-muted-foreground">
+              <label htmlFor="item1" className="text-muted-foreground text-sm">
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit.
               </label>
             </div>
@@ -95,7 +103,7 @@ const TodoList = () => {
           <Card className="p-4">
             <div className="flex items-center gap-4">
               <Checkbox id="item1" />
-              <label htmlFor="item1" className="text-sm text-muted-foreground">
+              <label htmlFor="item1" className="text-muted-foreground text-sm">
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit.
               </label>
             </div>
@@ -104,7 +112,7 @@ const TodoList = () => {
           <Card className="p-4">
             <div className="flex items-center gap-4">
               <Checkbox id="item1" />
-              <label htmlFor="item1" className="text-sm text-muted-foreground">
+              <label htmlFor="item1" className="text-muted-foreground text-sm">
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit.
               </label>
             </div>
@@ -113,7 +121,7 @@ const TodoList = () => {
           <Card className="p-4">
             <div className="flex items-center gap-4">
               <Checkbox id="item1" checked />
-              <label htmlFor="item1" className="text-sm text-muted-foreground">
+              <label htmlFor="item1" className="text-muted-foreground text-sm">
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit.
               </label>
             </div>
@@ -122,7 +130,7 @@ const TodoList = () => {
           <Card className="p-4">
             <div className="flex items-center gap-4">
               <Checkbox id="item1" checked />
-              <label htmlFor="item1" className="text-sm text-muted-foreground">
+              <label htmlFor="item1" className="text-muted-foreground text-sm">
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit.
               </label>
             </div>
@@ -131,7 +139,7 @@ const TodoList = () => {
           <Card className="p-4">
             <div className="flex items-center gap-4">
               <Checkbox id="item1" checked />
-              <label htmlFor="item1" className="text-sm text-muted-foreground">
+              <label htmlFor="item1" className="text-muted-foreground text-sm">
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit.
               </label>
             </div>
@@ -140,7 +148,7 @@ const TodoList = () => {
           <Card className="p-4">
             <div className="flex items-center gap-4">
               <Checkbox id="item1" checked />
-              <label htmlFor="item1" className="text-sm text-muted-foreground">
+              <label htmlFor="item1" className="text-muted-foreground text-sm">
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit.
               </label>
             </div>
@@ -149,7 +157,7 @@ const TodoList = () => {
           <Card className="p-4">
             <div className="flex items-center gap-4">
               <Checkbox id="item1" checked />
-              <label htmlFor="item1" className="text-sm text-muted-foreground">
+              <label htmlFor="item1" className="text-muted-foreground text-sm">
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit.
               </label>
             </div>
