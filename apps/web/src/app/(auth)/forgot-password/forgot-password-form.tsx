@@ -31,7 +31,7 @@ const ForgotPasswordForm = () => {
 
   const router = useRouter();
   const { ErrorToast, SuccessToast } = useAppToasts();
-  const ForgotPassword = api.auth.forgotpassword.useMutation();
+  const ForgotPassword = api.user.forgotpassword.useMutation();
   const onSubmit = (passworddetails: ForgotPasswordType) => {
     if (!passworddetails) return;
 

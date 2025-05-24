@@ -33,9 +33,10 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { Calendar as CalendarIcon, Plus } from "lucide-react";
 import { addTaskSchema, AddTaskSchemaType } from "@lawcrew/schema";
+import { api } from "@lawcrew/trpc-client/src/client";
 export default function AddTask() {
   const [open, setOpen] = useState(false);
-
+  const addToDo = api.user.addToDo.useMutation()
   const form = useForm<AddTaskSchemaType>({
     resolver: zodResolver(addTaskSchema),
     defaultValues: {
@@ -48,10 +49,10 @@ export default function AddTask() {
     try {
       const formattedValues = {
         ...values,
-        taskForDate: format(values.taskForDate, "MM/dd/yyyy"),
+        taskForDate: ,
       };
 
-      console.log(formattedValues);
+      addToDo.mutateAsync(formattedValues);
 
       toast(
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">

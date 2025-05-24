@@ -30,7 +30,7 @@ const SignInForm = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const router = useRouter();
   const { ErrorToast, SuccessToast } = useAppToasts();
-  const LoginUser = api.auth.login.useMutation();
+  const LoginUser = api.user.login.useMutation();
   const onSubmit = (logindetails: LoginType) => {
     if (!logindetails) return;
 

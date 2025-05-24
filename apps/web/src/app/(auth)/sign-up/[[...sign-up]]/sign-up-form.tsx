@@ -37,7 +37,7 @@ const SignUpForm = () => {
     },
   });
 
-  const SignupUser = api.auth.signup.useMutation();
+  const SignupUser = api.user.signup.useMutation();
   const router = useRouter();
   const { SuccessToast, ErrorToast } = useAppToasts();
   const [showPassword, setShowPassword] = useState<boolean>(false);

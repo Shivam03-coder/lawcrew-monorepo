@@ -4,7 +4,6 @@ import AuthServices from "@lawcrew/api/src/services/auth-services";
 import { GlobalUtils } from "@lawcrew/api/src/global";
 import { ApiError } from "../utils/api-error";
 import { z } from "zod";
-
 export const authRoutes = router({
   signup: publicProcedure
     .input(signupSchema)
@@ -152,7 +151,7 @@ export const authRoutes = router({
       await ctx.db.toDoList.create({
         data: {
           task,
-          taskForDate,
+          taskForDate : format(values.taskForDate, "MM/dd/yyyy"),
           userId: ctx.auth.id,
         },
       });
