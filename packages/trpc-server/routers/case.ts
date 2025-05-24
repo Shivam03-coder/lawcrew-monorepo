@@ -6,6 +6,7 @@ import {
 import { protectedProcedure, router } from "../trpc";
 import { ApiError } from "../utils/api-error";
 import { z } from "zod";
+import { db } from "@lawcrew/db";
 
 export const caseDetailsRoutes = router({
   createCase: protectedProcedure
@@ -351,4 +352,30 @@ export const caseDetailsRoutes = router({
         message: "Case updated successfully",
       };
     }),
+
+  getCaseDetailsByAdminId: protectedProcedure.query(async ({ ctx, input }) => {
+    const teamAdmin = await db.teamAdmin.findUnique({
+      where: {
+        userId: ctx.auth.id,
+      },
+    });
+    return await db.case.findMany({
+      where: {
+        adminId: teamAdmin?.id,
+      },
+      select: {
+        id: true,
+        title: true,
+        caseNote: {
+          select: {
+            note: true,
+          },
+        },
+        estimatedCloseDate: true,
+        status: true,
+        internalRefNumber: true,
+        practiseArea: true,
+      },
+    });
+  }),
 });

@@ -1,78 +1,117 @@
 "use client";
-import React, { FC, useCallback, useState } from "react";
+import React, { FC, useCallback, useState, useEffect } from "react";
 import {
   DragDropContext,
   type DropResult,
   Draggable,
   Droppable,
 } from "@hello-pangea/dnd";
-export enum TaskStatus {
-  ToDo = "To Do",
-  OnGoing = "On Going",
-  Completed = "Completed",
-}
+
 import { Card } from "@/components/ui/card";
 import { CalendarIcon } from "lucide-react";
 import KanbanHeader from "./kanban-header";
-import { Task } from "@/data";
+import { CaseStatus } from "./types";
+import { api } from "@lawcrew/trpc-client/src/client";
+import { AppRouterType } from "@lawcrew/trpc-server/routers/root";
+import { useAppToasts } from "@/hooks/use-app-toast";
 
-const boards: TaskStatus[] = [
-  TaskStatus.Completed,
-  TaskStatus.OnGoing,
-  TaskStatus.ToDo,
+type Task = AppRouterType["litigation"]["getCaseDetailsByAdminId"][number];
+
+const boards: CaseStatus[] = [
+  CaseStatus.CLOSED,
+  CaseStatus.PENDING,
+  CaseStatus.OPEN,
 ];
 
 type TaskState = {
-  [key in TaskStatus]: Task[];
+  [key in CaseStatus]: Task[];
 };
 
-interface DataKanban {
-  data: Task[];
-}
+const KanBanView = () => {
+  const { data, isLoading, error } =
+    api.litigation.getCaseDetailsByAdminId.useQuery();
 
-const KanBanView: FC<DataKanban> = ({ data }) => {
-  const [task, setTask] = useState<TaskState>(() => {
-    const initialState: TaskState = {
-      [TaskStatus.Completed]: [],
-      [TaskStatus.OnGoing]: [],
-      [TaskStatus.ToDo]: [],
-    };
+  const { SuccessToast } = useAppToasts();
+  const updateStatus = api.litigation.editcaseDetails.useMutation();
 
-    data.forEach((tasks) => {
-      initialState[tasks.status].push(tasks);
-    });
-
-    return initialState;
+  const [tasks, setTasks] = useState<TaskState>({
+    [CaseStatus.CLOSED]: [],
+    [CaseStatus.PENDING]: [],
+    [CaseStatus.OPEN]: [],
   });
 
-  const handleOnDrag = useCallback((results: DropResult) => {
-    if (!results.destination) return;
-
-    const { source, destination } = results;
-    const sourceStatus = source.droppableId as TaskStatus;
-    const destinationStatus = destination.droppableId as TaskStatus;
-
-    setTask((prevTask) => {
-      const newTask = { ...prevTask };
-
-      const sourceColumn = [...newTask[sourceStatus]];
-      const [movedTask] = sourceColumn.splice(source.index, 1);
-
-      if (!movedTask) return prevTask;
-
-      const updatedTask = {
-        ...movedTask,
-        status: destinationStatus,
+  useEffect(() => {
+    if (data) {
+      const newTasks: TaskState = {
+        [CaseStatus.CLOSED]: [],
+        [CaseStatus.PENDING]: [],
+        [CaseStatus.OPEN]: [],
       };
 
-      newTask[sourceStatus] = sourceColumn;
-      const destinationColumn = [...newTask[destinationStatus]];
-      destinationColumn.splice(destination.index, 0, updatedTask);
-      newTask[destinationStatus] = destinationColumn;
+      data.forEach((task) => {
+        if (task.status! in newTasks) {
+          newTasks[task.status as CaseStatus].push(task);
+        }
+      });
 
-      return newTask;
-    });
-  }, []);
+      setTasks(newTasks);
+    }
+  }, [data]);
+
+  const handleOnDrag = useCallback(
+    (results: DropResult) => {
+      if (!results.destination) return;
+
+      const { source, destination } = results;
+      const sourceStatus = source.droppableId as CaseStatus;
+      const destinationStatus = destination.droppableId as CaseStatus;
+
+      if (
+        source.droppableId === destination.droppableId &&
+        source.index === destination.index
+      )
+        return;
+
+      setTasks((prevTasks) => {
+        const newTasks = { ...prevTasks };
+
+        const sourceColumn = [...newTasks[sourceStatus]];
+        const [movedTask] = sourceColumn.splice(source.index, 1);
+
+        if (!movedTask) return prevTasks;
+
+        const updatedTask = {
+          ...movedTask,
+          status: destinationStatus,
+        };
+
+        updateStatus.mutate(
+          {
+            caseId: movedTask.id,
+            status: destinationStatus,
+          },
+          {
+            onSuccess: ({ message }) => {
+              SuccessToast({
+                title: "Case Status Updated Successfuly !",
+              });
+            },
+          },
+        );
+
+        newTasks[sourceStatus] = sourceColumn;
+        const destinationColumn = [...newTasks[destinationStatus]];
+        destinationColumn.splice(destination.index, 0, updatedTask);
+        newTasks[destinationStatus] = destinationColumn;
+
+        return newTasks;
+      });
+    },
+    [updateStatus],
+  );
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading cases: {error.message}</div>;
 
   return (
     <DragDropContext onDragEnd={handleOnDrag}>
@@ -83,7 +122,7 @@ const KanBanView: FC<DataKanban> = ({ data }) => {
               key={board}
               className="mr-8 flex flex-col rounded-md bg-secondary p-2 dark:bg-gray-800"
             >
-              <KanbanHeader board={board} taskCount={task[board].length} />
+              <KanbanHeader board={board} taskCount={tasks[board].length} />
               <Droppable droppableId={board.toString()}>
                 {(provided, snapshot) => {
                   return (
@@ -92,11 +131,17 @@ const KanBanView: FC<DataKanban> = ({ data }) => {
                       {...provided.droppableProps}
                       className="mt-4 flex min-h-[12.5rem] flex-col"
                     >
-                      {task[board].map((task, index) => {
+                      {tasks[board].map((task, index) => {
+                        const dueDate = task.estimatedCloseDate
+                          ? new Date(
+                              task.estimatedCloseDate,
+                            ).toLocaleDateString()
+                          : "No due date";
+
                         return (
                           <Draggable
                             key={task.id}
-                            draggableId={task.id.toString()}
+                            draggableId={task.id}
                             index={index}
                           >
                             {(provided, snapshot) => (
@@ -122,24 +167,26 @@ const KanBanView: FC<DataKanban> = ({ data }) => {
 
                                 {/* Category Tag */}
                                 <span className="mt-3 inline-block rounded-md bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700">
-                                  {task.category}
+                                  {task.practiseArea}
                                 </span>
 
                                 {/* Due Date */}
-                                {TaskStatus.Completed !== task.status && (
-                                  <div className="mt-3 flex items-center gap-2 text-sm text-red-500">
-                                    <CalendarIcon
-                                      size={16}
-                                      className="text-gray-400"
-                                    />
-                                    <p>Due: {task.dueDate}</p>
-                                  </div>
-                                )}
+                                {board !== CaseStatus.CLOSED &&
+                                  task.estimatedCloseDate && (
+                                    <div className="mt-3 flex items-center gap-2 text-sm text-red-500">
+                                      <CalendarIcon
+                                        size={16}
+                                        className="text-gray-400"
+                                      />
+                                      <p>Due: {dueDate}</p>
+                                    </div>
+                                  )}
                               </Card>
                             )}
                           </Draggable>
                         );
                       })}
+                      {provided.placeholder}
                     </div>
                   );
                 }}

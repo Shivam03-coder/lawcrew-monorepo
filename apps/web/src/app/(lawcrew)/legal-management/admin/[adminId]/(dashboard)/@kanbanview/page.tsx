@@ -1,8 +1,7 @@
 import React from "react";
 import KanBanView from "./kanban-view";
-import { dummyData } from "@/data";
-const KanbanView = () => {
-  return <KanBanView data={dummyData} />;
+const KanbanPage = () => {
+  return <KanBanView />;
 };
 
-export default KanbanView;
+export default KanbanPage;

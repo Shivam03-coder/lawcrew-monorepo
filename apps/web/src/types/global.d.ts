@@ -133,12 +133,6 @@ export enum CaseStage {
   DISPUTE = "DISPUTE",
 }
 
-export enum CaseStatus {
-  OPEN = "OPEN",
-  CLOSED = "CLOSED",
-  PENDING = "PENDING",
-}
-
 export enum MatterPriority {
   LOW = "LOW",
   MEDIUM = "MEDIUM",

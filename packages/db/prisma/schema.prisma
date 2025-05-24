@@ -60,8 +60,7 @@ model TeamAdmin {
   role       UserRole @default(ADMIN)
   isVerified Boolean  @default(false)
   createdAt  DateTime @default(now())
-
-  cases Case[]
+  cases      Case[]
 }
 
 model TeamMember {

@@ -132,20 +132,21 @@ export const caseDetailsSchema = z.object({
   labels: z.string(),
   note: z.string(),
 });
+
 export const editCaseDetailsSchema = z.object({
-  caseId: z.string().optional(),
-  title: z.string(),
-  description: z.string(),
-  practiseArea: PracticeAreaEnum,
-  status: CaseStatusEnum,
-  matterPriority: MatterPriorityEnum,
-  internalRefNumber: z.string(),
-  arrivalDate: z.string().datetime(),
-  filedDate: z.string().datetime(),
+  caseId: z.string(),
+  title: z.string().optional(),
+  description: z.string().optional(),
+  practiseArea: PracticeAreaEnum.optional(),
+  status: CaseStatusEnum.optional(),
+  matterPriority: MatterPriorityEnum.optional(),
+  internalRefNumber: z.string().optional(),
+  arrivalDate: z.string().datetime().optional(),
+  filedDate: z.string().datetime().optional(),
   closedDate: z.string().datetime().nullable().optional(),
-  estimatedCloseDate: z.string().datetime(),
-  stage: CaseStageEnum,
-  teamMemberIds: z.array(z.string()),
+  estimatedCloseDate: z.string().datetime().optional(),
+  stage: CaseStageEnum.optional(),
+  teamMemberIds: z.array(z.string()).optional(),
 });
 
 export const caseBillingSchema = z.object({
