@@ -8,6 +8,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { TrendingUp } from "lucide-react";
+import { api } from "@lawcrew/trpc-client/src/client";
 
 const chartConfig = {
   criminal: {
@@ -32,74 +33,95 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const chartData = [
-  { type: "criminal", cases: 250, fill: "var(--color-criminal)" },
-  { type: "civil", cases: 190, fill: "var(--color-civil)" },
-  { type: "family", cases: 160, fill: "var(--color-family)" },
-  { type: "corporate", cases: 130, fill: "var(--color-corporate)" },
-  { type: "other", cases: 100, fill: "var(--color-other)" },
-];
+const typeToColorMap = {
+  criminal: "var(--color-criminal)",
+  civil: "var(--color-civil)",
+  family: "var(--color-family)",
+  corporate: "var(--color-corporate)",
+  other: "var(--color-other)",
+};
 
 const CasePieChart = () => {
-  const totalCases = chartData.reduce((acc, curr) => acc + curr.cases, 0);
+  const { data, isLoading } = api.litigation.monthlyCaseStats.useQuery();
+
+  const chartData = (data || []).reduce<Record<string, number>>((acc, curr) => {
+    const type = (curr.practiseArea || "other").toLowerCase();
+    acc[type] = (acc[type] || 0) + 1;
+    return acc;
+  }, {});
+
+  const pieData = Object.entries(chartData).map(([type, cases]) => ({
+    type,
+    cases,
+    fill: typeToColorMap[type as keyof typeof typeToColorMap] || "gray",
+  }));
+
+  const totalCases = pieData.reduce((acc, cur) => acc + cur.cases, 0);
 
   return (
-    <div className="">
-      <h1 className="mb-6 text-base font-inter font-semibold">Law Case Distribution</h1>
-      <ChartContainer
-        config={chartConfig}
-        className="mx-auto aspect-square max-h-[250px]"
-      >
-        <PieChart>
-          <ChartTooltip
-            cursor={false}
-            content={<ChartTooltipContent hideLabel />}
-          />
-          <Pie
-            data={chartData}
-            dataKey="cases"
-            nameKey="type"
-            innerRadius={60}
-            strokeWidth={5}
-          >
-            <Label
-              content={({ viewBox }) => {
-                if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                  return (
-                    <text
-                      x={viewBox.cx}
-                      y={viewBox.cy}
-                      textAnchor="middle"
-                      dominantBaseline="middle"
-                    >
-                      <tspan
+    <div>
+      <h1 className="mb-6 font-inter text-base font-semibold">
+        Law Case Distribution
+      </h1>
+      <div className="mt-16">
+        <ChartContainer
+          config={chartConfig}
+          className="center mx-auto aspect-square max-h-[250px]"
+        >
+          <PieChart>
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent hideLabel />}
+            />
+            <Pie
+              data={pieData}
+              dataKey="cases"
+              nameKey="type"
+              innerRadius={60}
+              strokeWidth={5}
+            >
+              <Label
+                content={({ viewBox }) => {
+                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                    return (
+                      <text
                         x={viewBox.cx}
                         y={viewBox.cy}
-                        className="fill-foreground text-3xl font-bold"
+                        textAnchor="middle"
+                        dominantBaseline="middle"
                       >
-                        {totalCases.toLocaleString()}
-                      </tspan>
-                      <tspan
-                        x={viewBox.cx}
-                        y={(viewBox.cy || 0) + 24}
-                        className="fill-muted-foreground"
-                      >
-                        Total Cases
-                      </tspan>
-                    </text>
-                  );
-                }
-              }}
-            />
-          </Pie>
-        </PieChart>
-      </ChartContainer>
-      <div className="mt-4 flex text-sm flex-col gap-2 items-center">
-        <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4 text-green-500" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+                        <tspan
+                          x={viewBox.cx}
+                          y={viewBox.cy}
+                          className="fill-foreground text-3xl font-bold"
+                        >
+                          {totalCases.toLocaleString()}
+                        </tspan>
+                        <tspan
+                          x={viewBox.cx}
+                          y={(viewBox.cy || 0) + 24}
+                          className="fill-muted-foreground"
+                        >
+                          Total Cases
+                        </tspan>
+                      </text>
+                    );
+                  }
+                  return null;
+                }}
+              />
+            </Pie>
+          </PieChart>
+        </ChartContainer>
+
+        <div className="mt-4 flex flex-col items-center gap-2 text-sm">
+          <div className="flex items-center gap-2 font-medium leading-none">
+            Trending up by 5.2% this month
+            <TrendingUp className="h-4 w-4 text-green-500" />
+          </div>
+          <div className="text-muted-foreground leading-none">
+            Showing total cases for the last 6 months
+          </div>
         </div>
       </div>
     </div>
