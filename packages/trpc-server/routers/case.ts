@@ -7,6 +7,7 @@ import { protectedProcedure, router } from "../trpc";
 import { ApiError } from "../utils/api-error";
 import { z } from "zod";
 import { db } from "@lawcrew/db";
+import { format } from "date-fns";
 
 export const caseDetailsRoutes = router({
   createCase: protectedProcedure
@@ -377,5 +378,9 @@ export const caseDetailsRoutes = router({
         practiseArea: true,
       },
     });
+  }),
+
+  monthlyCaseStats: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.db.case.findMany();
   }),
 });

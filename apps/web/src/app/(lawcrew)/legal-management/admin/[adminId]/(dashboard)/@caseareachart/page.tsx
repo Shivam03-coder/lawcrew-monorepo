@@ -7,8 +7,11 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
+import { api } from "@lawcrew/trpc-client/src/client";
+import { useMemo } from "react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
-
+import { format } from "date-fns";
+import NoData from "@/components/shared/no-data";
 const chartConfig = {
   created: {
     label: "Created",
@@ -24,21 +27,66 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const chartData = [
-  { month: "January", created: 100, completed: 80, pending: 20 },
-  { month: "February", created: 150, completed: 120, pending: 30 },
-  { month: "March", created: 200, completed: 170, pending: 30 },
-  { month: "April", created: 180, completed: 140, pending: 40 },
-  { month: "May", created: 210, completed: 200, pending: 10 },
-  { month: "June", created: 190, completed: 160, pending: 30 },
+const MONTHS = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 const CaseAreaChart = () => {
+  const { data } = api.litigation.monthlyCaseStats.useQuery();
+
+  const results = useMemo(() => {
+    if (!data) return [];
+    const reduced = data.reduce<
+      Record<string, { created: number; completed: number }>
+    >((acc, cur) => {
+      const month = format(new Date(cur.createdAt), "MMMM");
+
+      if (!acc[month]) {
+        acc[month] = {
+          created: 0,
+          completed: 0,
+        };
+      }
+
+      acc[month].created += 1;
+
+      if (cur.status === "CLOSED") {
+        acc[month].completed += 1;
+      }
+      return acc;
+    }, {});
+
+    return MONTHS.map((month) => {
+      const monthData = reduced[month] || { created: 0, completed: 0 };
+      return {
+        month,
+        created: monthData.created,
+        completed: monthData.completed,
+        pending: monthData.created - monthData.completed,
+      };
+    });
+  }, [data]);
+
+  if (data?.length === 0) return <NoData />;
+
   return (
     <div className="">
-      <h1 className="mb-6 text-base font-inter font-semibold">Total Cases Overview</h1>
+      <h1 className="mb-6 font-inter text-base font-semibold">
+        Total Cases Overview
+      </h1>
       <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-        <AreaChart accessibilityLayer data={chartData}>
+        <AreaChart accessibilityLayer data={results}>
           <CartesianGrid vertical={false} />
           <XAxis
             dataKey="month"
