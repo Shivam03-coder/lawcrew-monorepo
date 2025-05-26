@@ -34,9 +34,11 @@ import { Calendar } from "@/components/ui/calendar";
 import { Calendar as CalendarIcon, Plus } from "lucide-react";
 import { addTaskSchema, AddTaskSchemaType } from "@lawcrew/schema";
 import { api } from "@lawcrew/trpc-client/src/client";
+import { useAppToasts } from "@/hooks/use-app-toast";
 export default function AddTask() {
   const [open, setOpen] = useState(false);
-  const addToDo = api.user.addToDo.useMutation()
+  const addToDo = api.user.addToDo.useMutation();
+  const { SuccessToast, ErrorToast } = useAppToasts();
   const form = useForm<AddTaskSchemaType>({
     resolver: zodResolver(addTaskSchema),
     defaultValues: {
@@ -45,25 +47,22 @@ export default function AddTask() {
     },
   });
 
-  function onSubmit(values: AddTaskSchemaType) {
+  async function onSubmit(values: AddTaskSchemaType) {
     try {
-      const formattedValues = {
-        ...values,
-        taskForDate: ,
-      };
-
-      addToDo.mutateAsync(formattedValues);
-
-      toast(
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">
-            {JSON.stringify(formattedValues, null, 2)}
-          </code>
-        </pre>,
-      );
-
-      setOpen(false);
-      form.reset();
+      await addToDo.mutateAsync(values, {
+        onSuccess() {
+          SuccessToast({
+            title: "Task added succesfully",
+          });
+          form.reset();
+          setOpen(false);
+        },
+        onError({ message }) {
+          ErrorToast({
+            title: message,
+          });
+        },
+      });
     } catch (error) {
       console.error("Form submission error", error);
       toast.error("Failed to submit the form. Please try again.");

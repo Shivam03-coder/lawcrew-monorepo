@@ -11,5 +11,8 @@
   },
   "dependencies": {
     "@prisma/client": "6.6.0"
+  },
+  "peerDependencies": {
+    "date-fns": "^4.1.0"
   }
 }

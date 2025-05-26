@@ -142,7 +142,7 @@ export const authRoutes = router({
 
     return { user };
   }),
-  
+
   addToDo: protectedProcedure
     .input(addTaskSchema)
     .mutation(async ({ ctx, input }) => {
@@ -151,32 +151,39 @@ export const authRoutes = router({
       await ctx.db.toDoList.create({
         data: {
           task,
-          taskForDate : format(values.taskForDate, "MM/dd/yyyy"),
+          taskForDate: new Date(taskForDate).toISOString(),
           userId: ctx.auth.id,
         },
       });
 
       return { message: "Password reset successfully" };
     }),
-
   getToDoByDate: protectedProcedure
     .input(
       z.object({
-        taskForDate: z.date(),
+        taskForDate: z.string(),
       })
     )
     .query(async ({ ctx, input }) => {
+      const startDate = new Date(input.taskForDate);
+      startDate.setHours(0, 0, 0, 0);
+
+      const endDate = new Date(startDate);
+      endDate.setDate(endDate.getDate() + 1);
+
       return await ctx.db.toDoList.findMany({
         where: {
-          taskForDate: input.taskForDate,
+          taskForDate: {
+            gte: startDate,
+            lt: endDate,
+          },
         },
         orderBy: {
           createdAt: "desc",
         },
       });
     }),
-
-  updateToDo: protectedProcedure
+  checkToDo: protectedProcedure
     .input(
       z.object({
         todoId: z.string(),
@@ -202,5 +209,30 @@ export const authRoutes = router({
       });
 
       return { message: "Task toggle successful" };
+    }),
+
+  deleteToDo: protectedProcedure
+    .input(
+      z.object({
+        todoId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { todoId } = input;
+
+      const existingTodo = await ctx.db.toDoList.findUnique({
+        where: { id: todoId },
+        select: { isTaskChecked: true },
+      });
+
+      if (!existingTodo) {
+        throw new Error("Todo not found");
+      }
+
+      await ctx.db.toDoList.delete({
+        where: { id: todoId },
+      });
+
+      return { message: "Task deleted successful" };
     }),
 });

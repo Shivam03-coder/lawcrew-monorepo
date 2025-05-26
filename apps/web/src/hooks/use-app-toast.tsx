@@ -31,11 +31,11 @@ export const useAppToasts = () => {
         >
           <CheckCircle className="mt-1 size-6 text-green-400" />
           <div>
-            <span className="font-semibold text-base text-green-300">
+            <span className="text-base font-semibold text-green-300">
               {title}
             </span>
             {description && (
-              <p className="text-sm text-green-400 mt-1">{description}</p>
+              <p className="mt-1 text-sm text-green-400">{description}</p>
             )}
           </div>
         </motion.div>
@@ -58,11 +58,11 @@ export const useAppToasts = () => {
         >
           <XCircle className="mt-1 size-6 text-red-400" />
           <div>
-            <span className="font-semibold text-base text-red-300">
+            <span className="text-base font-semibold text-red-300">
               {title}
             </span>
             {description && (
-              <p className="text-sm text-red-400 mt-1">{description}</p>
+              <p className="mt-1 text-sm text-red-400">{description}</p>
             )}
           </div>
         </motion.div>
@@ -85,11 +85,11 @@ export const useAppToasts = () => {
         >
           <AlertTriangle className="mt-1 size-6 text-yellow-400" />
           <div>
-            <span className="font-semibold text-base text-yellow-300">
+            <span className="text-base font-semibold text-yellow-300">
               {title}
             </span>
             {description && (
-              <p className="text-sm text-yellow-400 mt-1">{description}</p>
+              <p className="mt-1 text-sm text-yellow-400">{description}</p>
             )}
           </div>
         </motion.div>
