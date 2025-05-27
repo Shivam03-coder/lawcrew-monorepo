@@ -84,13 +84,7 @@ const AdminAppsidebar = () => {
       title: "Contacts",
       url: links?.contacts,
       icon: Contact,
-      tooltip: "Manage professional contacts",
-    },
-    {
-      title: "Settings",
-      url: links?.settings,
-      icon: Settings,
-      tooltip: "Change app and account settings",
+      tooltip: "View All contacts",
     },
     {
       title: "Add Case",

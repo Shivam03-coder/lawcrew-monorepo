@@ -235,4 +235,16 @@ export const authRoutes = router({
 
       return { message: "Task deleted successful" };
     }),
+
+  getContactDetails: protectedProcedure.query(async ({ ctx }) => {
+    const contacts = await ctx.db.user.findMany({
+      select: {
+        id: true,
+        email: true,
+        phoneNumber: true,
+        userName: true,
+      },
+    });
+    return contacts;
+  }),
 });
