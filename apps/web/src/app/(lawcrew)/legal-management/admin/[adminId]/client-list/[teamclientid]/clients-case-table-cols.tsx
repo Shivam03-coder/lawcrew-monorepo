@@ -32,9 +32,9 @@ export const caseTableColumns: ColumnDef<ClientCaseList>[] = [
     cell: ({ row }) => {
       const caseId = row.original.id;
       const router = useRouter();
-      
+
       return (
-        <Link 
+        <Link
           href={`/cases/${caseId}`}
           className="text-primary underline hover:text-primary/80"
         >
@@ -52,11 +52,11 @@ export const caseTableColumns: ColumnDef<ClientCaseList>[] = [
     ),
     cell: ({ row }) => {
       const initials = row.original.clientName
-        .split(' ')
-        .map(name => name[0])
-        .join('')
+        .split(" ")
+        .map((name) => name[0])
+        .join("")
         .toUpperCase();
-      
+
       return (
         <TooltipProvider>
           <Tooltip>
@@ -82,17 +82,19 @@ export const caseTableColumns: ColumnDef<ClientCaseList>[] = [
     ),
     cell: ({ row }) => {
       const initials = row.original.opponentName
-        .split(' ')
-        .map(name => name[0])
-        .join('')
+        .split(" ")
+        .map((name) => name[0])
+        .join("")
         .toUpperCase();
-      
+
       return (
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
               <Avatar className="h-8 w-8">
-                <AvatarFallback className="bg-primary text-secondary">{initials}</AvatarFallback>
+                <AvatarFallback className="bg-primary text-secondary">
+                  {initials}
+                </AvatarFallback>
               </Avatar>
             </TooltipTrigger>
             <TooltipContent>
@@ -108,21 +110,21 @@ export const caseTableColumns: ColumnDef<ClientCaseList>[] = [
     header: "Team Members",
     cell: ({ row }) => {
       const members = row.original.membersName;
-      
+
       return (
         <div className="flex -space-x-2">
           {members.map((member, index) => {
             const initials = member
-              .split(' ')
-              .map(name => name[0])
-              .join('')
+              .split(" ")
+              .map((name) => name[0])
+              .join("")
               .toUpperCase();
-              
+
             return (
               <TooltipProvider key={index}>
                 <Tooltip>
                   <TooltipTrigger>
-                    <Avatar className="h-8 w-8 border-2 border-white bg-primary text-secondary hover:z-10 hover:scale-110 transition-all">
+                    <Avatar className="h-8 w-8 border-2 border-white bg-primary text-secondary transition-all hover:z-10 hover:scale-110">
                       <AvatarFallback>{initials}</AvatarFallback>
                     </Avatar>
                   </TooltipTrigger>
@@ -145,8 +147,11 @@ export const caseTableColumns: ColumnDef<ClientCaseList>[] = [
       </Button>
     ),
     cell: ({ row }) => {
-      const status = row.getValue("caseStatus") as "OPEN" | "CLOSED" | "PENDING";
-      
+      const status = row.getValue("caseStatus") as
+        | "OPEN"
+        | "CLOSED"
+        | "PENDING";
+
       const statusConfig = {
         OPEN: {
           color: "bg-green-100 text-green-800",
@@ -161,13 +166,15 @@ export const caseTableColumns: ColumnDef<ClientCaseList>[] = [
           icon: "🟡",
         },
       };
-      
+
       const config = statusConfig[status] || statusConfig.OPEN;
-      
+
       return (
         <div className="flex items-center gap-2">
           <span>{config.icon}</span>
-          <span className={`px-2 py-1 rounded-full text-xs font-medium ${config.color}`}>
+          <span
+            className={`rounded-full px-2 py-1 text-xs font-medium ${config.color}`}
+          >
             {status}
           </span>
         </div>
@@ -201,10 +208,12 @@ export const caseTableColumns: ColumnDef<ClientCaseList>[] = [
               Copy Case ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => router.push(`/cases/${caseData.id}`)}>
+            <DropdownMenuItem
+              onClick={() => router.push(`/cases/${caseData.id}`)}
+            >
               View Case Details
             </DropdownMenuItem>
-            <DropdownMenuItem 
+            <DropdownMenuItem
               onClick={() => router.push(`/cases/${caseData.id}/edit`)}
               disabled={caseData.caseStatus === "CLOSED"}
             >

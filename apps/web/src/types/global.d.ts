@@ -152,11 +152,17 @@ export enum PracticeArea {
   TAXATION = "TAXATION",
 }
 
+export enum CaseStatus {
+  OPEN = "OPEN",
+  CLOSED = "CLOSED",
+  PENDING = "PENDING",
+}
+
 export interface ClientCaseList {
   id: string;
   clientName: string;
   opponentName: string;
   internalRefNumber: string;
   membersName: Array<string>;
-  caseStatus: "OPEN" | "CLOSED" | "PENDING";
+  caseStatus: CaseStatus;
 }

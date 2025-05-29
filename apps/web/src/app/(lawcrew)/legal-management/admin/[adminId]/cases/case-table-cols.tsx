@@ -13,8 +13,15 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
-import { LegalCaseType, CaseStage, CaseStatus, MatterPriority, PracticeArea } from "@/types/global";
+import {
+  LegalCaseType,
+  CaseStage,
+  MatterPriority,
+  PracticeArea,
+  CaseStatus,
+} from "@/types/global";
 import badgeClass from "@/utils/badge-class";
+import ChatTokenBtn from "./chat-token-btn";
 
 export const caseTableColumns: ColumnDef<LegalCaseType>[] = [
   {
@@ -74,7 +81,9 @@ export const caseTableColumns: ColumnDef<LegalCaseType>[] = [
     header: "Stage",
     cell: ({ row }) => {
       const stage = row.getValue("stage") as CaseStage;
-      return <Badge className={badgeClass(stage)}>{stage.replace(/_/g, " ")}</Badge>;
+      return (
+        <Badge className={badgeClass(stage)}>{stage.replace(/_/g, " ")}</Badge>
+      );
     },
   },
   {
@@ -98,7 +107,9 @@ export const caseTableColumns: ColumnDef<LegalCaseType>[] = [
     header: "Practice Area",
     cell: ({ row }) => {
       const area = row.getValue("practiseArea") as PracticeArea;
-      return <Badge className={badgeClass(area)}>{area.replace(/_/g, " ")}</Badge>;
+      return (
+        <Badge className={badgeClass(area)}>{area.replace(/_/g, " ")}</Badge>
+      );
     },
   },
   {
@@ -134,28 +145,10 @@ export const caseTableColumns: ColumnDef<LegalCaseType>[] = [
   },
   {
     id: "actions",
-    header: "Actions",
+    header: "Discussion",
     enableHiding: false,
-    cell: ({ row }) => {
-      const caseId = row.original.id;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="bg-white" align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(caseId)}>
-              Copy Case ID
-            </DropdownMenuItem>
-            <DropdownMenuItem>View Details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+    cell: () => {
+      return <ChatTokenBtn />;
     },
   },
 ];

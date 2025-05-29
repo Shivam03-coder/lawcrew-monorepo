@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from "react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
@@ -7,6 +6,7 @@ import { Pencil } from "lucide-react";
 import { ClientType } from "@/types/global";
 import { format } from "date-fns";
 import EditClientForm from "./edit-client-info-form";
+
 const ClientInfoContainer = (client: ClientType) => {
   const [open, setOpen] = useState<boolean>(false);
   const getLocation = useCallback(() => {

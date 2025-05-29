@@ -1,3 +1,6 @@
+// hooks/useUser.ts
+'use client';
+
 import { useMemo } from "react";
 import Cookies from "js-cookie";
 
@@ -6,8 +9,10 @@ export interface AuthUser {
   role: "ADMIN" | "CLIENT" | "MEMBER" | null;
 }
 
-const useAuth = (): AuthUser | null => {
-  const parsedUser = useMemo(() => {
+const useUser = (): AuthUser | null => {
+  return useMemo(() => {
+    if (typeof window === 'undefined') return null; // Server-side guard
+
     const userId = Cookies.get("UserId");
     const userRole = Cookies.get("UserRole");
 
@@ -25,10 +30,8 @@ const useAuth = (): AuthUser | null => {
     return {
       id: userId,
       role,
-    } as AuthUser;
+    };
   }, []);
-
-  return parsedUser;
 };
 
-export default useAuth;
+export default useUser;

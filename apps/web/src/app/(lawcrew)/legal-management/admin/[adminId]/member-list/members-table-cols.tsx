@@ -14,7 +14,7 @@ import {
 import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
 import { Participants } from "@/types/global";
 import { useRouter } from "next/navigation";
-import useAuth from "@/hooks/use-auth";
+import useAuth from "@/hooks/use-user";
 import Link from "next/link";
 
 export const membersTableCols: ColumnDef<Participants>[] = [

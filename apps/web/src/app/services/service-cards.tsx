@@ -4,7 +4,7 @@ import { Scale, Briefcase, ChevronRight, MonitorCheck } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import useAuth from "@/hooks/use-auth";
+import useAuth from "@/hooks/use-user";
 
 function ServicesCards() {
   const user = useAuth();

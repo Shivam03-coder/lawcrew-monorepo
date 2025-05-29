@@ -247,4 +247,47 @@ export const authRoutes = router({
     });
     return contacts;
   }),
+
+  setChatToken: protectedProcedure
+    .input(
+      z.object({
+        token: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const user = await ctx.db.user.findUnique({
+        where: {
+          id: ctx.auth.id,
+        },
+      });
+
+      if (!user) ApiError("User not found !");
+
+      await ctx.db.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          chatToken: input.token,
+        },
+      });
+
+      return {
+        message: "Chat Token saved succesfully",
+      };
+    }),
+
+  checkToken: protectedProcedure.query(async ({ ctx, input }) => {
+    const user = await ctx.db.user.findUnique({
+      where: {
+        id: ctx.auth.id,
+      },
+    });
+
+    if (!user) ApiError("User not found !");
+
+    return {
+      token: user.chatToken,
+    };
+  }),
 });

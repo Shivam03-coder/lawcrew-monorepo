@@ -2,10 +2,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { api } from "@lawcrew/trpc-client/src/client";
 import { ClientCaseList, ClientType } from "@/types/global";
-import ClientInfoContainer from "./client-info-container";
 import ClientCaseContainer from "./client-case-container";
 import ClientsCaseTable from "./client-case-table";
 import CaseLineChart from "./case-line-chart";
+import useUser from "@/hooks/use-user";
 
 interface ClientPageProps {
   params: Promise<{
@@ -14,6 +14,8 @@ interface ClientPageProps {
 }
 
 const ClientPage = ({ params }: ClientPageProps) => {
+  const user = useUser();
+  console.log("🚀 ~ page ~ user:", user);
   const { teamclientid } = React.use(params);
   const [clientName, setClientName] = useState<string>("");
   const { data } = api.participant.getClientDetailsById.useQuery({
@@ -43,7 +45,7 @@ const ClientPage = ({ params }: ClientPageProps) => {
     }));
   }, [caseDetails]);
 
-  const caseTableData = useEffect(() => {
+  useEffect(() => {
     if (data?.userName) {
       setClientName(data.userName);
       setUserInfo({

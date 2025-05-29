@@ -93,6 +93,8 @@
     "react-spinners": "^0.17.0",
     "recharts": "^2.15.3",
     "sonner": "^2.0.3",
+    "stream-chat": "^9.3.0",
+    "stream-chat-react": "^13.0.5",
     "svix": "^1.44.0",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
