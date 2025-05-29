@@ -11,55 +11,57 @@ import {
   Thread,
   Window,
 } from "stream-chat-react";
-
+import { useSearchParams } from "next/navigation";
 import "stream-chat-react/dist/css/v2/index.css";
-
-const apiKey = "dz5f4d5kzrue";
-const userId = "bitter-salad-4";
-const userName = "bitter";
-const userToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYml0dGVyLXNhbGFkLTQiLCJleHAiOjE3NDg1MzU4NDd9.d7HO5tShE-fTIEcEwm2WISa3uXL3ijLPw_o11L82JGM";
-
-const user: User = {
-  id: userId,
-  name: userName,
-  image: `https://getstream.io/random_png/?name=${userName}`,
-};
+import { api } from "@lawcrew/trpc-client/src/client";
+import { useReadLocalStorage } from "usehooks-ts";
+import LoaderSpinner from "@/components/shared/laoder";
 
 const CaseChannel = () => {
+  const searchParams = useSearchParams();
+  const userToken = searchParams.get("token") as string;
   const [channel, setChannel] = useState<StreamChannel>();
+  const { data: userInfo } = api.user.userinfo.useQuery();
+  const activeCase = JSON.parse(useReadLocalStorage("ActiveCase") as string);
+  const user: User = {
+    id: userInfo?.user?.id ?? "X",
+    name: userInfo?.user?.userName,
+    image: `https://getstream.io/random_png/?name=${userInfo?.user?.userName}`,
+  };
+
   const client = useCreateChatClient({
-    apiKey,
+    apiKey: process.env.NEXT_PUBLIC_STREAM_API_KEY!,
     tokenOrProvider: userToken,
     userData: user,
   });
 
   useEffect(() => {
     if (!client) return;
-
-    const channel = client.channel("messaging", "custom_channel_id", {
+    const channel = client.channel("messaging", activeCase.caseId!, {
       // @ts-ignore
-      image: "https://getstream.io/random_png/?name=react",
-      name: "Talk about React",
-      members: [userId],
+      name: activeCase.caseName!,
+      members: [user.id],
     });
-
     setChannel(channel);
   }, [client]);
 
-  if (!client) return <div>Setting up client & connection...</div>;
+  if (!client) return <LoaderSpinner />;
 
   return (
-    <Chat client={client}>
-      <Channel channel={channel}>
-        <Window>
-          <ChannelHeader />
-          <MessageList />
-          <MessageInput />
-        </Window>
-        <Thread />
-      </Channel>
-    </Chat>
+    <div className="h-screen font-lexend">
+      <div className="mx-auto h-full w-[90%] overflow-hidden rounded-lg">
+        <Chat client={client}>
+          <Channel channel={channel}>
+            <Window>
+              <ChannelHeader />
+              <MessageList />
+              <MessageInput audioRecordingEnabled additionalTextareaProps={{}} />
+            </Window>
+            <Thread />
+          </Channel>
+        </Chat>
+      </div>
+    </div>
   );
 };
 

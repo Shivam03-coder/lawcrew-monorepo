@@ -106,6 +106,7 @@ export interface EditCaseType {
 export interface LegalCaseType {
   id: string;
   arrivalDate: string;
+  title: string;
   closedDate: string;
   stage: CaseStage;
   status: CaseStatus;

@@ -4,14 +4,6 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import {
   LegalCaseType,
@@ -147,8 +139,9 @@ export const caseTableColumns: ColumnDef<LegalCaseType>[] = [
     id: "actions",
     header: "Discussion",
     enableHiding: false,
-    cell: () => {
-      return <ChatTokenBtn />;
+    cell: ({ row }) => {
+      const c = row.original;
+      return <ChatTokenBtn caseId={c.id} caseName={c.title} />;
     },
   },
 ];

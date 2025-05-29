@@ -327,3 +327,7 @@
 .cl-internal-1lldyk3 {
   @apply textDark;
 }
+
+.str-chat {
+  @apply bg-red-500 font-lexend;
+}

@@ -1,9 +1,9 @@
 "use client";
-import useUser from "@/hooks/use-user";
 import React from "react";
+import CaseChannel from "./case-channel";
 
 const ChatPage = () => {
-  return <div>page</div>;
+  return <CaseChannel />;
 };
 
 export default ChatPage;

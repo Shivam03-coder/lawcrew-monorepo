@@ -120,6 +120,7 @@ export const caseDetailsRoutes = router({
     const caseDetails = await ctx.db.case.findMany({
       select: {
         id: true,
+        title: true,
         arrivalDate: true,
         closedDate: true,
         stage: true,

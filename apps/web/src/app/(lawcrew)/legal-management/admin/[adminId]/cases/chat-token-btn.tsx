@@ -4,22 +4,26 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { Loader2, SendHorizonal } from "lucide-react";
-
 import { api } from "@lawcrew/trpc-client/src/client";
 import { useAppToasts } from "@/hooks/use-app-toast";
 import useUser from "@/hooks/use-user";
 import useAppLinks from "@lawcrew/navigations";
+import { useLocalStorage } from "usehooks-ts";
 
-const ChatTokenBtn = () => {
+const ChatTokenBtn = ({
+  caseId,
+  caseName,
+}: {
+  caseId: string;
+  caseName: string;
+}) => {
   const user = useUser();
-  console.log("🚀 ~ ChatTokenBtn ~ user:", user)
   const router = useRouter();
   const navs = useAppLinks();
   const { SuccessToast, ErrorToast } = useAppToasts();
-
+  const [_, setActiveCase] = useLocalStorage("ActiveCase", "");
   const { data, isLoading: isCheckingToken } = api.user.checkToken.useQuery();
   const setChatToken = api.user.setChatToken.useMutation();
-
   const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
@@ -31,7 +35,6 @@ const ChatTokenBtn = () => {
       router.push(`${navs.casesDiscussion}?token=${token}`);
     }
   };
-// cmashjcrb00000wx2bgqd1ugr
   const handleGenerateTokenAndNavigate = async () => {
     if (!user?.id) return;
 
@@ -40,7 +43,6 @@ const ChatTokenBtn = () => {
       const response = await axios.get(`/api/chat/${user.id}`, {
         headers: { "Content-Type": "application/json" },
       });
-      console.log("🚀 ~ handleGenerateTokenAndNavigate ~ response:", response);
 
       const token = response.data.token;
 
@@ -71,8 +73,16 @@ const ChatTokenBtn = () => {
       </div>
     );
   }
-
   const handleClick = () => {
+    console.log(caseId, caseName);
+    if (caseId && caseName) {
+      const caseData = {
+        caseId,
+        caseName,
+      };
+      setActiveCase(JSON.stringify(caseData));
+    }
+
     if (data?.token) {
       handleNavigate(data.token);
     } else {
