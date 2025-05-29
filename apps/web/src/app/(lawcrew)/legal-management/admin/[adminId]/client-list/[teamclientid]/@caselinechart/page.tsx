@@ -30,7 +30,7 @@ const chartConfig = {
 
 const CaseLineChart = () => {
   return (
-    <div className="">
+    <div className="mainCard">
       <h1 className="mb-6 text-base font-inter font-semibold">Cases Completed</h1>
       <ChartContainer config={chartConfig} className="mt-6">
         <LineChart

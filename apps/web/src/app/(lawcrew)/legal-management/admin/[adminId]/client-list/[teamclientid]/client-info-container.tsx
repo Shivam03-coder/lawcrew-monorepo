@@ -49,6 +49,7 @@ const ClientInfoContainer = (client: ClientType) => {
           <Progress value={66} />
         </div>
 
+        <InfoRow label="User-Id" value={client.id} />
         <InfoRow label="Username" value={client.userName} />
         <InfoRow label="Email" value={client.email} />
         <InfoRow label="Phone" value={client.phoneNumber} />

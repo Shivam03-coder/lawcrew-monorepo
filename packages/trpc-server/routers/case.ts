@@ -271,6 +271,12 @@ export const caseDetailsRoutes = router({
               },
             },
           },
+          client: {
+            include: {
+              user: true,
+            },
+          },
+          Opponent: true,
           caseTag: {
             select: {
               label: true,
@@ -382,5 +388,4 @@ export const caseDetailsRoutes = router({
   monthlyCaseStats: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.db.case.findMany();
   }),
-  
 });

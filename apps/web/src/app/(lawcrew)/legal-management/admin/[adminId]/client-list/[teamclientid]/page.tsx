@@ -1,13 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { api } from "@lawcrew/trpc-client/src/client";
-import useAppLinks from "@lawcrew/navigations";
-import { ClientType } from "@/types/global";
-import AppBreadcrumb from "@/components/shared/app-breadcrumb";
-import CardList from "@/components/shared/card-list";
-import CaseLineChart from "./case-line-chart";
+import { ClientCaseList, ClientType } from "@/types/global";
 import ClientInfoContainer from "./client-info-container";
 import ClientCaseContainer from "./client-case-container";
+import ClientsCaseTable from "./client-case-table";
+import CaseLineChart from "./case-line-chart";
 
 interface ClientPageProps {
   params: Promise<{
@@ -16,15 +14,36 @@ interface ClientPageProps {
 }
 
 const ClientPage = ({ params }: ClientPageProps) => {
-  const links = useAppLinks();
   const { teamclientid } = React.use(params);
   const [clientName, setClientName] = useState<string>("");
   const { data } = api.participant.getClientDetailsById.useQuery({
     clientId: teamclientid,
   });
+
+  const { data: caseDetails } =
+    api.litigation.getCaseDetailsByClientId.useQuery({
+      clientId: teamclientid,
+    });
   const [userInfo, setUserInfo] = useState<ClientType>();
 
-  useEffect(() => {
+  const caseData = useMemo((): ClientCaseList[] => {
+    if (!caseDetails) return [];
+
+    return caseDetails.map((c) => ({
+      id: c.id,
+      clientName:
+        `${c.client.user?.firstName ?? ""} ${c.client.user?.lastName ?? ""}`.trim(),
+      opponentName:
+        `${c.Opponent?.firstName ?? ""} ${c.Opponent?.lastName ?? ""}`.trim(),
+      internalRefNumber: c.internalRefNumber ?? "",
+      membersName: c.members.map(
+        (member) => member.teamMember.user?.firstName ?? "",
+      ),
+      caseStatus: c.status ?? "PENDING",
+    }));
+  }, [caseDetails]);
+
+  const caseTableData = useEffect(() => {
     if (data?.userName) {
       setClientName(data.userName);
       setUserInfo({
@@ -38,35 +57,24 @@ const ClientPage = ({ params }: ClientPageProps) => {
     };
   }, [data]);
 
-  const userCrumbs = [
-    { label: "Dashboard", href: links?.base },
-    { label: "Clinets-List", href: links?.clientList },
-    { label: clientName },
-  ];
-
   return (
-    <div className="page">
-      <AppBreadcrumb items={userCrumbs} />
-      <div className="mt-4 flex flex-col gap-8 xl:flex-row">
-        <div className="w-full space-y-6 xl:w-1/3">
-          {userInfo && <ClientInfoContainer {...userInfo} />}
-          <div className="mainCard rounded-lg p-4">
-            <CardList title="Recent Transactions" />
-          </div>
-        </div>
-        <div className="w-full space-y-6 xl:w-2/3">
-          <ClientCaseContainer
-            userName={`${userInfo?.firstName} ${userInfo?.lastName}`}
-            userImage="https://avatars.githubusercontent.com/u/1486366"
-            userInitials={userInfo?.email.slice(0, 2) as string}
-            clientId={teamclientid}
-          />
-
-          <div className="mainCard rounded-lg p-4">
-            <h1 className="text-xl font-semibold">User Activity</h1>
-            <CaseLineChart />
-          </div>
-        </div>
+    <div className="grid grid-cols-12 gap-5 p-4">
+      <div className="col-span-12">
+        <ClientCaseContainer
+          userName={`${userInfo?.firstName} ${userInfo?.lastName}`}
+          userImage="https://avatars.githubusercontent.com/u/1486366"
+          userInitials={userInfo?.email.slice(0, 2) as string}
+          clientId={teamclientid}
+        />
+      </div>
+      <div className="col-span-6">
+        <CaseLineChart />
+      </div>
+      <div className="col-span-6">
+        <CaseLineChart />
+      </div>
+      <div className="col-span-12">
+        <ClientsCaseTable data={caseData} />
       </div>
     </div>
   );

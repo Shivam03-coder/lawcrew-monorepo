@@ -151,3 +151,12 @@ export enum PracticeArea {
   ENVIRONMENTAL = "ENVIRONMENTAL",
   TAXATION = "TAXATION",
 }
+
+export interface ClientCaseList {
+  id: string;
+  clientName: string;
+  opponentName: string;
+  internalRefNumber: string;
+  membersName: Array<string>;
+  caseStatus: "OPEN" | "CLOSED" | "PENDING";
+}
