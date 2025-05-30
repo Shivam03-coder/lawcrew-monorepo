@@ -82,14 +82,15 @@ export const authRoutes = router({
       where: { userName },
     });
 
-    if (!user) ApiError("User not found !");
+    if (!user) ApiError("Please check your username and password.");
 
     const isPasswordCorrect = await AuthServices.verifyPassword(
       password,
       user.password
     );
 
-    if (!isPasswordCorrect) ApiError("You have entered an incorrect password");
+    if (!isPasswordCorrect)
+      ApiError(" Please check your username and password.");
 
     const { sessionToken } = await AuthServices.generateTokens(user);
 
@@ -99,9 +100,16 @@ export const authRoutes = router({
       { name: "UserId", value: user.id },
     ]);
 
-    return { message: "You have been logged in succesfully" };
+    return {
+      success: true,
+      message: "Login successful! Redirecting...",
+      user: {
+        id: user.id,
+        userName: user.userName,
+        role: user.role,
+      },
+    };
   }),
-
   forgotpassword: publicProcedure
     .input(loginSchema)
     .mutation(async ({ ctx, input }) => {

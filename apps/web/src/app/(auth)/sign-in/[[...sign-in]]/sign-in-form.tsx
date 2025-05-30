@@ -46,7 +46,6 @@ const SignInForm = () => {
           router.push("/services");
         },
         onError: ({ message }) => {
-          console.log("🚀 ~ onSubmit ~ message:", message)
           ErrorToast({
             title: message,
           });
@@ -56,7 +55,7 @@ const SignInForm = () => {
   };
 
   return (
-    <Card className="w-full max-w-md bg-white border border-primary/60 py-3 font-lexend shadow-none">
+    <Card className="w-full max-w-[540px] border-2 border-dashed border-main bg-white font-lexend shadow-none">
       <CardHeader className="space-y-1 pb-8">
         <CardTitle className="textDark whitespace-nowrap bg-clip-text text-center text-3xl font-bold tracking-tight text-transparent">
           Welcome back to Lawcrew.
@@ -98,7 +97,7 @@ const SignInForm = () => {
             <button className="float-right">
               <Link
                 href="/forgot-password"
-                className="text-main/80 mt-2 flex justify-end px-4 underline underline-offset-1"
+                className="mt-2 flex justify-end px-4 text-main/80 underline underline-offset-1"
               >
                 forgot-password
               </Link>
