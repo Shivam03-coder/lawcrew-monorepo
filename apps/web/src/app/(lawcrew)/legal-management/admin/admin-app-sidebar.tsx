@@ -2,10 +2,7 @@
 import React from "react";
 import {
   Home,
-  Calendar,
-  Settings,
   User2,
-  CheckSquare,
   Ellipsis,
   PlusCircleIcon,
   UserCircle,
@@ -17,10 +14,8 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
@@ -43,10 +38,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { api } from "@lawcrew/trpc-client/src/client";
+import { useRouter } from "next/navigation";
+import { useAppToasts } from "@/hooks/use-app-toast";
 const AdminAppsidebar = () => {
   const links = useAppLinks();
   const Mount = useMount();
   if (!links || Object.values(links).some((link) => !link)) return null;
+  const Logout = api.user.logout.useMutation();
+  const { ErrorToast, SuccessToast } = useAppToasts();
 
   const items = [
     {
@@ -93,6 +93,28 @@ const AdminAppsidebar = () => {
       tooltip: "Create a new legal case",
     },
   ];
+
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await Logout.mutateAsync(undefined, {
+        onSuccess: (data) => {
+          router.push("/sign-in");
+          SuccessToast({
+            title: data.message,
+          });
+        },
+        onError: (error) => {
+          ErrorToast({
+            title: error.message,
+          });
+        },
+      });
+    } catch (error) {
+      console.error("Unexpected error during logout:", error);
+    }
+  };
 
   if (!Mount) return null;
   return (
@@ -144,12 +166,14 @@ const AdminAppsidebar = () => {
                     <User2 /> John Doe <Ellipsis className="ml-auto" />
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
+                <DropdownMenuContent className="bg-white" align="end">
                   <DropdownMenuItem>Account</DropdownMenuItem>
                   <Separator className="bg-gray-200" />
                   <DropdownMenuItem>Setting</DropdownMenuItem>
                   <Separator className="bg-gray-200" />
-                  <DropdownMenuItem>Sign out</DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleLogout}>
+                    Sign out
+                  </DropdownMenuItem>
                   <Separator className="bg-gray-200" />
                 </DropdownMenuContent>
               </DropdownMenu>

@@ -84,13 +84,20 @@ export const authRoutes = router({
 
     if (!user) ApiError("Please check your username and password.");
 
-    const isPasswordCorrect = await AuthServices.verifyPassword(
-      password,
-      user.password
-    );
+    let isPasswordCorrect = false;
 
-    if (!isPasswordCorrect)
-      ApiError(" Please check your username and password.");
+    if (user.password.startsWith("$2")) {
+      isPasswordCorrect = await AuthServices.verifyPassword(
+        password,
+        user.password
+      );
+    } else {
+      isPasswordCorrect = password === user.password;
+    }
+
+    if (!isPasswordCorrect) {
+      ApiError("Please check your username and password.");
+    }
 
     const { sessionToken } = await AuthServices.generateTokens(user);
 
@@ -108,6 +115,17 @@ export const authRoutes = router({
         userName: user.userName,
         role: user.role,
       },
+    };
+  }),
+
+  logout: publicProcedure.mutation(async ({ ctx }) => {
+    ctx.res.clearCookie("sessionToken");
+    ctx.res.clearCookie("UserRole");
+    ctx.res.clearCookie("UserId");
+
+    return {
+      success: true,
+      message: "Logout successful! Redirecting to login...",
     };
   }),
 

@@ -88,7 +88,10 @@ export const signupSchema = z.object({
 });
 
 export const loginSchema = z.object({
-  userName: usernameSchema,
+  userName: z
+    .string()
+    .min(3, "Username must be at least 3 characters long")
+    .regex(/^[a-zA-Z0-9]+$/, "Username can only contain letters and numbers"),
   password: passwordSchema,
 });
 
