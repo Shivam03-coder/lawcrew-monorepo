@@ -13,7 +13,7 @@ const AuthInitializer = () => {
     if (!userId || !userRole) {
       route.push("/");
     } else {
-      setRole(userRole);
+      setRole(userRole.toLocaleLowerCase());
     }
   }, []);
   return null;

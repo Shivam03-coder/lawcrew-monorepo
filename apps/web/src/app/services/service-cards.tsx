@@ -4,11 +4,11 @@ import { Scale, Briefcase, ChevronRight, MonitorCheck } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import useAuth from "@/hooks/use-user";
+import useAuthStore from "@/store/use-auth-store";
 
 function ServicesCards() {
-  const user = useAuth();
-  if (!user) return null;
+  const { role } = useAuthStore((state) => state);
+  if (!role) return;
   const services = [
     {
       title: "Legal Management",
@@ -20,7 +20,7 @@ function ServicesCards() {
         "Contract Drafting",
         "Legal Representation",
       ],
-      path: `/legal-management/${user?.role?.toLowerCase()}/`,
+      path: `/legal-management/${role}/`,
     },
     {
       title: "Financial Management",
@@ -32,7 +32,7 @@ function ServicesCards() {
         "Financial Planning",
         "Wealth Management",
       ],
-      path: `/finance-management/${user?.role?.toLowerCase()}/`,
+      path: `/finance-management/${role?.toLowerCase()}/`,
     },
   ];
 
