@@ -20,7 +20,7 @@ function ServicesCards() {
         "Contract Drafting",
         "Legal Representation",
       ],
-      path: `/legal-management/${user?.role?.toLowerCase()}/${user?.id}/`,
+      path: `/legal-management/${user?.role?.toLowerCase()}/`,
     },
     {
       title: "Financial Management",
@@ -32,7 +32,7 @@ function ServicesCards() {
         "Financial Planning",
         "Wealth Management",
       ],
-      path: `/finance-management/${user?.role?.toLowerCase()}/${user?.id}/`,
+      path: `/finance-management/${user?.role?.toLowerCase()}/`,
     },
   ];
 

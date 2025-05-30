@@ -1,13 +1,15 @@
+"use client";
+import cookies from "js-cookie";
 import { create } from "zustand";
 
 interface AuthStore {
-  isAuthLoading: boolean;
-  setIsAuthLoading: (loading: boolean) => void;
+  role: string;
+  setRole: (role: string) => void;
 }
 
 const useAuthStore = create<AuthStore>((set) => ({
-  isAuthLoading: false,
-  setIsAuthLoading: (loading: boolean) => set({ isAuthLoading: loading }),
+  role: cookies.get("UserRole") ?? "",
+  setRole: (role) => set({ role: role.toLowerCase() }),
 }));
 
 export default useAuthStore;
