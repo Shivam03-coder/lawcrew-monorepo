@@ -6,7 +6,7 @@ import { useSidebar } from "@/components/ui/sidebar";
 import { PanelLeft } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import DocsNabar from "./[adminId]/documents/docs-navbar";
+import DocsNabar from "./documents/docs-navbar";
 
 const AdminNavbar = () => {
   const { toggleSidebar } = useSidebar();

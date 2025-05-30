@@ -6,9 +6,7 @@ const useAppLinks = () => {
 
   if (!user?.role || !user?.id) return null;
 
-  const legalBasePath = `/legal-management/${user.role.toLowerCase()}/${
-    user.id
-  }`;
+  const legalBasePath = `/legal-management/${user.role.toLowerCase()}`
 
   return {
     base: legalBasePath,
