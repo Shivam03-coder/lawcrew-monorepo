@@ -89,11 +89,11 @@ model Opponent {
 }
 
 model TeamClient {
-  id        String   @id @default(cuid())
-  userId    String?  @unique
-  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  role      UserRole @default(CLIENT)
-  createdAt DateTime @default(now())
+  id          String   @id @default(cuid())
+  userId      String?  @unique
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role        UserRole @default(CLIENT)
+  createdAt   DateTime @default(now())
 
   cases Case[]
 }

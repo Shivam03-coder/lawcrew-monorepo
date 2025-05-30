@@ -48,7 +48,6 @@ const AddCasePage = () => {
           height={350}
           alt="apperance"
         />
-        ;
         <SelectedMembers
           onMemberSelect={handleMemberSelect}
           selectedMembers={selectedMembers}

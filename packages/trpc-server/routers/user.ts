@@ -110,6 +110,7 @@ export const authRoutes = router({
       },
     };
   }),
+
   forgotpassword: publicProcedure
     .input(loginSchema)
     .mutation(async ({ ctx, input }) => {
@@ -147,7 +148,6 @@ export const authRoutes = router({
         userProfile: true,
       },
     });
-
     return { user };
   }),
 

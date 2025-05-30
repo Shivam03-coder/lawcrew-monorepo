@@ -10,26 +10,16 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   User,
-  Lock,
   Mail,
   Phone,
   MapPin,
   Home,
   Flag,
   Hash,
-  AlertCircle,
   BarChartHorizontalBig,
 } from "lucide-react";
-import PasswordViewToggle from "@/components/shared/password-toggle";
 import Spinner from "@/components/shared/spinner";
 import { useAppToasts } from "@/hooks/use-app-toast";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
 
 const NewOpponentDetailsForm = ({
   setShowSheet,
@@ -39,11 +29,8 @@ const NewOpponentDetailsForm = ({
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors },
     reset,
-    watch,
-    setValue,
   } = useForm<CreateOpponentType>({
     resolver: zodResolver(createOpponentSchema),
     defaultValues: {
@@ -62,13 +49,14 @@ const NewOpponentDetailsForm = ({
   const { ErrorToast, SuccessToast } = useAppToasts();
 
   const createOpponent = api.participant.createNewOpponent.useMutation();
-
+  const apiUtils = api.useUtils();
   const onSubmit = async (data: CreateOpponentType) => {
     await createOpponent.mutateAsync(data, {
       onSuccess: () => {
         SuccessToast({ title: "Opponent created successfully!" });
         setShowSheet(false);
         reset();
+        apiUtils.participant.getAllOpponent.invalidate();
       },
       onError: () => {
         ErrorToast({
