@@ -3,10 +3,11 @@ import { api } from "@lawcrew/trpc-client/src/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import NoData from "@/components/shared/no-data";
 
 const ClientListCard = () => {
   const { data: clients } = api.participant.getClient.useQuery();
-
+  if (clients?.length === 0) return <NoData />;
   return (
     <div className="fontin h-[470px] overflow-scroll">
       <h1 className="mb-6 font-inter text-base font-semibold">

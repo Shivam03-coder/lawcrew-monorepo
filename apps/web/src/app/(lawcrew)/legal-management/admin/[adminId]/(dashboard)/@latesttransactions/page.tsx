@@ -64,6 +64,7 @@ const latestTransactions = [
 ];
 
 const LatestTransactions = () => {
+  return <NoData />;
   return (
     <div className="fontin h-[470px] overflow-scroll">
       <h1 className="mb-6 font-inter text-base font-semibold">

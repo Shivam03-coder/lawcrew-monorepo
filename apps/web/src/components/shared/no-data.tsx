@@ -3,7 +3,7 @@ import React from "react";
 const NoData = ({ message = "No data available", className = "" }) => {
   return (
     <div
-      className={`flex flex-col items-center justify-center p-8 text-center ${className}`}
+      className={`flex h-full flex-col items-center justify-center p-8 text-center ${className}`}
     >
       <svg
         className="mb-4 h-16 w-16 text-gray-400"

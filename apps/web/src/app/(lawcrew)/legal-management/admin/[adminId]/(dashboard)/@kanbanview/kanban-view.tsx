@@ -14,6 +14,7 @@ import { CaseStatus } from "./types";
 import { api } from "@lawcrew/trpc-client/src/client";
 import { AppRouterType } from "@lawcrew/trpc-server/routers/root";
 import { useAppToasts } from "@/hooks/use-app-toast";
+import NoData from "@/components/shared/no-data";
 
 type Task = AppRouterType["litigation"]["getCaseDetailsByAdminId"][number];
 
@@ -110,7 +111,7 @@ const KanBanView = () => {
     [updateStatus],
   );
 
-  if (isLoading) return <div>Loading...</div>;
+  if (data?.length === 0) return <NoData />;
   if (error) return <div>Error loading cases: {error.message}</div>;
 
   return (
@@ -120,7 +121,7 @@ const KanBanView = () => {
           return (
             <div
               key={board}
-              className="mr-8 flex flex-col rounded-md bg-secondary p-2 dark:bg-gray-800"
+              className="mainCard mr-8 flex flex-col rounded-md p-2 dark:bg-gray-800"
             >
               <KanbanHeader board={board} taskCount={tasks[board].length} />
               <Droppable droppableId={board.toString()}>

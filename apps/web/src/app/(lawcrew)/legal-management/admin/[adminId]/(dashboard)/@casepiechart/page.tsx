@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/chart";
 import { TrendingUp } from "lucide-react";
 import { api } from "@lawcrew/trpc-client/src/client";
+import NoData from "@/components/shared/no-data";
 
 const chartConfig = {
   criminal: {
@@ -57,6 +58,8 @@ const CasePieChart = () => {
   }));
 
   const totalCases = pieData.reduce((acc, cur) => acc + cur.cases, 0);
+
+  if (pieData?.length === 0) return <NoData />;
 
   return (
     <div>
