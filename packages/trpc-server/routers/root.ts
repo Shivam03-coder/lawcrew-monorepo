@@ -5,6 +5,7 @@ import { participantsRoutes } from "./participants";
 import { caseDetailsRoutes } from "./case";
 import { documentsRoutes } from "./documents";
 import { clientRoutes } from "./client";
+import { memberRoutes } from "./member";
 
 export const appRouter = router({
   user: authRoutes,
@@ -12,6 +13,7 @@ export const appRouter = router({
   litigation: caseDetailsRoutes,
   document: documentsRoutes,
   client: clientRoutes,
+  member: memberRoutes,
 });
 
 export type AppRouter = typeof appRouter;
