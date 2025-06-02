@@ -2,8 +2,6 @@
 import React from "react";
 import {
   Home,
-  User2,
-  Ellipsis,
   PlusCircleIcon,
   UserCircle,
   Files,
@@ -22,14 +20,7 @@ import {
 
 import Link from "next/link";
 import Image from "next/image";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Users, Gavel, Contact } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
 import useMount from "@/hooks/use-mount";
 import useAppLinks from "@lawcrew/navigations";
 import {
@@ -38,15 +29,11 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { api } from "@lawcrew/trpc-client/src/client";
-import { useRouter } from "next/navigation";
-import { useAppToasts } from "@/hooks/use-app-toast";
+import UserProfile from "@/components/shared/user-profile";
 const AdminAppsidebar = () => {
   const links = useAppLinks();
   const Mount = useMount();
   if (!links || Object.values(links).some((link) => !link)) return null;
-  const Logout = api.user.logout.useMutation();
-  const { ErrorToast, SuccessToast } = useAppToasts();
 
   const items = [
     {
@@ -94,28 +81,6 @@ const AdminAppsidebar = () => {
     },
   ];
 
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    try {
-      await Logout.mutateAsync(undefined, {
-        onSuccess: (data) => {
-          router.push("/sign-in");
-          SuccessToast({
-            title: data.message,
-          });
-        },
-        onError: (error) => {
-          ErrorToast({
-            title: error.message,
-          });
-        },
-      });
-    } catch (error) {
-      console.error("Unexpected error during logout:", error);
-    }
-  };
-
   if (!Mount) return null;
   return (
     <Sidebar collapsible="icon">
@@ -160,23 +125,7 @@ const AdminAppsidebar = () => {
         <SidebarFooter>
           <SidebarMenu className="rounded-xl bg-slate-50">
             <SidebarMenuItem>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <SidebarMenuButton>
-                    <User2 /> John Doe <Ellipsis className="ml-auto" />
-                  </SidebarMenuButton>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-white" align="end">
-                  <DropdownMenuItem>Account</DropdownMenuItem>
-                  <Separator className="bg-gray-200" />
-                  <DropdownMenuItem>Setting</DropdownMenuItem>
-                  <Separator className="bg-gray-200" />
-                  <DropdownMenuItem onClick={handleLogout}>
-                    Sign out
-                  </DropdownMenuItem>
-                  <Separator className="bg-gray-200" />
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <UserProfile />
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarFooter>

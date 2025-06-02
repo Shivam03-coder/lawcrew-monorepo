@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Home } from "lucide-react";
+import { Files, Home } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -42,6 +42,12 @@ const MemberAppsidebar = () => {
       url: links?.cases,
       icon: Gavel,
       tooltip: "View and manage legal cases",
+    },
+    {
+      title: "Documents",
+      url: links?.documents,
+      icon: Files,
+      tooltip: "Manage case-related files",
     },
   ];
 

@@ -6,7 +6,7 @@ import { LegalCaseType } from "@/types/global";
 import CaseListTable from "@/app/(lawcrew)/legal-management/admin/cases/case-list-table";
 
 const CaseListPage = () => {
-  const { data, isLoading } = api.client.getClientCasedetails.useQuery();
+  const { data, isLoading } = api.clients.getClientCasedetails.useQuery();
   if (isLoading) return <LoaderSpinner />;
   return <CaseListTable data={data?.caseDetails as LegalCaseType[]} />;
 };

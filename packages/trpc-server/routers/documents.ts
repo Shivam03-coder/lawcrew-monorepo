@@ -41,6 +41,9 @@ export const documentsRoutes = router({
 
   getAllDocs: protectedProcedure.query(async ({ ctx, input }) => {
     const Docs = await ctx.db.document.findMany({
+      where: {
+        userId: ctx.auth.id,
+      },
       orderBy: {
         createdAt: "desc",
       },

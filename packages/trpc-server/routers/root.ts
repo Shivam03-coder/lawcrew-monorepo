@@ -12,7 +12,7 @@ export const appRouter = router({
   participant: participantsRoutes,
   litigation: caseDetailsRoutes,
   document: documentsRoutes,
-  client: clientRoutes,
+  clients: clientRoutes,
   member: memberRoutes,
 });
 

@@ -43,7 +43,7 @@ const typeToColorMap = {
 };
 
 const CasePieChart = () => {
-  const { data } = api.client.clientMonthlyCaseStats.useQuery();
+  const { data } = api.clients.clientMonthlyCaseStats.useQuery();
 
   const chartData = (data || []).reduce<Record<string, number>>((acc, curr) => {
     const type = (curr.practiseArea || "other").toLowerCase();
