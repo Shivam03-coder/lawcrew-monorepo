@@ -43,7 +43,7 @@ const MONTHS = [
 ];
 
 const CaseAreaChart = () => {
-  const { data } = api.litigation.monthlyCaseStats.useQuery();
+  const { data } = api.client.clientMonthlyCaseStats.useQuery();
 
   const results = useMemo(() => {
     if (!data) return [];

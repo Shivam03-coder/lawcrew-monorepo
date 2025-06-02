@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { User, Channel as StreamChannel } from "stream-chat";
 import {
   useCreateChatClient,
@@ -23,6 +23,8 @@ const CaseChannel = () => {
   const [channel, setChannel] = useState<StreamChannel>();
   const { data: userInfo } = api.user.userinfo.useQuery();
   const activeCase = JSON.parse(useReadLocalStorage("ActiveCase") as string);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+
   const user: User = {
     id: userInfo?.user?.id ?? "X",
     name: userInfo?.user?.userName,
@@ -37,25 +39,56 @@ const CaseChannel = () => {
 
   useEffect(() => {
     if (!client) return;
-    const channel = client.channel("messaging", activeCase.caseId!, {
+
+    const chatChannel = client.channel("messaging", activeCase.caseId!, {
       // @ts-ignore
       name: activeCase.caseName!,
       members: [user.id],
     });
-    setChannel(channel);
+
+    const initChannel = async () => {
+      try {
+        await chatChannel.watch();
+        setChannel(chatChannel);
+      } catch (err) {
+        console.error("Failed to watch or create channel", err);
+      }
+    };
+
+    initChannel();
   }, [client]);
+
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
+  }, [channel?.state.messages]);
 
   if (!client) return <LoaderSpinner />;
 
   return (
-    <div className="h-screen font-lexend">
-      <div className="mx-auto h-full w-[90%] overflow-hidden rounded-lg">
+    <div className="flex h-screen flex-col font-lexend">
+      <div className="mx-auto flex w-[90%] flex-1 flex-col overflow-hidden rounded-lg">
         <Chat client={client}>
           <Channel channel={channel}>
             <Window>
               <ChannelHeader />
-              <MessageList />
-              <MessageInput audioRecordingEnabled additionalTextareaProps={{}} />
+              <div ref={chatContainerRef} className="flex-1 overflow-y-auto">
+                <MessageList />
+              </div>
+              <div className="sticky bottom-0 border-t border-gray-200 bg-white p-4">
+                <MessageInput
+                  focus
+                  additionalTextareaProps={{
+                    placeholder: "Type your message here...",
+                    className: "border border-gray-300 rounded-lg p-3 w-full",
+                    rows: 1,
+                  }}
+                  audioRecordingEnabled
+                />
+              </div>
             </Window>
             <Thread />
           </Channel>

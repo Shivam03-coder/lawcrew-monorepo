@@ -24,6 +24,7 @@ export const documentsRoutes = router({
 
       return newDoc;
     }),
+
   deleteDoc: protectedProcedure
     .input(
       z.object({

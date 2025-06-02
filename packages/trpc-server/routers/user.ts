@@ -302,7 +302,6 @@ export const authRoutes = router({
         message: "Chat Token saved succesfully",
       };
     }),
-
   checkToken: protectedProcedure.query(async ({ ctx, input }) => {
     const user = await ctx.db.user.findUnique({
       where: {

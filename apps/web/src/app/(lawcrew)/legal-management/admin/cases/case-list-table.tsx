@@ -4,7 +4,7 @@ import { TableShell } from "@/components/shared/table-shell";
 import { TableToolbar } from "@/components/shared/table-toolbar";
 import { LegalCaseType } from "@/types/global";
 import ExportToExcel from "@/components/shared/export-to-excel";
-import { caseTableColumns } from "./case-table-cols";
+import { caseTableColumns } from "@/app/(lawcrew)/legal-management/admin/cases/case-table-cols";
 
 function CaseListTable({ data }: { data: LegalCaseType[] }) {
   return (

@@ -13,7 +13,7 @@ import {
   CaseStatus,
 } from "@/types/global";
 import badgeClass from "@/utils/badge-class";
-import ChatTokenBtn from "./chat-token-btn";
+import ChatTokenBtn from "@/components/shared/chat-token-btn";
 
 export const caseTableColumns: ColumnDef<LegalCaseType>[] = [
   {
