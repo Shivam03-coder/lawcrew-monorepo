@@ -3,6 +3,7 @@ import { appEnvConfigs } from "./configs";
 import App from "./app";
 const appInstance = new App();
 const expressApp = appInstance.getAppInstance();
+import "module-alias/register";
 
 (() => {
   try {
