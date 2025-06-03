@@ -10,6 +10,7 @@
     "prisma": "^6.6.0"
   },
   "dependencies": {
+    "@lawcrew/env": "workspace:*",
     "@prisma/client": "6.6.0"
   },
   "peerDependencies": {

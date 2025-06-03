@@ -23,6 +23,9 @@ importers:
       '@lawcrew/db':
         specifier: workspace:^
         version: link:../../packages/db
+      '@lawcrew/env':
+        specifier: workspace:*
+        version: link:../../packages/env
       '@lawcrew/trpc-server':
         specifier: workspace:^
         version: link:../../packages/trpc-server
@@ -460,6 +463,9 @@ importers:
 
   packages/db:
     dependencies:
+      '@lawcrew/env':
+        specifier: workspace:*
+        version: link:../env
       '@prisma/client':
         specifier: 6.6.0
         version: 6.6.0(prisma@6.6.0(typescript@5.8.3))(typescript@5.8.3)
@@ -470,6 +476,12 @@ importers:
       prisma:
         specifier: ^6.6.0
         version: 6.6.0(typescript@5.8.3)
+
+  packages/env:
+    dependencies:
+      dotenv:
+        specifier: ^16.5.0
+        version: 16.5.0
 
   packages/navigations:
     dependencies:
@@ -491,6 +503,9 @@ importers:
       '@lawcrew/api':
         specifier: workspace:^
         version: link:../../apps/api
+      '@lawcrew/env':
+        specifier: workspace:*
+        version: link:../env
       '@lawcrew/trpc-server':
         specifier: workspace:^
         version: link:../trpc-server
