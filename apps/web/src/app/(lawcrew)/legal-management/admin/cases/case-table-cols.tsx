@@ -10,10 +10,10 @@ import {
   CaseStage,
   MatterPriority,
   PracticeArea,
-  CaseStatus,
 } from "@/types/global";
 import badgeClass from "@/utils/badge-class";
 import ChatTokenBtn from "@/components/shared/chat-token-btn";
+import { $Enums } from "@lawcrew/db";
 
 export const caseTableColumns: ColumnDef<LegalCaseType>[] = [
   {
@@ -82,7 +82,7 @@ export const caseTableColumns: ColumnDef<LegalCaseType>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
-      const status = row.getValue("status") as CaseStatus;
+      const status = row.getValue("status") as $Enums.CaseStatus;
       return <Badge className={badgeClass(status)}>{status}</Badge>;
     },
   },

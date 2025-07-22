@@ -27,7 +27,7 @@ import {
 import ThemeToggle from "./theme-toogle";
 
 const HeaderSettings = () => {
-  const { data, isLoading } = api.auth.userinfo.useQuery();
+  const { data, isLoading } = api.user.userinfo.useQuery();
   if (!data || isLoading) return null;
   const name = data?.user?.userName.slice(0, 2).toUpperCase();
   if (!name) return;

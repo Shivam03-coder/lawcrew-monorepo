@@ -1,4 +1,4 @@
-import { appEnvConfigs } from "@src/configs";
+import { appEnvConfigs } from "../configs";
 import { v2 as cloudinary } from "cloudinary";
 import { Request } from "express";
 import { promises as fs } from "fs";

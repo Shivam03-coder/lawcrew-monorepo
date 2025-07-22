@@ -11,6 +11,9 @@
   "keywords": [],
   "author": "shivam",
   "license": "ISC",
+  "_moduleAliases": {
+    "@src": "dist"
+  },
   "dependencies": {
     "@google/generative-ai": "^0.24.0",
     "@lawcrew/db": "workspace:^",

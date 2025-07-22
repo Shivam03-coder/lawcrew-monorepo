@@ -4,7 +4,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -89,11 +89,11 @@ model Opponent {
 }
 
 model TeamClient {
-  id          String   @id @default(cuid())
-  userId      String?  @unique
-  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  role        UserRole @default(CLIENT)
-  createdAt   DateTime @default(now())
+  id        String   @id @default(cuid())
+  userId    String?  @unique
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      UserRole @default(CLIENT)
+  createdAt DateTime @default(now())
 
   cases Case[]
 }
@@ -122,7 +122,7 @@ model TeamMembership {
 
 model ToDoList {
   id            String   @id @default(cuid())
-  task          String   @db.MediumText
+  task          String   @db.VarChar(300)
   userId        String?
   createdBy     User?    @relation(fields: [userId], references: [id])
   isTaskChecked Boolean  @default(false)
@@ -133,8 +133,8 @@ model ToDoList {
 
 model Case {
   id                 String         @id @default(cuid())
-  title              String         @db.LongText
-  description        String?        @db.LongText
+  title              String         @db.VarChar(300)
+  description        String?        @db.VarChar(300)
   practiseArea       PracticeArea   @default(CRIMINAL)
   arrivalDate        DateTime?      @default(now())
   status             CaseStatus?    @default(OPEN)
@@ -168,7 +168,7 @@ model Case {
 
 model CaseNote {
   id        String   @id @default(cuid())
-  note      String?  @db.LongText
+  note      String?  @db.VarChar(300)
   caseId    String   @unique
   case      Case?    @relation(fields: [caseId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
@@ -224,7 +224,7 @@ model CaseBilling {
 model Document {
   id             String   @id @default(cuid())
   title          String?
-  initialContent String?  @db.LongText
+  initialContent String?  @db.VarChar(300)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   userId         String

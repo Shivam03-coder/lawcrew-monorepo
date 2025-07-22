@@ -1,5 +1,5 @@
-import { upload } from "@src/middleware/multer";
-import CloudinaryService from "@src/services/cloudinary-service";
+import { upload } from "../middleware/multer";
+import CloudinaryService from "../services/cloudinary-service";
 import { Request, Response, Router } from "express";
 
 const getMediaUrlRoute = Router();

@@ -15,7 +15,6 @@ interface ClientPageProps {
 
 const ClientPage = ({ params }: ClientPageProps) => {
   const user = useUser();
-  console.log("🚀 ~ page ~ user:", user);
   const { teamclientid } = React.use(params);
   const [clientName, setClientName] = useState<string>("");
   const { data } = api.participant.getClientDetailsById.useQuery({

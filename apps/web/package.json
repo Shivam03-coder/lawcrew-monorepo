@@ -18,6 +18,7 @@
   "dependencies": {
     "@hello-pangea/dnd": "^18.0.1",
     "@hookform/resolvers": "^5.0.1",
+    "@lawcrew/db": "workspace:*",
     "@lawcrew/navigations": "workspace:^",
     "@lawcrew/schema": "workspace:^",
     "@lawcrew/trpc-client": "workspace:^",

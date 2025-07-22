@@ -1,6 +1,6 @@
 import { db } from "@lawcrew/db";
-import { appEnvConfigs } from "@src/configs";
-import { GlobalUtils } from "@src/global";
+import { appEnvConfigs } from "../configs";
+import { GlobalUtils } from "../global";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { Response } from "express";

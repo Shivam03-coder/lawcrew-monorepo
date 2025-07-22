@@ -4,6 +4,7 @@ import {
   MatterPriorityEnum,
   PracticeAreaEnum,
 } from "@lawcrew/schema";
+import { $Enums } from "@lawcrew/db";
 
 export interface MetaProps {
   title: string;
@@ -153,17 +154,11 @@ export enum PracticeArea {
   TAXATION = "TAXATION",
 }
 
-export enum CaseStatus {
-  OPEN = "OPEN",
-  CLOSED = "CLOSED",
-  PENDING = "PENDING",
-}
-
 export interface ClientCaseList {
   id: string;
   clientName: string;
   opponentName: string;
   internalRefNumber: string;
   membersName: Array<string>;
-  caseStatus: CaseStatus;
+  caseStatus: $Enums.CaseStatus;
 }
